@@ -4,7 +4,7 @@
 // using for print_highlight, print_value, print_info
 #include <pcl/console/print.h>
 
-#include "include/ML/estrategiaClasificacion.hpp"
+#include "source/ML/include/estrategia_clasificacion.hpp"
 
 int main(int argc,char** argv)
 {

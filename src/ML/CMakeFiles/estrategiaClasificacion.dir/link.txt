@@ -1,2 +1,0 @@
-/usr/bin/ar qc libestrategiaClasificacion.a  CMakeFiles/estrategiaClasificacion.dir/estrategiaClasificacion.cpp.o
-/usr/bin/ranlib libestrategiaClasificacion.a

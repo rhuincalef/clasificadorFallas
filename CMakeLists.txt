@@ -10,11 +10,36 @@ add_definitions(${PCL_DEFINITIONS})
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive")
 
+#Se configura dir build/
+
+set(DESTDIR "build/")
+
 
 #Se guardan todos los archivos fuente y de includes
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "source/*.cpp")
 add_executable (mainPipeLine "mainPipeLine.cpp" "${SOURCES}")
 target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

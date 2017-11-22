@@ -1,0 +1,55 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_54c35/fast"
+/usr/bin/make -f CMakeFiles/cmTC_54c35.dir/build.make CMakeFiles/cmTC_54c35.dir/build
+make[1]: se entra en el directorio '/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_54c35.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_54c35.dir/CheckSymbolExists.c.o   -c /home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_54c35
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_54c35.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_54c35.dir/CheckSymbolExists.c.o  -o cmTC_54c35 -rdynamic 
+CMakeFiles/cmTC_54c35.dir/CheckSymbolExists.c.o: En la función `main':
+CheckSymbolExists.c:(.text+0x16): referencia a `pthread_create' sin definir
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_54c35.dir/build.make:97: fallo en las instrucciones para el objetivo 'cmTC_54c35'
+make[1]: *** [cmTC_54c35] Error 1
+make[1]: se sale del directorio '/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp'
+Makefile:126: fallo en las instrucciones para el objetivo 'cmTC_54c35/fast'
+make: *** [cmTC_54c35/fast] Error 2
+
+File /home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_014fe/fast"
+/usr/bin/make -f CMakeFiles/cmTC_014fe.dir/build.make CMakeFiles/cmTC_014fe.dir/build
+make[1]: se entra en el directorio '/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_014fe.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_014fe.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_014fe
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_014fe.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_014fe.dir/CheckFunctionExists.c.o  -o cmTC_014fe -rdynamic -lpthreads 
+/usr/bin/ld: no se puede encontrar -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_014fe.dir/build.make:97: fallo en las instrucciones para el objetivo 'cmTC_014fe'
+make[1]: *** [cmTC_014fe] Error 1
+make[1]: se sale del directorio '/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/CMakeTmp'
+Makefile:126: fallo en las instrucciones para el objetivo 'cmTC_014fe/fast'
+make: *** [cmTC_014fe/fast] Error 2
+
+
