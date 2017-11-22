@@ -1,3 +1,0 @@
-/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/rebuild_cache.dir
-/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/edit_cache.dir
-/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/CMakeFiles/mainPipeLine.dir
