@@ -1,6 +1,7 @@
 #Ignorar archivos especificos de la app
 *.pcd
 *.dat
+build/*
 
 # Ignorar CMakes
 CMakeCache.txt
