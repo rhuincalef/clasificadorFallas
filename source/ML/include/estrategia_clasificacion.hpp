@@ -11,10 +11,11 @@ public:
 	EstrategiaClasificacionMLAbstract();
 	EstrategiaClasificacionMLAbstract(std::string formateador,std::string dirSalidaTmp);
 	TipoMuestra clasificar(std::string pathDatasetTmp); 
+	int leerDatasetTmp(std::string pathDatasetTmp);
 
 private:
 	std::string formateador; //TODO CORREGIR ESTE TIPO POR LA CLASE QUE CORRESPONDE!
-	int leerDatasetTmp(std::string pathDatasetTmp);
+//	int leerDatasetTmp(std::string pathDatasetTmp);
 
 };
 #endif
