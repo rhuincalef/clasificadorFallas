@@ -5,12 +5,10 @@
 #include <string>
 #include <fstream>
 #include <stdlib.h>
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/features/normal_3d.h>
-//#include <pcl/features/fpfh.h>
-//#include <pcl/features/vfh.h>
-//#include <pcl/features/grsd.h>
+//#include <pcl/features/normal_3d.h>
+#include <pcl/features/fpfh.h>
+#include <pcl/features/vfh.h>
+#include <pcl/features/grsd.h>
 #include <pcl/features/esf.h>
 #include <pcl/features/normal_3d_omp.h>
 
@@ -44,8 +42,25 @@ EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
 }
 
+//Estrategia ESF
 ESF::ESF(){
 
 }
 
+template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT> n){
+	//TODO AGREGAR LA GENERACION del descriptor ESF
+}
+
+
+
+
+
+//Estrategia GRSD
+GRSD::GRSD(){
+
+}
+
+template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT> n){
+
+}
 

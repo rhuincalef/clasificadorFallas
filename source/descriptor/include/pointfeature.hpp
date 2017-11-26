@@ -9,74 +9,24 @@
 #include <pcl/point_types.h>
 
 #include "../../utils/include/utils.hpp"
+#include "../../nube/include/nube.hpp"
 
-/*
-#ifndef _TIPO_PUNTO_T
-#define _TIPO_PUNTO_T
-
-template <typename PointT> class PointCloud;
-
-#endif
-*/
 
 #ifndef PointFeature_DEF
 #define PointFeature_DEF
-template <typename PointT> class PointFeature{
+template <class SignatureT> 
+class PointFeature{
 
 public:
 	//Constructor 
 	PointFeature();
 
-private:
-	pcl::PointCloud<PointT> descPCL;
+	template<typename PointT> typename pcl::PointCloud<SignatureT>::Ptr procesarDescriptorPCL(Nube<PointT> n);
+
+//private:
+protected:
+	typename pcl::PointCloud<SignatureT>::Ptr descPCL;
 	double diffAltoAncho;
 
 };
 #endif
-
-/*
-#ifndef PointFeatureESF_DEF
-#define PointFeatureESF_DEF
-
-class PointFeatureESF : public PointFeature {
-
-public:
-	//Constructor 
-	PointFeatureESF();
-
-private:
-	pcl::PointCloud<pcl::ESFSignature640> descPCL;
-
-};
-#endif
-
-
-#ifndef PointFeatureGRSD_DEF
-#define PointFeatureGRSD_DEF
-class PointFeatureGRSD : public PointFeature
-{
-public:
-	//Constructor 
-	PointFeatureGRSD();
-  
-private:
-	pcl::PointCloud<pcl::GRSDSignature21> descPCL;
-
-	
-};
-#endif
-
-#ifndef PointFeatureFPFH_DEF
-#define PointFeatureFPFH_DEF
-class PointFeatureFPFH : public PointFeature
-{
-public:
-	//Constructor 
-	PointFeatureFPFH();  
-//private:
-	
-};
-#endif
-
-
-*/

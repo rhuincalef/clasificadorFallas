@@ -1,47 +1,78 @@
-// Descriptor ESF con downsampling + diff. Alto y Ancho -->
-
-
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <stdlib.h>
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/features/normal_3d.h>
-//#include <pcl/features/fpfh.h>
-//#include <pcl/features/vfh.h>
-//#include <pcl/features/grsd.h>
-#include <pcl/features/esf.h>
-#include <pcl/features/normal_3d_omp.h>
-
-// Mediciones
-#include <pcl/console/time.h>
-// using for print_highlight, print_value, print_info
-#include <pcl/console/print.h>
-
-
-#include <boost/filesystem.hpp>
-// command parse
-#include <pcl/console/parse.h>
-#include <math.h>
-
-#include <pcl/features/principal_curvatures.h>
-
-#include <pcl/ml/svm_wrapper.h>
-//#include <pcl/filters/uniform_sampling.h>
-#include <pcl/filters/voxel_grid.h>
-#include <pcl/surface/convex_hull.h>
-
-#include <pcl/common/distances.h>
-#include <pcl/surface/gp3.h>
-#include <pcl/features/moment_of_inertia_estimation.h>
-
 #include "../../utils/include/utils.hpp"
 
 #include "../include/nube.hpp"
 
-Nube::Nube(){
+template <typename PointT> Nube<PointT>::Nube(){
+
+}
+
+//Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
+template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
+
+	//Se computa la nube completa
+	original_cloud (new pcl::PointCloud<PointT>);
+	downsampling_cloud (new pcl::PointCloud<PointT>);
+	/*
+	original_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+	downsampling_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+	*/
+	//pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
+	normals_cloud (new pcl::PointCloud<pcl::Normal>); 
+	//
+
+	//if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathCaptura, *original_cloud) == -1) //* load the file
+	if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *original_cloud) == -1) //* load the file
+	{
+		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
+		return;
+	}
+	std::cout << "Leida muestra " << fullPathCaptura << " con " << original_cloud->points.size () << std::endl;
+
+	pcl::copyPointCloud(*original_cloud, *downsampling_cloud);
+	/*if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathArch, *original_cloud) == -1) //* load the file
+	{
+		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
+		return 1;
+	}
+	*/
+	std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
+	//pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> normalEstimation(0);
+	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
+	normalEstimation.setInputCloud(original_cloud);
+	// For every point, use all neighbors in a radius of 3cm.
+	normalEstimation.setRadiusSearch(0.008);
+	// A kd-tree is a data structure that makes searches efficient. More about it later.
+	// The normal estimation object will use it to find nearest neighbors.
+	//pcl::search::KdTree<pcl::PointXYZRGB>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZRGB>);
+	typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
+	normalEstimation.setSearchMethod(kdtree);
+
+	// Calculate the normals.
+	normalEstimation.compute(*normals_cloud);
+
+	std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
 
 }
 
 
+template<class PointT>
+typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getDownsamplingCloud(){
+	return downsampling_cloud;
+}
+
+
+template<class PointT>
+typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getNormalsCloud(){
+	return normals_cloud;
+}
+
+
+template<class PointT>
+typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getOriginalCloud(){
+
+}
+
+template<class PointT>
+typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getNoOutlierCloud(){
+	
+}

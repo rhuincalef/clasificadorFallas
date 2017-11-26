@@ -5,15 +5,15 @@ project(mainPipeLine)
 find_package(PCL 1.8 REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
+link_directories(${PCL_LIBRARY_DIRS} "tests/googletest/cmake/build")
 add_definitions(${PCL_DEFINITIONS})
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive")
 
 #Se configura dir build/
+#set(DESTDIR "build/")
 
-set(DESTDIR "build/")
-
+#cmake_policy(SET CMP0015 NEW)
 
 #Se guardan todos los archivos fuente y de includes
 file(GLOB_RECURSE SOURCES "source/*.cpp")
