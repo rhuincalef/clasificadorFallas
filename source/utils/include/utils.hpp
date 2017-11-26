@@ -27,9 +27,11 @@ typedef struct {
   float ancho;
   float alto;
   float profundidad;
+  /*
   float anchoMin;
   float anchoMax;
   float altoMin;
   float altoMax;
+  */
 } TipoDimensiones;
 #endif

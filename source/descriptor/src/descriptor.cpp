@@ -48,7 +48,13 @@ ESF::ESF(){
 }
 
 template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT> n){
-	//TODO AGREGAR LA GENERACION del descriptor ESF
+	
+
+
+
+
+
+	
 }
 
 

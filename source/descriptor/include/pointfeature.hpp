@@ -23,6 +23,13 @@ public:
 
 	template<typename PointT> typename pcl::PointCloud<SignatureT>::Ptr procesarDescriptorPCL(Nube<PointT> n);
 
+
+	
+	template <class PointT> void calcularAltoAncho(pcl::PointCloud<PointT>* cloud,
+														TipoDimensiones* dimensiones);
+	
+	
+
 //private:
 protected:
 	typename pcl::PointCloud<SignatureT>::Ptr descPCL;

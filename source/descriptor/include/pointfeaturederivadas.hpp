@@ -38,20 +38,19 @@ private:
 };
 #endif
 
-/*
+
 #ifndef PointFeatureGRSD_DEF
 #define PointFeatureGRSD_DEF
-template<typename PointT,typename SignatureT> class PointFeatureGRSD : public PointFeature<PointT,SignatureT> {
+
+class PointFeatureGRSD : public PointFeature<pcl::GRSDSignature21> {
 
 public:
 	//Constructor 
 	PointFeatureGRSD();
+	template<typename PointT> pcl::PointCloud<pcl::GRSDSignature21>::Ptr procesarDescriptorPCL(Nube<PointT> n);
 
-	pcl::PointCloud<pcl::GRSDSignature21>::Ptr procesarDescriptorPCL(Nube n);
-  
 private:
 	pcl::PointCloud<pcl::GRSDSignature21>::Ptr descPCL;
 
 };
 #endif
-*/
