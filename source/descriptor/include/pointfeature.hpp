@@ -21,14 +21,17 @@ public:
 	//Constructor 
 	PointFeature();
 
-	template<typename PointT> typename pcl::PointCloud<SignatureT>::Ptr procesarDescriptorPCL(Nube<PointT> n);
+	template<typename PointT> typename pcl::PointCloud<SignatureT> procesarDescriptorPCL(Nube<PointT> n);
 
 
 	
 	template <class PointT> void calcularAltoAncho(pcl::PointCloud<PointT>* cloud,
 														TipoDimensiones* dimensiones);
 	
-	
+
+
+	double getDiffAltoAncho();
+	typename pcl::PointCloud<SignatureT> getDescriptorPCL();
 
 //private:
 protected:

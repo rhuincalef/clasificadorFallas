@@ -42,31 +42,51 @@ EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
 }
 
-//Estrategia ESF
+/************************************** Estrategia ESF **************************************/
 ESF::ESF(){
-
+	//this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
+
+/*
+std::string ESF::getPathModeloEntrenado(){
+	return this->pathModeloEntrenado;
+}
+*/
+
 
 template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT> n){
-	
 
+	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
 
-
-
-
-	
+	//Se procesa el descrptor especifico de la estrategia
+	PointFeatureESF* featureESF (new PointFeatureESF);
+	featureESF->procesarDescriptorPCL(n);
+	return featureESF;
 }
 
 
 
 
 
-//Estrategia GRSD
+/************************************** Estrategia GRSD **************************************/
 GRSD::GRSD(){
-
+	//this->pathModeloEntrenado = TRAIN_MODEL_GRSD_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
+
+/*
+std::string GRSD::getPathModeloEntrenado(){
+	return this->pathModeloEntrenado;
+}
+*/
 
 template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT> n){
+
+	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
+
+	//Se procesa el descrptor especifico de la estrategia
+	PointFeatureGRSD* featureGRSD (new PointFeatureESF);
+	featureGRSD->procesarDescriptorPCL(n);
+	return featureGRSD;
 
 }
 

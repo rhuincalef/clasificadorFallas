@@ -18,6 +18,17 @@ void PointFeature<pcl::ESFSignature640>::calcularAltoAncho(pcl::PointCloud<Point
                             TipoDimensiones* dimensiones){
 */
 
+
+template <class SignatureT> double PointFeature<SignatureT>::getDiffAltoAncho(){
+  return this.diffAltoAncho;
+}
+
+
+template <class SignatureT> pcl::PointCloud<SignatureT> PointFeature<SignatureT>::getDescriptorPCL(){
+    return this.descPCL;
+}
+
+
 //Doble Template para el tipo generico de la clase PointFeature y el argumento del metodo -->
 template <class PointT>
 template <class PointT1>
@@ -97,11 +108,12 @@ void PointFeature<PointT>::calcularAltoAncho(pcl::PointCloud<PointT1>* cloud,
 
 /******************************************** Metodos ESF **********************************************/
 PointFeatureESF::PointFeatureESF(){
-	
+  //this->descPCL = new pcl::PointCloud<pcl::ESFSignature640>;
 }
 
+
 template <class PointT>
-pcl::PointCloud<pcl::ESFSignature640>::Ptr PointFeatureESF::procesarDescriptorPCL(Nube<PointT> n){
+pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::procesarDescriptorPCL(Nube<PointT> n){
 	pcl::console::TicToc tt;
 	tt.tic();
 	// ESF estimation object.
@@ -118,17 +130,22 @@ pcl::PointCloud<pcl::ESFSignature640>::Ptr PointFeatureESF::procesarDescriptorPC
 
 }
 
+/*
+pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::getDescriptorPCL(){
+  return this->descPCL;
+}
+*/
 
 
 /******************************************** Metodos GRSD **********************************************/
 
 PointFeatureGRSD::PointFeatureGRSD(){
-	
+  //this->descPCL = new pcl::PointCloud<pcl::GRSDSignature21>;
 }
 
 
 template <class PointT>
-pcl::PointCloud<pcl::GRSDSignature21>::Ptr PointFeatureGRSD::procesarDescriptorPCL(Nube<PointT> n){
+pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD::procesarDescriptorPCL(Nube<PointT> n){
 
 	pcl::console::TicToc tt;
 	tt.tic();
@@ -152,5 +169,8 @@ pcl::PointCloud<pcl::GRSDSignature21>::Ptr PointFeatureGRSD::procesarDescriptorP
 	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< diffAltoAncho << std::endl;
 }
 
-
-
+/*
+pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD::getDescriptorPCL(){
+  return this->descPCL;
+}
+*/
