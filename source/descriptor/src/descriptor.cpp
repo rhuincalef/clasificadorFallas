@@ -42,6 +42,12 @@
 EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
 }
+
+template <pcl::ESFSignature640,pcl::PointXYZRGB> PointFeature<pcl::ESFSignature640> EstrategiaDescriptorsAbstract::generarDescriptor(Nube<pcl::PointXYZRGB>& n){
+	std::cout << "vergaaaaaaaaaaaaaaa" << std::endl;
+}
+
+
 std::string EstrategiaDescriptorsAbstract::getPathModeloEntrenado(){
 	return this->pathModeloEntrenado;
 }
@@ -51,7 +57,7 @@ ESF::ESF(){
 	this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
 
-template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT> n){
+template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT>& n){
 
 	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
 
@@ -71,7 +77,7 @@ GRSD::GRSD(){
 }
 
 
-template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT> n){
+template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT>& n){
 
 	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
 

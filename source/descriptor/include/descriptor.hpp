@@ -8,7 +8,7 @@
 
 #ifndef EstrategiaDescriptorsAbstract_DEF
 #define EstrategiaDescriptorsAbstract_DEF
-class EstrategiaDescriptorsAbstract{
+class EstrategiaDescriptorsAbstract {
 
 
 protected:
@@ -17,7 +17,7 @@ protected:
 public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
-	template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT> n);
+	template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>& n);
 
 	std::string getPathModeloEntrenado();
 
@@ -35,7 +35,7 @@ public:
 	//Constructor 
 	ESF();
 
-	template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT> n);
+	template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT>& n);
 	
 };
 #endif
@@ -52,7 +52,7 @@ public:
 	//Constructor 
 	GRSD();
 
-	template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT> n);
+	template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT>& n);
 
 };
 #endif
@@ -67,7 +67,7 @@ public:
 	//Constructor 
 	FPFH();
 
-	template <class PointT> PointFeature<pcl::FPFHSignature33> generarDescriptor(Nube<PointT> n);
+	template <class PointT> PointFeature<pcl::FPFHSignature33> generarDescriptor(Nube<PointT>& n);
 
 };
 #endif
