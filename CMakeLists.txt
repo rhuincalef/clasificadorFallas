@@ -8,17 +8,19 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS} "tests/googletest/cmake/build")
 add_definitions(${PCL_DEFINITIONS})
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive ../libs/libsvm.so")
 
-#Se configura dir build/
-#set(DESTDIR "build/")
+#Se agrega la libsvm.so.2 que contiene los elementos de svm-predict y svm-train
+#add_library(libsvm SHARED IMPORTED)
+#set_property(TARGET libsvm PROPERTY IMPORTED_LOCATION "libs/")
 
-#cmake_policy(SET CMP0015 NEW)
 
 #Se guardan todos los archivos fuente y de includes
 file(GLOB_RECURSE SOURCES "source/*.cpp")
 add_executable (mainPipeLine "mainPipeLine.cpp" "${SOURCES}")
 target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )
+
+#target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )
 
 
 
