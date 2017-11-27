@@ -19,6 +19,9 @@ public:
 	int leerDatasetTmp(std::string pathDatasetTmp);
 	*/
 	template <class SignatureT,class ProblemaT> ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);
+	
+	template <class ModeloT> ModeloT cargarModelo(std::string pathModeloEntrenado);
+
 	template <class ProblemaT> void clasificar(std::string pathModeloEntrenado, 
 													ProblemaT descriptor);
 
@@ -41,9 +44,9 @@ public:
 
 	template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);
 	
+	svm_model* cargarModelo(std::string pathModeloEntrenado);
+
 	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
-
-
 
 //private:
 
