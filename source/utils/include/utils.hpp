@@ -42,13 +42,17 @@ typedef struct {
 //Paths a los modelos entrenados (previamente a la ejecucion del script) para levantar el modelo entrenado
 // segun el tipo de descriptor  
 //
-#ifndef TRAIN_PATHS_DEF
-#define TRAIN_PATHS_DEF
+#ifndef MODEL_TRAINED_PATHS_DEF
+#define MODEL_TRAINED_PATHS_DEF
 
 const std::string TRAIN_MODEL_NAME_DEFAULT = "modelo.dat";
 
-const std::string TRAIN_MODEL_ESF_DIR_DEFAULT = "vfh";
-const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "grsd";
+const std::string TRAIN_MODEL_ESF_DIR_DEFAULT = "vfh/";
+const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "grsd/";
 
 #endif
+
+
+
+
 

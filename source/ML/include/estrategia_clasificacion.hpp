@@ -2,6 +2,9 @@
 #include <iostream>
 #include "../../utils/include/utils.hpp"
 
+#include "formateador_dataset.hpp"
+#include "../../descriptor/include/pointfeaturederivadas.hpp"
+
 #ifndef EstrategiaClasificacionMLAbstract_DEF
 #define EstrategiaClasificacionMLAbstract_DEF
 class EstrategiaClasificacionMLAbstract{
@@ -9,13 +12,20 @@ class EstrategiaClasificacionMLAbstract{
 public:
 	//Constructor 
 	EstrategiaClasificacionMLAbstract();
-	EstrategiaClasificacionMLAbstract(std::string formateador,std::string dirSalidaTmp);
+	EstrategiaClasificacionMLAbstract(FormateadorDatasetAbstract formateador);
+	
+	/*
 	TipoMuestra clasificar(std::string pathDatasetTmp); 
 	int leerDatasetTmp(std::string pathDatasetTmp);
+	*/
+	template <class SignatureT,class ProblemaT> ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);
+	template <class ProblemaT> void clasificar(std::string pathModeloEntrenado, 
+													ProblemaT descriptor);
 
-private:
-	std::string formateador; //TODO CORREGIR ESTE TIPO POR LA CLASE QUE CORRESPONDE!
-//	int leerDatasetTmp(std::string pathDatasetTmp);
+
+protected:
+	FormateadorDatasetAbstract formateador;
+	std::string pathModeloEntrenado;
 
 };
 #endif
@@ -25,12 +35,17 @@ private:
 class EstrategiaClasificacionSVM : public EstrategiaClasificacionMLAbstract
 {
   
-private:
-	std::string pathModeloEntrenado;
 public:
 	//Constructor 
-	EstrategiaClasificacionSVM(std::string pathModeloEntrenado,
-								std::string formateador,
-								std::string dirSalidaTmp);
+	EstrategiaClasificacionSVM();
+
+	template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);
+	
+	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
+
+
+
+//private:
+
 };
 #endif

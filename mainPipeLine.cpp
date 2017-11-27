@@ -14,7 +14,7 @@ int main(int argc,char** argv)
 	std::string param1 = "a";
 	std::string param2 = "a";
 	std::string param3 = "a";
-	EstrategiaClasificacionSVM* estr(new EstrategiaClasificacionSVM(param1,param2,param3));
+	//EstrategiaClasificacionSVM* estr(new EstrategiaClasificacionSVM(param1,param2,param3));
 
 	std::cout << "Fin main xx pipeLine..." << std::endl;
 	return 0;

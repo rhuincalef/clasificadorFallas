@@ -38,21 +38,18 @@
 
 #include "../include/descriptor.hpp"
 
+
 EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
+}
+std::string EstrategiaDescriptorsAbstract::getPathModeloEntrenado(){
+	return this->pathModeloEntrenado;
 }
 
 /************************************** Estrategia ESF **************************************/
 ESF::ESF(){
-	//this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
+	this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
-
-/*
-std::string ESF::getPathModeloEntrenado(){
-	return this->pathModeloEntrenado;
-}
-*/
-
 
 template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT> n){
 
@@ -70,14 +67,9 @@ template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescripto
 
 /************************************** Estrategia GRSD **************************************/
 GRSD::GRSD(){
-	//this->pathModeloEntrenado = TRAIN_MODEL_GRSD_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
+	this->pathModeloEntrenado = TRAIN_MODEL_GRSD_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
 
-/*
-std::string GRSD::getPathModeloEntrenado(){
-	return this->pathModeloEntrenado;
-}
-*/
 
 template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT> n){
 

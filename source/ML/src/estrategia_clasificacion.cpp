@@ -2,24 +2,31 @@
 
 #include "../include/estrategia_clasificacion.hpp"
 
+
+//Constructores 
 EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(){
 
 }
 
-EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(std::string formateador,std::string dirSalidaTmp){
-
-}
-
-int EstrategiaClasificacionMLAbstract::leerDatasetTmp(std::string pathDatasetTmp){
-  return 0;
-}
-
-TipoMuestra EstrategiaClasificacionMLAbstract::clasificar(std::string pathDatasetTmp) {
-  return TIPO_BACHE;
+EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(FormateadorDatasetAbstract formateador){
+	this->formateador = formateador;
 }
 
 
-EstrategiaClasificacionSVM::EstrategiaClasificacionSVM(std::string pathModeloEntrenado,std::string formateador,std::string dirSalidaTmp){  
+
+/************************** Estrategia clasificacion SVM **************************/
+template <class SignatureT> svm_problem EstrategiaClasificacionSVM::adaptarDescriptor(PointFeature<SignatureT> descriptor){
+	return this->formateador.adaptarDescriptor(descriptor);
 }
+
+//TODO: CONTINUAR POR ACA!!!
+TipoMuestra EstrategiaClasificacionSVM::clasificar(std::string pathModeloEntrenado, svm_problem descriptor){
+
+
+
+
+}
+
+
 
 
