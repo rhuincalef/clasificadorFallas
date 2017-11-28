@@ -43,11 +43,6 @@ EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
 }
 
-template <pcl::ESFSignature640,pcl::PointXYZRGB> PointFeature<pcl::ESFSignature640> EstrategiaDescriptorsAbstract::generarDescriptor(Nube<pcl::PointXYZRGB>& n){
-	std::cout << "vergaaaaaaaaaaaaaaa" << std::endl;
-}
-
-
 std::string EstrategiaDescriptorsAbstract::getPathModeloEntrenado(){
 	return this->pathModeloEntrenado;
 }

@@ -15,6 +15,13 @@ EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(Formateador
 
 
 /************************** Estrategia clasificacion SVM **************************/
+
+
+EstrategiaClasificacionSVM::EstrategiaClasificacionSVM(){
+	
+}
+
+
 template <class SignatureT> svm_problem EstrategiaClasificacionSVM::adaptarDescriptor(PointFeature<SignatureT> descriptor){
 	return this->formateador.adaptarDescriptor(descriptor);
 }
