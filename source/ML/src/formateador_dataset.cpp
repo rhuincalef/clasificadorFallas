@@ -5,10 +5,12 @@
 
 
 /**************************** Clase Abstract ****************************/
-FormateadorDatasetAbstract::FormateadorDatasetAbstract(){
+
+template<class SignatureT,typename ProblemaT>
+FormateadorDatasetAbstract<SignatureT,ProblemaT>::FormateadorDatasetAbstract(){
 
 }
-
+/*
 template <class SignatureT> void FormateadorDatasetAbstract::dumpearDescriptor(PointFeature<SignatureT> descriptor,
 														std::string dirSalidaTmp,
 														std::string nombreTmp){
@@ -45,7 +47,7 @@ void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM,
 			}
 		}
 	}
-	/*
+	
 	//myfile << "#" << nombrePcds[i].c_str() << " ";
 	//Si quedan elementos para leer del problema
 	if (i+1 < colMuestras.size())
@@ -53,22 +55,27 @@ void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM,
 		myfile << "\n";
 	}
 	std::cout << "escribiendo muestra en archivo: "<< nombreArchivo << std::endl;
-	*/
+	
 	myfile << "\n";
 	myfile.close();
 	std::cout << " Generado archivo de salida " << nombreArchivo << std::endl;
 }
-
+*/
 
 
 /**************************** FormateadorDatasetSVM ****************************/
-FormateadorDatasetSVM::FormateadorDatasetSVM(){
+template<class SignatureT>
+FormateadorDatasetSVM<SignatureT>::FormateadorDatasetSVM(){
 
 }
 
 //Genera las features de una muestra y las guarda en un vector
-	template <class SignatureT> void FormateadorDatasetSVM::generarMuestraSVM(
-													PointFeature<SignatureT> descriptor,
+/*
+template <class SignatureT> void FormateadorDatasetSVM::generarMuestraSVM(PointFeature<SignatureT> descriptor,
+													pcl::SVMData* muestraSVM){
+*/
+template <class SignatureT> 
+void FormateadorDatasetSVM<SignatureT>::generarMuestraSVM(PointFeature<SignatureT> descriptor,
 													pcl::SVMData* muestraSVM){
 
 	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
@@ -110,7 +117,8 @@ FormateadorDatasetSVM::FormateadorDatasetSVM(){
 */
 //pcl::SVM::adaptInputToLibSVM (std::vector<SVMData> training_set, svm_problem &prob)
 //template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor)
-template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor)
+template <class SignatureT,class ProblemaT> 
+ProblemaT FormateadorDatasetSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor)
 {
 
 	svm_problem prob;
@@ -167,6 +175,7 @@ template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<Signature
 	Este metodo dumpea el PointFeature de una muestra en disco, en un directorio de salida temporal,
 	y con un nombre. 
 */
+/*
 template <class SignatureT> void FormateadorDatasetSVM::dumpearDescriptor(PointFeature<SignatureT> descriptor,
 														std::string dirSalidaTmp,
 														std::string nombreTmp){
@@ -177,4 +186,10 @@ template <class SignatureT> void FormateadorDatasetSVM::dumpearDescriptor(PointF
 	//Se guarda la muestra en un archivo tmp en disco 
 	almacenarSVMTmp(muestraSVM, dirSalidaTmp, nombreTmp);
 }
+*/
+
+template class FormateadorDatasetSVM<pcl::ESFSignature640,svm_problem>;
+template class FormateadorDatasetSVM<pcl::GRSDSignature21,svm_problem>;
+template class FormateadorDatasetSVM<pcl::FPFHSignature33,svm_problem>;
+
 

@@ -5,50 +5,57 @@
 #include "formateador_dataset.hpp"
 #include "../../descriptor/include/pointfeaturederivadas.hpp"
 
+
+#ifndef EstrategiaClasificacionAbstract_DEF
+#define EstrategiaClasificacionAbstract_DEF
+
+class EstrategiaClasificacionAbstract {
+
+};
+#endif
+
 #ifndef EstrategiaClasificacionMLAbstract_DEF
 #define EstrategiaClasificacionMLAbstract_DEF
-class EstrategiaClasificacionMLAbstract{
+template <class SignatureT,class ProblemaT,class ModeloT>
+//class EstrategiaClasificacionMLAbstract{
+class EstrategiaClasificacionMLAbstract: public EstrategiaClasificacionAbstract {
 
 public:
 	//Constructor 
 	EstrategiaClasificacionMLAbstract();
-	EstrategiaClasificacionMLAbstract(FormateadorDatasetAbstract formateador);
-	
-	/*
-	TipoMuestra clasificar(std::string pathDatasetTmp); 
-	int leerDatasetTmp(std::string pathDatasetTmp);
-	*/
-	template <class SignatureT,class ProblemaT> ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);
-	
-	template <class ModeloT> ModeloT cargarModelo(std::string pathModeloEntrenado);
+	//EstrategiaClasificacionMLAbstract(FormateadorDatasetAbstract formateador);
 
-	template <class ProblemaT> void clasificar(std::string pathModeloEntrenado, 
-													ProblemaT descriptor);
+
+	ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);	
+	ModeloT* cargarModelo(std::string pathModeloEntrenado);
+	//void clasificar(std::string pathModeloEntrenado,ProblemaT descriptor);
+	TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
 
 
 protected:
-	FormateadorDatasetAbstract formateador;
-	std::string pathModeloEntrenado;
+	FormateadorDatasetAbstract<SignatureT,ProblemaT>* formateador;
+	//std::string pathModeloEntrenado;
 
 };
 #endif
 
 #ifndef EstrategiaClasificacionSVM_DEF
 #define EstrategiaClasificacionSVM_DEF
-class EstrategiaClasificacionSVM : public EstrategiaClasificacionMLAbstract
+template<class SignatureT>
+class EstrategiaClasificacionSVM : public EstrategiaClasificacionMLAbstract<SignatureT,svm_problem,svm_model>
 {
   
 public:
 	//Constructor 
 	EstrategiaClasificacionSVM();
-
-	template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);
 	
-	svm_model* cargarModelo(std::string pathModeloEntrenado);
+	/*
+	template <class SignatureT1,typename ProblemaT> ProblemaT adaptarDescriptor(PointFeature<SignatureT1> descriptor);	
+	template <typename ModeloT> ModeloT* cargarModelo(std::string pathModeloEntrenado);
+	//void clasificar(std::string pathModeloEntrenado,ProblemaT descriptor);
+	template <typename ProblemaT> TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
+	*/
 
-	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
-
-//private:
 
 };
 #endif

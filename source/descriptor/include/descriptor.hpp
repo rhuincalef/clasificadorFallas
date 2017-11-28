@@ -8,16 +8,17 @@
 
 #ifndef EstrategiaDescriptorsAbstract_DEF
 #define EstrategiaDescriptorsAbstract_DEF
-class EstrategiaDescriptorsAbstract {
 
-
+template<class PointT,class SignatureT>
+class EstrategiaDescriptorsAbstract{
 protected:
 	std::string pathModeloEntrenado;
 	
 public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
-	template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>& n);
+	//template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n);
+	PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n);
 
 	std::string getPathModeloEntrenado();
 
@@ -26,7 +27,9 @@ public:
 
 #ifndef ESF_DEF
 #define ESF_DEF
-class ESF : public EstrategiaDescriptorsAbstract
+
+template <class PointT>
+class ESF : public EstrategiaDescriptorsAbstract<PointT,pcl::ESFSignature640>
 {
   
 protected:
@@ -35,7 +38,7 @@ public:
 	//Constructor 
 	ESF();
 
-	template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT>& n);
+	//template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT>* n);
 	
 };
 #endif
@@ -44,7 +47,8 @@ public:
 
 #ifndef GRSD_DEF
 #define GRSD_DEF
-class GRSD : public EstrategiaDescriptorsAbstract
+template <class PointT>
+class GRSD : public EstrategiaDescriptorsAbstract<PointT,pcl::GRSDSignature21>
 {
   
 
@@ -52,7 +56,7 @@ public:
 	//Constructor 
 	GRSD();
 
-	template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT>& n);
+	//template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT>* n);
 
 };
 #endif
@@ -60,14 +64,14 @@ public:
 
 #ifndef FPFH_DEF
 #define FPFH_DEF
-class FPFH : public EstrategiaDescriptorsAbstract
+template <class PointT>
+class FPFH : public EstrategiaDescriptorsAbstract<PointT,pcl::FPFHSignature33>
 {
-
 public:
 	//Constructor 
 	FPFH();
 
-	template <class PointT> PointFeature<pcl::FPFHSignature33> generarDescriptor(Nube<PointT>& n);
+	//template <class PointT> PointFeature<pcl::FPFHSignature33> generarDescriptor(Nube<PointT>* n);
 
 };
 #endif

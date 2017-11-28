@@ -9,7 +9,7 @@
 
 #ifndef MainPipeLine_DEF
 #define MainPipeLine_DEF
-template <class SignatureT>
+template <class PointT,class SignatureT>
 class MainPipeLine{
 
 public:
@@ -23,9 +23,13 @@ public:
 
 private:
 	std::string dirAlmacenamientoCapturas;
-	EstrategiaDescriptorsAbstract* estratDescriptor = NULL;
-	EstrategiaClasificacionMLAbstract* estratClasificacion = NULL;
-
+	EstrategiaDescriptorsAbstract<PointT,SignatureT>* estratDescriptor;
+	//EstrategiaClasificacionMLAbstract<SignatureT>* estratClasificacion;
+	EstrategiaClasificacionAbstract* estratClasificacion;
+	/*
+	template <class SignatureT1,typename ProblemaT,typename ModeloT>
+	EstrategiaClasificacionMLAbstract<SignatureT1,ProblemaT,ModeloT>* estratClasificacion;
+	*/
 
 //protected:
 };

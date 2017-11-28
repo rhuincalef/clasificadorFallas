@@ -39,6 +39,7 @@
 #include "../include/descriptor.hpp"
 
 
+
 EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
 
 }
@@ -47,12 +48,16 @@ std::string EstrategiaDescriptorsAbstract::getPathModeloEntrenado(){
 	return this->pathModeloEntrenado;
 }
 
+template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n){
+	
+}
+
 /************************************** Estrategia ESF **************************************/
 ESF::ESF(){
 	this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
 
-template <class PointT> PointFeature<pcl::ESFSignature640> ESF::generarDescriptor(Nube<PointT>& n){
+template <class PointT,class SignatureT> PointFeature<SignatureT> ESF::generarDescriptor(Nube<PointT>* n){
 
 	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
 
@@ -72,7 +77,7 @@ GRSD::GRSD(){
 }
 
 
-template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescriptor(Nube<PointT>& n){
+template <class PointT,class SignatureT> PointFeature<SignatureT> GRSD::generarDescriptor(Nube<PointT>* n){
 
 	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
 
@@ -82,4 +87,35 @@ template <class PointT> PointFeature<pcl::GRSDSignature21> GRSD::generarDescript
 	return featureGRSD;
 
 }
+/*
+namespace N {
+  template<class T> class Y { void mf() { } }; // template definition
+}
+// template class Y<int>; // error: class template Y not visible in the global namespace
+using N::Y;
+// template class Y<int>; // error: explicit instantiation outside 
+                          // of the namespace of the template
+template class N::Y<char*>;      // OK: explicit instantiation
+template void N::Y<double>::mf(); // OK: explicit instantiation
+
+*/
+
+/*
+Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
+definicion de sus templates en archivos .hpp y .cpp separados. 
+*/
+template class ESF<pcl::PointXYZRGB,pcl::ESFSignature640>;
+template class GRSD<pcl::PointXYZRGB,pcl::GRSDSignature21>;
+template class FPFH<pcl::PointXYZRGB,pcl::FPFHSignature33>;
+
+/*
+template class EstrategiaDescriptorsAbstract::generarDescriptor<pcl::PointXYZRGB,pcl::ESFSignature640>();
+template class ESF::generarDescriptor<pcl::PointXYZRGB,pcl::ESFSignature640>();
+template class GRSD::generarDescriptor<pcl::PointXYZRGB,pcl::GRSDSignature21>();
+*/
+
+
+
+
+
 
