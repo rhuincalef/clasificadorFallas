@@ -8,6 +8,7 @@ find_package (Threads)
 find_package(PCL 1.8 REQUIRED)
 find_package(GTest REQUIRED)
 
+#set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive ../libs/libsvm.so")
 set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive")
 
 include_directories(
@@ -22,12 +23,16 @@ link_directories(
 	${GTEST_BOTH_LIBRARIES}
 	)
 
+#Se agrega la libsvm.so.2 que contiene los elementos de svm-predict y svm-train
+#add_library(libsvm SHARED IMPORTED)
+#set_property(TARGET libsvm PROPERTY IMPORTED_LOCATION "libs/")
+
 add_definitions(${PCL_DEFINITIONS})
 
 #Se guardan todos los archivos fuente y de includes
 file(GLOB_RECURSE SOURCES "source/*.cpp")
 add_executable (mainPipeLine "mainPipeLine.cpp" "${SOURCES}")
-add_executable (unittest_segmentation "test/unittest_segmentation.cpp" "source/segmentation/src/segmentation.cpp")
+add_executable (unittest_segmentation "tests/unittest/segmentation/unittest_segmentation.cpp" "source/segmentation/src/segmentation.cpp")
 # Standard linking to gtest stuff.
-target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )
 target_link_libraries(unittest_segmentation ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )

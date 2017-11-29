@@ -1,62 +1,42 @@
 // Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
 #include <iostream>
+#include <pcl/features/esf.h>
+#include <pcl/features/fpfh.h>
+#include <pcl/features/grsd.h>
+#include <pcl/ml/svm_wrapper.h>
+#include <pcl/features/normal_3d.h>
+
+#include <pcl/point_types.h>
+
 #include "../../utils/include/utils.hpp"
+#include "../../nube/include/nube.hpp"
+
 
 #ifndef PointFeature_DEF
 #define PointFeature_DEF
+template <class SignatureT> 
 class PointFeature{
 
 public:
 	//Constructor 
 	PointFeature();
 
-//private:
+	template<typename PointT> typename pcl::PointCloud<SignatureT> procesarDescriptorPCL(Nube<PointT> n);
 
-};
-#endif
-
-
-#ifndef PointFeatureESF_DEF
-#define PointFeatureESF_DEF
-class PointFeatureESF : public PointFeature
-{
-public:
-	//Constructor 
-	PointFeatureESF();
-  
-//private:
 
 	
-};
-#endif
-
-
-#ifndef PointFeatureGRSD_DEF
-#define PointFeatureGRSD_DEF
-class PointFeatureGRSD : public PointFeature
-{
-public:
-	//Constructor 
-	PointFeatureGRSD();
-  
-//private:
-
+	template <class PointT> void calcularAltoAncho(pcl::PointCloud<PointT>* cloud,
+														TipoDimensiones* dimensiones);
 	
-};
-#endif
 
-#ifndef PointFeatureFPFH_DEF
-#define PointFeatureFPFH_DEF
-class PointFeatureFPFH : public PointFeature
-{
-public:
-	//Constructor 
-	PointFeatureFPFH();
-  
+
+	double getDiffAltoAncho();
+	typename pcl::PointCloud<SignatureT> getDescriptorPCL();
+
 //private:
+protected:
+	typename pcl::PointCloud<SignatureT>::Ptr descPCL;
+	double diffAltoAncho;
 
-	
 };
 #endif
-
-

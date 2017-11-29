@@ -5,53 +5,45 @@
 #include <pcl/console/print.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
-#include "gtest/gtest.h"
 
-#include "source/ML/include/estrategia_clasificacion.hpp"
-#include "source/parser/include/parametrizador.hpp"
-#include "source/segmentation/include/segmentation.hpp"
+//#include "source/ML/include/estrategia_clasificacion.hpp"
+//#include "source/ML/include/estrategia_clasificacion.hpp"
+//#include "source/main_pipe_line/include/main_pipe_line.hpp"
+
+
+/*
+TipoMuestra testESF(MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>* pipeline, std::string muestraPcd){
+
+	PointFeature<pcl::ESFSignature640> features; 
+	features = pipeline->computarNube(muestraPcd);
+	return pipeline->clasificar(features);
+}
+
+TipoMuestra testESF(MainPipeLine<pcl::ESFSignature640>* pipeline, std::string muestraPcd){
+
+	PointFeature<pcl::ESFSignature640> features; 
+	features = pipeline->computarNube(muestraPcd);
+	return pipeline->clasificar(features);
+}
+*/
+
+
+//Ejemplo de invocacion -->
+// ./mainPipeLine ejemplos/bache_pav_6_1.pcd
 
 int main(int argc,char** argv)
 {
 	std::cout << "Iniciado main pipeLine..." << std::endl;
-	//EstrategiaClasificacionSVM::EstrategiaClasificacionSVM();
-	//::EstrategiaClasificacionSVM* estr(new ::EstrategiaClasificacionSVM("a","b","c"));
-	std::string param1 = "a";
-	std::string param2 = "a";
-	std::string param3 = "a";
-	EstrategiaClasificacionSVM* estr(new EstrategiaClasificacionSVM(param1,param2,param3));
+	
+	/*
+	MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>* pipeLineESF = new MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>;
+	TipoMuestra tipo = testESF(pipeLineESF,argv[1]);
+	std::cout << "El tipo de muestra clasificado con ESF es: "<< tipo << std::endl;
 
-	//Foo<pcl::PointXYZRGB> my_clase;
-	Parametro p1;
-	p1.setNombre("thresh");
-	Parametro p2;
-	p2.setNombre("max_it");
-	Parametrizador param;
-	param.agregar(p1);
-	param.agregar(p2);
-
-	PlanarAndEuclidean<pcl::PointXYZRGB> ec;
-
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-	if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (argv[1], *cloud) == -1) //* load the file
-	{
-		std::cout << "No se pudo leer el archivo: "<< argv[1] << std::endl;
-	}
-	int tam_nube_original = 0;
-	tam_nube_original = cloud->points.size();
-	std::cout << "tam_nube_original: " << tam_nube_original << std::endl;
-	ec.setNube(*cloud);
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr nueva_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-	*nueva_cloud = ec.getNube();
-	int tam_nueva_cloud = 0;
-	//int tam_nueva_cloud = ec.getSizeNube();
-	tam_nueva_cloud = nueva_cloud->points.size();
-	std::cout << "tam_nueva_cloud: " << tam_nueva_cloud << std::endl;
-
-
-	std::cout << "Parametro::p1::nombre " << p1.getNombre() << std::endl;
-	std::cout << "Parametro::p2::nombre " << p2.getNombre() << std::endl;
-	std::cout << "Parametrizador cant param " << param.getParametros().size() << std::endl;
+	MainPipeLine<pcl::GRSDSignature21>* pipeLineGRSD = new MainPipeLine<pcl::GRSDSignature21>;
+	TipoMuestra tipo = testGRSD(pipeLineGRSD,argv[1]);
+	std::cout << "El tipo de muestra clasificado con GRSD es: "<< tipo << std::endl;
+	*/
 	std::cout << "Fin main xx pipeLine..." << std::endl;
 }
 

@@ -14,7 +14,7 @@
 //
 // Don't forget gtest.h, which declares the testing framework.
 #include <gtest/gtest.h>
-#include "../source/segmentation/include/segmentation.hpp"
+#include "../../../source/segmentation/include/segmentation.hpp"
 
 // Step 2. Use the TEST macro to define your tests.
 //

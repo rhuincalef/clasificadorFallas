@@ -1,63 +1,116 @@
-// Descriptor ESF con downsampling + diff. Alto y Ancho -->
-
-
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <stdlib.h>
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/features/normal_3d.h>
-//#include <pcl/features/fpfh.h>
-//#include <pcl/features/vfh.h>
-//#include <pcl/features/grsd.h>
-#include <pcl/features/esf.h>
-#include <pcl/features/normal_3d_omp.h>
-
-// Mediciones
-#include <pcl/console/time.h>
-// using for print_highlight, print_value, print_info
-#include <pcl/console/print.h>
-
-
-#include <boost/filesystem.hpp>
-// command parse
-#include <pcl/console/parse.h>
-#include <math.h>
-
-#include <pcl/features/principal_curvatures.h>
-
-#include <pcl/ml/svm_wrapper.h>
-//#include <pcl/filters/uniform_sampling.h>
-#include <pcl/filters/voxel_grid.h>
-#include <pcl/surface/convex_hull.h>
-
-#include <pcl/common/distances.h>
-#include <pcl/surface/gp3.h>
-#include <pcl/features/moment_of_inertia_estimation.h>
-
 #include "../../utils/include/utils.hpp"
 
 #include "../include/estrategia_clasificacion.hpp"
 
-EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(){
+
+//Constructores 
+template <class SignatureT,class ProblemaT,class ModeloT>
+EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT>::EstrategiaClasificacionMLAbstract(){
 
 }
 
-EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(std::string formateador,std::string dirSalidaTmp){
+
+/************************** Estrategia clasificacion SVM **************************/
+
+
+/*
+template <class SignatureT,class ProblemaT,class ModeloT>
+EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT>::EstrategiaClasificacionSVM(){
+*/
+template <class SignatureT>
+EstrategiaClasificacionSVM<SignatureT>::EstrategiaClasificacionSVM(){
+	//this->formateador = new FormateadorDatasetSVM<SignatureT>();
+	this->formateador = new SVMFormatter<SignatureT>();
+}
+
+//template <class SignatureT,class ProblemaT>
+//ProblemaT EstrategiaClasificacionSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor){
+/*
+template <class SignatureT,class ProblemaT,class ModeloT>
+ProblemaT EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT>::adaptarDescriptor(PointFeature<SignatureT> descriptor){
+*/
+
+
+//template <class SignatureT,class ProblemaT> ProblemaT EstrategiaClasificacionSVM<SignatureT1>::adaptarDescriptor(PointFeature<SignatureT1> descriptor){
+template <class SignatureT>
+svm_problem EstrategiaClasificacionSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor){
+	//return this->formateador->adaptarDescriptor(descriptor);
+	svm_problem p;
+	return p;
+}
+
+
+
+
+/*
+	Carga el modelo.dat a memoira y lo retorna
+*/
+//struct svm_model *svm_load_model(const char *model_file_name);
+//
+//svm_model* EstrategiaClasificacionSVM::cargarModelo(std::string pathModeloEntrenado){
+/*
+template <class SignatureT,class ModeloT>
+ModeloT* EstrategiaClasificacionSVM<SignatureT>::cargarModelo(std::string pathModeloEntrenado){
+*/
+template <class SignatureT>
+svm_model* EstrategiaClasificacionSVM<SignatureT>::cargarModelo(std::string pathModeloEntrenado){
+
+	struct svm_model* modelo;
+	if ( (modelo=svm_load_model(pathModeloEntrenado.c_str() )) ==0) 
+	{
+		//fprintf(stderr,"can't open model file %s\n",argv[i+1]);
+		std::cout << "No se puede abrir el modelo entrenado!" << std::endl; 
+		exit(1);
+	}
+	
+	std::cout << "Leido el modelo: "<< pathModeloEntrenado << std::endl; 
+	return modelo;
+}
+
+/*
+  struct svm_problem
+  {
+    int l; //Cantidad de muestras de training
+    double *y; //Arreglo de labels de las muestras
+
+    struct svm_node **x; //Arreglo de svm_node, donde cada svm_node es un vector de entrenamiento para la SVM
+  };
+	//double svm_predict (const struct svm_model *model, const struct svm_node *x);
+*/
+/*
+template <class SignatureT,class ProblemaT>
+TipoMuestra EstrategiaClasificacionSVM<SignatureT>::clasificar(std::string pathModeloEntrenado, ProblemaT descriptor){
+*/
+template <class SignatureT>
+TipoMuestra EstrategiaClasificacionSVM<SignatureT>::clasificar(std::string pathModeloEntrenado, svm_problem descriptor){
+
+	struct svm_model* modelo;
+	modelo = cargarModelo(pathModeloEntrenado);
+
+	int result = (int) svm_predict(modelo, *(descriptor.x) );
+	switch(result) {
+		case TIPO_BACHE: 
+			std::cout << "Muestra clasificada como: BACHE" << std::endl;
+			return TIPO_BACHE;
+
+	    case TIPO_GRIETA:
+			std::cout << "Muestra clasificada como: GRIETA" << std::endl; 
+	        return TIPO_GRIETA;
+	}
 
 }
 
-int EstrategiaClasificacionMLAbstract::leerDatasetTmp(std::string pathDatasetTmp){
-  return 0;
-}
+/*
+Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
+definicion de sus templates en archivos .hpp y .cpp separados. 
 
-TipoMuestra EstrategiaClasificacionMLAbstract::clasificar(std::string pathDatasetTmp) {
-  return TIPO_BACHE;
-}
+template class EstrategiaClasificacionSVM<pcl::ESFSignature640,svm_problem,svm_model>;
+template class EstrategiaClasificacionSVM<pcl::GRSDSignature21,svm_problem,svm_model>;
+template class EstrategiaClasificacionSVM<pcl::FPFHSignature33,svm_problem,svm_model>;
+*/
+//template svm_problem EstrategiaClasificacionAbstract::adaptarDescriptor(PointFeature<pcl::ESFSignature640>);
 
-
-EstrategiaClasificacionSVM::EstrategiaClasificacionSVM(std::string pathModeloEntrenado,std::string formateador,std::string dirSalidaTmp){  
-}
-
+template class EstrategiaClasificacionSVM<pcl::ESFSignature640>;
+template class EstrategiaClasificacionSVM<pcl::GRSDSignature21>;
+template class EstrategiaClasificacionSVM<pcl::FPFHSignature33>;
 
