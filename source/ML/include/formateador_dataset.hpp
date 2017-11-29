@@ -1,4 +1,4 @@
-// Clases: FormateadorDatasetAbstract, FormateadorDatasetSVM
+// Clases: FormateadorDatasetAbstract, SVMFormatter
 #include <iostream>
 #include "../../utils/include/utils.hpp"
 #include "../../descriptor/include/pointfeaturederivadas.hpp"
@@ -27,26 +27,39 @@ public:
 
 	ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);
 };
+
 #endif
 
-#ifndef FormateadorDatasetSVM_DEF
-#define FormateadorDatasetSVM_DEF
+
+#ifndef FormateadorSVM_DEF
+#define FormateadorSVM_DEF
 
 template<class SignatureT>
-class FormateadorDatasetSVM : public FormateadorDatasetAbstract<SignatureT,svm_problem>
-{
-  
-//private:
-public:
-	//Constructor 
-	FormateadorDatasetSVM();
-	
-	void generarMuestraSVM(PointFeature<SignatureT> descriptor,pcl::SVMData* muestraSVM);
-	
-	//svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);
+class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,svm_problem> {
 
-	/*void dumpearDescriptor(PointFeature<SignatureT> descriptor,std::string dirSalidaTmp,
-								std::string nombreTmp);
-	*/
+public:
+	SVMFormatter();
+	void generarMuestraSVM(PointFeature<SignatureT> descriptor,pcl::SVMData* muestraSVM);
+ 	
+ 	//TODO: VER ESTO...
+	svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);
 };
 #endif
+
+/*
+#ifndef SVMFormatter_DEF
+#define SVMFormatter_DEF
+
+//template<class SignatureT,typename ProblemaT> class SVMFormatter;
+
+template<class SignatureT,typename ProblemaT>
+class SVMFormatter : public FormateadorDatasetAbstract<SignatureT,ProblemaT>{
+//class SVMFormatter <SignatureT,ProblemaT>: public FormateadorDatasetAbstract<SignatureT,ProblemaT>{
+	//Constructor 
+	SVMFormatter();
+	void generarMuestraSVM(PointFeature<SignatureT> descriptor,pcl::SVMData* muestraSVM);
+	ProblemaT adaptarDescriptor(PointFeature<SignatureT> descriptor);
+};
+
+#endif
+*/

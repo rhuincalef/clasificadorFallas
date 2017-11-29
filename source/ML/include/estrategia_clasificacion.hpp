@@ -11,7 +11,13 @@
 
 class EstrategiaClasificacionAbstract {
 
+
 };
+
+
+//template svm_problem EstrategiaClasificacionAbstract::adaptarDescriptor(PointFeature<pcl::ESFSignature640>);
+
+
 #endif
 
 #ifndef EstrategiaClasificacionMLAbstract_DEF
@@ -48,14 +54,11 @@ class EstrategiaClasificacionSVM : public EstrategiaClasificacionMLAbstract<Sign
 public:
 	//Constructor 
 	EstrategiaClasificacionSVM();
-	
-	/*
-	template <class SignatureT1,typename ProblemaT> ProblemaT adaptarDescriptor(PointFeature<SignatureT1> descriptor);	
-	template <typename ModeloT> ModeloT* cargarModelo(std::string pathModeloEntrenado);
-	//void clasificar(std::string pathModeloEntrenado,ProblemaT descriptor);
-	template <typename ProblemaT> TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
-	*/
 
+
+	svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor);	
+	svm_model* cargarModelo(std::string pathModeloEntrenado);
+	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
 
 };
 #endif

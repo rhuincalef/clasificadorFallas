@@ -8,7 +8,7 @@
 #include "source/main_pipe_line/include/main_pipe_line.hpp"
 
 
-TipoMuestra testESF(MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640>* pipeline, std::string muestraPcd){
+TipoMuestra testESF(MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>* pipeline, std::string muestraPcd){
 
 	PointFeature<pcl::ESFSignature640> features; 
 	features = pipeline->computarNube(muestraPcd);
@@ -32,7 +32,7 @@ int main(int argc,char** argv)
 {
 	std::cout << "Iniciado main pipeLine..." << std::endl;
 	
-	MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640>* pipeLineESF = new MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640>;
+	MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>* pipeLineESF = new MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>;
 	TipoMuestra tipo = testESF(pipeLineESF,argv[1]);
 	std::cout << "El tipo de muestra clasificado con ESF es: "<< tipo << std::endl;
 

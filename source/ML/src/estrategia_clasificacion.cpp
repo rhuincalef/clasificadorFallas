@@ -19,7 +19,8 @@ EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT>::EstrategiaClasificacio
 */
 template <class SignatureT>
 EstrategiaClasificacionSVM<SignatureT>::EstrategiaClasificacionSVM(){
-	this->formateador = new FormateadorDatasetSVM<SignatureT>();
+	//this->formateador = new FormateadorDatasetSVM<SignatureT>();
+	this->formateador = new SVMFormatter<SignatureT>();
 }
 
 //template <class SignatureT,class ProblemaT>
@@ -30,8 +31,12 @@ ProblemaT EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT>::adaptarDescr
 */
 
 
-template <class SignatureT,class ProblemaT> ProblemaT EstrategiaClasificacionSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor){
-	return this->formateador->adaptarDescriptor(descriptor);
+//template <class SignatureT,class ProblemaT> ProblemaT EstrategiaClasificacionSVM<SignatureT1>::adaptarDescriptor(PointFeature<SignatureT1> descriptor){
+template <class SignatureT>
+svm_problem EstrategiaClasificacionSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor){
+	//return this->formateador->adaptarDescriptor(descriptor);
+	svm_problem p;
+	return p;
 }
 
 
@@ -43,8 +48,13 @@ template <class SignatureT,class ProblemaT> ProblemaT EstrategiaClasificacionSVM
 //struct svm_model *svm_load_model(const char *model_file_name);
 //
 //svm_model* EstrategiaClasificacionSVM::cargarModelo(std::string pathModeloEntrenado){
+/*
 template <class SignatureT,class ModeloT>
 ModeloT* EstrategiaClasificacionSVM<SignatureT>::cargarModelo(std::string pathModeloEntrenado){
+*/
+template <class SignatureT>
+svm_model* EstrategiaClasificacionSVM<SignatureT>::cargarModelo(std::string pathModeloEntrenado){
+
 	struct svm_model* modelo;
 	if ( (modelo=svm_load_model(pathModeloEntrenado.c_str() )) ==0) 
 	{
@@ -67,10 +77,12 @@ ModeloT* EstrategiaClasificacionSVM<SignatureT>::cargarModelo(std::string pathMo
   };
 	//double svm_predict (const struct svm_model *model, const struct svm_node *x);
 */
-//TipoMuestra EstrategiaClasificacionSVM::clasificar(std::string pathModeloEntrenado, svm_problem descriptor){
-
+/*
 template <class SignatureT,class ProblemaT>
 TipoMuestra EstrategiaClasificacionSVM<SignatureT>::clasificar(std::string pathModeloEntrenado, ProblemaT descriptor){
+*/
+template <class SignatureT>
+TipoMuestra EstrategiaClasificacionSVM<SignatureT>::clasificar(std::string pathModeloEntrenado, svm_problem descriptor){
 
 	struct svm_model* modelo;
 	modelo = cargarModelo(pathModeloEntrenado);
@@ -91,10 +103,14 @@ TipoMuestra EstrategiaClasificacionSVM<SignatureT>::clasificar(std::string pathM
 /*
 Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
 definicion de sus templates en archivos .hpp y .cpp separados. 
-*/
+
 template class EstrategiaClasificacionSVM<pcl::ESFSignature640,svm_problem,svm_model>;
 template class EstrategiaClasificacionSVM<pcl::GRSDSignature21,svm_problem,svm_model>;
 template class EstrategiaClasificacionSVM<pcl::FPFHSignature33,svm_problem,svm_model>;
+*/
+//template svm_problem EstrategiaClasificacionAbstract::adaptarDescriptor(PointFeature<pcl::ESFSignature640>);
 
-
+template class EstrategiaClasificacionSVM<pcl::ESFSignature640>;
+template class EstrategiaClasificacionSVM<pcl::GRSDSignature21>;
+template class EstrategiaClasificacionSVM<pcl::FPFHSignature33>;
 

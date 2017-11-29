@@ -63,52 +63,10 @@ void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM,
 */
 
 
-/**************************** FormateadorDatasetSVM ****************************/
+/**************************** SVMFormatter ****************************/
 template<class SignatureT>
-FormateadorDatasetSVM<SignatureT>::FormateadorDatasetSVM(){
+SVMFormatter<SignatureT>::SVMFormatter(){
 
-}
-
-//Genera las features de una muestra y las guarda en un vector
-/*
-template <class SignatureT> void FormateadorDatasetSVM::generarMuestraSVM(PointFeature<SignatureT> descriptor,
-													pcl::SVMData* muestraSVM){
-*/
-template <class SignatureT> 
-void FormateadorDatasetSVM<SignatureT>::generarMuestraSVM(PointFeature<SignatureT> descriptor,
-													pcl::SVMData* muestraSVM){
-
-	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
-	std::vector<pcl::SVMDataPoint> vectorFeatures;
-
-	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
-	int indexador = 0;
-	pcl::PointCloud<SignatureT> descriptores = descriptor.getDescriptorPCL();
-	//Recorrer para cada punto del descriptor, cada histograma y por
-	//cada histograma iterar cada valor.
-	for (int j= 0; j < descriptores.points.size() ; ++j)
-	{	
-		
-		for (int k = 0; k < 640; ++k)
-		{
-			pcl::SVMDataPoint dataPoint;
-			indexador = 640*j + k;			
-			dataPoint.idx = indexador;
-			dataPoint.value = descriptores.points[j].histogram[k];
-			vectorFeatures.push_back(dataPoint);
-		 //End For - Histogram Signatures 
-		}
-
-		/*************************************************************************************************************/
-	}/* End for muestras*/
-
-	
-	//Calculo ancho-alto
-	pcl::SVMDataPoint diffAltoAncho;
-	diffAltoAncho.idx = ++indexador;
-	diffAltoAncho.value = descriptor.getDiffAltoAncho();
-	vectorFeatures.push_back(diffAltoAncho);
-	muestraSVM->SV = vectorFeatures;
 }
 
 /* 
@@ -117,8 +75,8 @@ void FormateadorDatasetSVM<SignatureT>::generarMuestraSVM(PointFeature<Signature
 */
 //pcl::SVM::adaptInputToLibSVM (std::vector<SVMData> training_set, svm_problem &prob)
 //template <class SignatureT> svm_problem adaptarDescriptor(PointFeature<SignatureT> descriptor)
-template <class SignatureT,class ProblemaT> 
-ProblemaT FormateadorDatasetSVM<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor)
+template <class SignatureT> 
+svm_problem SVMFormatter<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor)
 {
 
 	svm_problem prob;
@@ -170,13 +128,57 @@ ProblemaT FormateadorDatasetSVM<SignatureT>::adaptarDescriptor(PointFeature<Sign
 	return prob;
 };
 
+//Genera las features de una muestra y las guarda en un vector
+/*
+template <class SignatureT> void SVMFormatter::generarMuestraSVM(PointFeature<SignatureT> descriptor,
+													pcl::SVMData* muestraSVM){
+*/
+template <class SignatureT> 
+void SVMFormatter<SignatureT>::generarMuestraSVM(PointFeature<SignatureT> descriptor,
+													pcl::SVMData* muestraSVM){
+
+	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
+	std::vector<pcl::SVMDataPoint> vectorFeatures;
+
+	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
+	int indexador = 0;
+	pcl::PointCloud<SignatureT> descriptores = descriptor.getDescriptorPCL();
+	//Recorrer para cada punto del descriptor, cada histograma y por
+	//cada histograma iterar cada valor.
+	for (int j= 0; j < descriptores.points.size() ; ++j)
+	{	
+		
+		for (int k = 0; k < 640; ++k)
+		{
+			pcl::SVMDataPoint dataPoint;
+			indexador = 640*j + k;			
+			dataPoint.idx = indexador;
+			dataPoint.value = descriptores.points[j].histogram[k];
+			vectorFeatures.push_back(dataPoint);
+		 //End For - Histogram Signatures 
+		}
+
+		/*************************************************************************************************************/
+	}/* End for muestras*/
+
+	
+	//Calculo ancho-alto
+	pcl::SVMDataPoint diffAltoAncho;
+	diffAltoAncho.idx = ++indexador;
+	diffAltoAncho.value = descriptor.getDiffAltoAncho();
+	vectorFeatures.push_back(diffAltoAncho);
+	muestraSVM->SV = vectorFeatures;
+}
+
+
+
 
 /*
 	Este metodo dumpea el PointFeature de una muestra en disco, en un directorio de salida temporal,
 	y con un nombre. 
 */
 /*
-template <class SignatureT> void FormateadorDatasetSVM::dumpearDescriptor(PointFeature<SignatureT> descriptor,
+template <class SignatureT> void SVMFormatter::dumpearDescriptor(PointFeature<SignatureT> descriptor,
 														std::string dirSalidaTmp,
 														std::string nombreTmp){
 	//Se convierte la muestra a un formato de muestra SVM
@@ -187,9 +189,13 @@ template <class SignatureT> void FormateadorDatasetSVM::dumpearDescriptor(PointF
 	almacenarSVMTmp(muestraSVM, dirSalidaTmp, nombreTmp);
 }
 */
+template class SVMFormatter<pcl::ESFSignature640>;
+template class SVMFormatter<pcl::GRSDSignature21>;
+template class SVMFormatter<pcl::FPFHSignature33>;
 
-template class FormateadorDatasetSVM<pcl::ESFSignature640,svm_problem>;
-template class FormateadorDatasetSVM<pcl::GRSDSignature21,svm_problem>;
-template class FormateadorDatasetSVM<pcl::FPFHSignature33,svm_problem>;
-
+/*
+template class SVMFormatter<pcl::ESFSignature640,svm_problem>;
+template class SVMFormatter<pcl::GRSDSignature21,svm_problem>;
+template class SVMFormatter<pcl::FPFHSignature33,svm_problem>;
+*/
 
