@@ -2,41 +2,37 @@
 
 #include "../include/nube.hpp"
 
-template <typename PointT> Nube<PointT>::Nube(){
+template <typename PointT>
+Nube<PointT>::Nube(){
 
 }
 
 //Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
-template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
+template <typename PointT>
+Nube<PointT>::Nube(std::string fullPathCaptura){
 
-	//Se computa la nube completa
-	original_cloud (new pcl::PointCloud<PointT>);
-	downsampling_cloud (new pcl::PointCloud<PointT>);
-	/*
-	original_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-	downsampling_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-	*/
-	//pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
-	normals_cloud (new pcl::PointCloud<pcl::Normal>); 
-	//
+  //Se computa la nube completa
+  original_cloud (new pcl::PointCloud<PointT>);
+  downsampling_cloud (new pcl::PointCloud<PointT>);
+  /*
+  original_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  downsampling_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  */
+  //normals_cloud (new pcl::PointCloud<pcl::Normal>); 
+  //pcl::PointCloud<pcl::Normal>::Ptr n_cloud (new pcl::PointCloud<pcl::Normal>);
+  normals_cloud (new pcl::PointCloud<pcl::Normal>);
 
-	//if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathCaptura, *original_cloud) == -1) //* load the file
-	if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *original_cloud) == -1) //* load the file
-	{
-		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
-		return;
-	}
-	std::cout << "Leida muestra " << fullPathCaptura << " con " << original_cloud->points.size () << std::endl;
-
-	pcl::copyPointCloud(*original_cloud, *downsampling_cloud);
-	/*if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathArch, *original_cloud) == -1) //* load the file
-	{
-		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
-		return 1;
-	}
-	*/
-	std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
-	//pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> normalEstimation(0);
+  //if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathCaptura, *original_cloud) == -1) //* load the file
+  if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *original_cloud) == -1) //* load the file
+  {
+	std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
+	return;
+  }
+  std::cout << "Leida muestra " << fullPathCaptura << " con " << original_cloud->points.size () << std::endl;
+  pcl::copyPointCloud(*original_cloud, *downsampling_cloud);
+  std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
+  /*
+    //pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> normalEstimation(0);
 	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
 	normalEstimation.setInputCloud(original_cloud);
 	// For every point, use all neighbors in a radius of 3cm.
@@ -51,28 +47,29 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	normalEstimation.compute(*normals_cloud);
 
 	std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
+  */
 
 }
 
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getDownsamplingCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getDownsamplingCloud(){
 	return downsampling_cloud;
 }
 
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getNormalsCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getNormalsCloud(){
 	return normals_cloud;
 }
 
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getOriginalCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getOriginalCloud(){
 
 }
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getNoOutlierCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getNoOutlierCloud(){
 	
 }
