@@ -35,9 +35,12 @@ template <> MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_problem,svm_m
 template<class PointT,class SignatureT,class ProblemaT,class ModeloT>
 PointFeature<SignatureT,PointT>* MainPipeLine<PointT,SignatureT,ProblemaT,ModeloT>::computarNube(std::string pcdNoEscaneado){
 	//Se crea una nube y se emplea la estrategia de ESF para obtener el PointFeature
+	std::cout << "Entre a ComputarNube" << std::endl;
 	Nube<PointT>* n = new Nube<PointT>(pcdNoEscaneado);
+	std::cout << "Entre despues de instanciar la nube" << std::endl;
 	//PointFeature<pcl::ESFSignature640> pointFeature = this->estratDescriptor->generarDescriptor(n);
 	PointFeature<SignatureT,PointT>* pointFeature = this->estratDescriptor->generarDescriptor(n);
+	std::cout << "Genere el descriptor" << std::endl;
 	return pointFeature;
 };
 

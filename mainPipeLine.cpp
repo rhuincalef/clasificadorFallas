@@ -14,8 +14,10 @@
 TipoMuestra testESF(MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>* pipeline,
 								 std::string muestraPcd){
 
+	std::cout << "En testESF!" << std::endl;
 	PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* features; 
 	features = pipeline->computarNube(muestraPcd);
+	std::cout << "Despues de computarNube" << std::endl;
 	return pipeline->clasificar(features);
 }
 

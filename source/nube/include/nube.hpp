@@ -36,5 +36,6 @@ private:
 	typename pcl::PointCloud<PointT>::Ptr original_cloud;
 	typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud;
 
+
 };
 #endif
