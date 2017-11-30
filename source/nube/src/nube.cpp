@@ -2,11 +2,13 @@
 
 #include "../include/nube.hpp"
 
-template <typename PointT> Nube<PointT>::Nube(){
+template <typename PointT>
+Nube<PointT>::Nube(){
 
 }
 
 //Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
+
 template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
 	//Se computa la nube completa
@@ -29,9 +31,13 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	this->normals_cloud = new pcl::PointCloud<PointT>;
 	*/
 
-	//
-
-	//if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (fullPathCaptura, *original_cloud) == -1) //* load the file
+	//Se computa la nube completa
+	
+	/*
+	original_cloud (new pcl::PointCloud<PointT>);
+	downsampling_cloud (new pcl::PointCloud<PointT>);
+	normals_cloud (new pcl::PointCloud<pcl::Normal>);
+	*/
 	if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *original_cloud) == -1) //* load the file
 	{
 		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
@@ -48,6 +54,7 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	*/
 	std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
 	//pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> normalEstimation(0);
+
 	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
 	normalEstimation.setInputCloud(original_cloud);
 	// For every point, use all neighbors in a radius of 3cm.
@@ -63,14 +70,14 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
 	std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
 
+
 }
 
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getDownsamplingCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getDownsamplingCloud(){
 	return downsampling_cloud;
 }
-
 
 template<class PointT>
 typename pcl::PointCloud<pcl::Normal>::Ptr Nube<PointT>::getNormalsCloud(){
@@ -78,13 +85,13 @@ typename pcl::PointCloud<pcl::Normal>::Ptr Nube<PointT>::getNormalsCloud(){
 }
 
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getOriginalCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getOriginalCloud(){
 
 }
 
-template<class PointT>
-typename pcl::PointCloud<PointT>::Ptr Nube<PointT>::getNoOutlierCloud(){
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getNoOutlierCloud(){
 	
 }
 

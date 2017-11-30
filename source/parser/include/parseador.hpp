@@ -1,5 +1,7 @@
 // Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
 #include <iostream>
+#include <boost/algorithm/string.hpp>
+
 #include "../../utils/include/utils.hpp"
 
 #ifndef Parseador_DEF

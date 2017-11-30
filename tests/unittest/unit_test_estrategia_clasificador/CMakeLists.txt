@@ -19,4 +19,3 @@ set(CMAKE_CXX_FLAGS "-std=c++98 -fpermissive -lgtest")
 add_executable (unit_test_estrategia_clasificador "unit_test_estrategia_clasificador.cpp")
 target_link_libraries (unit_test_estrategia_clasificador ${PCL_LIBRARIES} )
 
-
