@@ -18,7 +18,7 @@ public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
 	//template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n);
-	PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n);
+	PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n);
 
 	std::string getPathModeloEntrenado();
 
@@ -37,7 +37,7 @@ protected:
 public:
 	//Constructor 
 	ESF();
-
+	PointFeature<pcl::ESFSignature640,PointT>* generarDescriptor(Nube<PointT>* n);
 	//template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT>* n);
 	
 };
@@ -55,6 +55,7 @@ class GRSD : public EstrategiaDescriptorsAbstract<PointT,pcl::GRSDSignature21>
 public:
 	//Constructor 
 	GRSD();
+	PointFeature<pcl::GRSDSignature21,PointT>* generarDescriptor(Nube<PointT>* n);
 
 	//template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT>* n);
 
@@ -70,6 +71,7 @@ class FPFH : public EstrategiaDescriptorsAbstract<PointT,pcl::FPFHSignature33>
 public:
 	//Constructor 
 	FPFH();
+	PointFeature<pcl::FPFHSignature33,PointT> generarDescriptor(Nube<PointT>* n);
 
 	//template <class PointT> PointFeature<pcl::FPFHSignature33> generarDescriptor(Nube<PointT>* n);
 

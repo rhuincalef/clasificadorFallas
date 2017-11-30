@@ -14,24 +14,19 @@
 
 #ifndef PointFeature_DEF
 #define PointFeature_DEF
-template <class SignatureT> 
+template <class SignatureT,class PointT> 
 class PointFeature{
 
 public:
 	//Constructor 
 	PointFeature();
 
-	template<typename PointT> typename pcl::PointCloud<SignatureT> procesarDescriptorPCL(Nube<PointT> n);
 
-
-	
-	template <class PointT> void calcularAltoAncho(pcl::PointCloud<PointT>* cloud,
-														TipoDimensiones* dimensiones);
-	
-
+	void procesarDescriptorPCL(Nube<PointT>* n);
+	void calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,TipoDimensiones* dimensiones);
 
 	double getDiffAltoAncho();
-	typename pcl::PointCloud<SignatureT> getDescriptorPCL();
+	typename pcl::PointCloud<SignatureT>::Ptr getDescriptorPCL();
 
 //private:
 protected:

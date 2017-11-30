@@ -23,14 +23,17 @@ class derived : public base
   }
 };
 */
-
-class PointFeatureESF : public PointFeature<pcl::ESFSignature640> {
+//template<class SignatureT,class PointT>
+template<class PointT>
+class PointFeatureESF: public PointFeature<pcl::ESFSignature640,PointT> {
 
 public:
 	//Constructor 
 	PointFeatureESF();
 
-	template<typename PointT> pcl::PointCloud<pcl::ESFSignature640> procesarDescriptorPCL(Nube<PointT> n);
+	//pcl::PointCloud<pcl::ESFSignature640> procesarDescriptorPCL(Nube<PointT> n);
+	void procesarDescriptorPCL(Nube<PointT>* n);
+	//template<typename PointT> pcl::PointCloud<pcl::ESFSignature640> procesarDescriptorPCL(Nube<PointT> n);
 
 	//pcl::PointCloud<pcl::ESFSignature640> getDescriptorPCL();
 	
@@ -45,13 +48,18 @@ private:
 #ifndef PointFeatureGRSD_DEF
 #define PointFeatureGRSD_DEF
 
-class PointFeatureGRSD : public PointFeature<pcl::GRSDSignature21> {
+//template<class SignatureT,class PointT>
+
+template<class PointT>
+class PointFeatureGRSD : public PointFeature<pcl::GRSDSignature21,PointT> {
 
 public:
 	//Constructor 
 	PointFeatureGRSD();
-	template<typename PointT> pcl::PointCloud<pcl::GRSDSignature21> procesarDescriptorPCL(Nube<PointT> n);
-
+	//pcl::PointCloud<pcl::GRSDSignature21> procesarDescriptorPCL(Nube<PointT> n);
+	void procesarDescriptorPCL(Nube<PointT>* n);
+	
+	//template<typename PointT> pcl::PointCloud<pcl::GRSDSignature21> procesarDescriptorPCL(Nube<PointT> n);
 	//pcl::PointCloud<pcl::GRSDSignature21> getDescriptorPCL();
 	
 
