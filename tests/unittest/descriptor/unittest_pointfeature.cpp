@@ -14,7 +14,7 @@
 //
 // Don't forget gtest.h, which declares the testing framework.
 #include <gtest/gtest.h>
-#include "../../../source/segmentation/include/segmentation.hpp"
+#include "../../../source/descriptor/include/pointfeaturederivadas.hpp"
 
 // Step 2. Use the TEST macro to define your tests.
 //
@@ -40,7 +40,7 @@
 //
 // </TechnicalDetails>
 
-class PlanarAndEuclideanTest : public ::testing::Test {
+class PointFeatureTest : public ::testing::Test {
  protected:
   virtual void SetUp() {
   }
@@ -54,7 +54,7 @@ class PlanarAndEuclideanTest : public ::testing::Test {
 // Tests PlanarAndEuclidean()
 /*
 */
-TEST(PlanarAndEuclideanTest, TamanioNube)
+TEST(PointFeatureTest, Tamanio)
 {
   srand (time (NULL));
 
@@ -70,51 +70,13 @@ TEST(PlanarAndEuclideanTest, TamanioNube)
     cloud->points[i].y = 1024.0f * rand () / (RAND_MAX + 1.0f);
     cloud->points[i].z = 1024.0f * rand () / (RAND_MAX + 1.0f);
   }
+  /*
   PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
   pl_ec.setNube(*cloud);
   int orig_cloud_size = 0;
   orig_cloud_size = cloud->points.size();
   EXPECT_EQ(orig_cloud_size, pl_ec.getSizeNube());
-}
-
-TEST(PlanarAndEuclideanTest, DistanceThreshold)
-{
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  float distance_tresh = 9;
-  pl_ec.setDistanceThreshold(distance_tresh);
-  EXPECT_EQ(9, pl_ec.getDistanceThreshold());
-}
-
-TEST(PlanarAndEuclideanTest, MinClusterSize)
-{
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  int min_cluster_size = 1000;
-  pl_ec.setMinClusterSize(min_cluster_size);
-  EXPECT_EQ(1000, pl_ec.getMinClusterSize());
-}
-
-TEST(PlanarAndEuclideanTest, MaxClusterSize)
-{
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  int max_cluster_size = 250000;
-  pl_ec.setMaxClusterSize(max_cluster_size);
-  EXPECT_EQ(250000, pl_ec.getMaxClusterSize());
-}
-
-TEST(PlanarAndEuclideanTest, MaxIterations)
-{
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  int max_iterations = 1000;
-  pl_ec.setMaxIterations(max_iterations);
-  EXPECT_EQ(1000, pl_ec.getMaxIterations());
-}
-
-TEST(PlanarAndEuclideanTest, ClusterTolerance)
-{
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  float tolerance = .023f;
-  pl_ec.setClusterTolerance(tolerance);
-  EXPECT_EQ(.023f, pl_ec.getClusterTolerance());
+  */
 }
 
 // Step 3. Call RUN_ALL_TESTS() in main().
