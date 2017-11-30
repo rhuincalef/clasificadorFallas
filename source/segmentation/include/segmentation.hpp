@@ -94,6 +94,9 @@ public:
   std::vector<pcl::PointCloud<PointT>>
   computar(pcl::PointCloud<PointT> &input);
 
+  void
+  planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane);
+
 protected:
   // Planar Segmentation variables.
   float distance_threshold_ = .009f;
@@ -107,11 +110,13 @@ protected:
   pcl::ExtractIndices<PointT> extract_;
   pcl::EuclideanClusterExtraction<PointT> ec;
 
+  /*
   void
   planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> cloud_no_plane, pcl::PointCloud<PointT> cloud_plane);
+  */
   
   void
-  euclideanClusterExtraction(const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>>);
+  euclideanClusterExtraction(const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>> &clusters_cloud);
 
 };
 #endif

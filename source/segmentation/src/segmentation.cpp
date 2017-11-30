@@ -91,7 +91,7 @@ PlanarAndEuclidean<PointT>::getNube ()
 }
 
 template <typename PointT> void
-PlanarAndEuclidean<PointT>::planarSegmentation (const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> cloud_no_plane, pcl::PointCloud<PointT> cloud_plane)
+PlanarAndEuclidean<PointT>::planarSegmentation (const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane)
 {
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
   pcl::SACSegmentation<PointT> segmentation;
@@ -127,7 +127,7 @@ PlanarAndEuclidean<PointT>::planarSegmentation (const pcl::PointCloud<PointT> &i
 }
 
 template <typename PointT> void
-PlanarAndEuclidean<PointT>::euclideanClusterExtraction (const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>>)
+PlanarAndEuclidean<PointT>::euclideanClusterExtraction (const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>> &clusters_cloud)
 {
   typename pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
   *cloud = input;
@@ -140,11 +140,30 @@ PlanarAndEuclidean<PointT>::euclideanClusterExtraction (const pcl::PointCloud<Po
   ec.setSearchMethod (tree);
   ec.setInputCloud (cloud);
   ec.extract (cluster_indices);
+  for (std::vector<pcl::PointIndices>::const_iterator i = cluster_indices.begin(); i != cluster_indices.end(); ++i)
+  {
+  	// ...add all its points to a new cloud...
+  	typename pcl::PointCloud<PointT>::Ptr cluster(new pcl::PointCloud<PointT>);
+  	for (std::vector<int>::const_iterator point = i->indices.begin(); point != i->indices.end(); point++)
+  		cluster->points.push_back(cloud->points[*point]);
+  	cluster->width = cluster->points.size();
+  	cluster->height = 1;
+  	cluster->is_dense = true;
+  	if (cluster->points.size() <= 0)
+  		break;
+  	clusters_cloud.push_back(*cluster);
+  }
 }
 
 template <typename PointT> std::vector<pcl::PointCloud<PointT>>
 PlanarAndEuclidean<PointT>::computar (pcl::PointCloud<PointT> &input)
 {
+  std::vector<pcl::PointCloud<PointT>> clusters_cloud;
+  typename pcl::PointCloud<PointT>::Ptr plane (new pcl::PointCloud<PointT>);
+  typename pcl::PointCloud<PointT>::Ptr no_plane (new pcl::PointCloud<PointT>);
+  PlanarAndEuclidean<PointT>::planarSegmentation (input, *no_plane, *plane);
+  PlanarAndEuclidean<PointT>::euclideanClusterExtraction(*no_plane, clusters_cloud);
+  return clusters_cloud;
 }
 
 //The explicit instantiation part
