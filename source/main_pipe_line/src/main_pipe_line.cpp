@@ -17,25 +17,30 @@ template <> MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_m
 	std::cout << "Construyendo ESF..." << std::endl;  
 	this->dirAlmacenamientoCapturas = "";
 	this->estratDescriptor = new ESF<pcl::PointXYZRGB>();
-	this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::ESFSignature640>();
+	//this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::ESFSignature640,svm_problem,svm_model,pcl::PointXYZRGB>();
+	this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::ESFSignature640,pcl::PointXYZRGB>();
 }
 
 template <> MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_problem,svm_model>::MainPipeLine(){
 	std::cout << "Construyendo GRSD..." << std::endl;
 	this->dirAlmacenamientoCapturas = "";
 	this->estratDescriptor = new GRSD<pcl::PointXYZRGB>();
-	this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::GRSDSignature21>();
+	//this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::GRSDSignature21,svm_problem,svm_model,pcl::PointXYZRGB>();
+	this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::GRSDSignature21,pcl::PointXYZRGB>();
 }
 
 
 
 //Computar la nube
 template<class PointT,class SignatureT,class ProblemaT,class ModeloT>
-PointFeature<SignatureT> MainPipeLine<PointT,SignatureT,ProblemaT,ModeloT>::computarNube(std::string pcdNoEscaneado){
+PointFeature<SignatureT,PointT>* MainPipeLine<PointT,SignatureT,ProblemaT,ModeloT>::computarNube(std::string pcdNoEscaneado){
 	//Se crea una nube y se emplea la estrategia de ESF para obtener el PointFeature
+	std::cout << "Entre a ComputarNube" << std::endl;
 	Nube<PointT>* n = new Nube<PointT>(pcdNoEscaneado);
+	std::cout << "Entre despues de instanciar la nube" << std::endl;
 	//PointFeature<pcl::ESFSignature640> pointFeature = this->estratDescriptor->generarDescriptor(n);
-	PointFeature<SignatureT> pointFeature = this->estratDescriptor->generarDescriptor(n);
+	PointFeature<SignatureT,PointT>* pointFeature = this->estratDescriptor->generarDescriptor(n);
+	std::cout << "Genere el descriptor" << std::endl;
 	return pointFeature;
 };
 
@@ -51,8 +56,8 @@ PointFeature<pcl::ESFSignature640> MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignatu
 };
 */
 
-template <class PointT,class SignatureT,class ModeloT,class ProblemaT>
-TipoMuestra MainPipeLine<PointT,SignatureT,ModeloT,ProblemaT>::clasificar(PointFeature<SignatureT> descriptor){
+template <class PointT,class SignatureT,class ProblemaT,class ModeloT>
+TipoMuestra MainPipeLine<PointT,SignatureT,ProblemaT,ModeloT>::clasificar(PointFeature<SignatureT,PointT>* descriptor){
 
 	ProblemaT problema = this->estratClasificacion->adaptarDescriptor(descriptor);
 	return this->estratClasificacion->clasificar(this->estratDescriptor->getPathModeloEntrenado(),
@@ -61,7 +66,7 @@ TipoMuestra MainPipeLine<PointT,SignatureT,ModeloT,ProblemaT>::clasificar(PointF
 
 
 //Instanciacion explicita de la clase
-template class MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_model,svm_problem>;
-template class MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_model,svm_problem>;
+template class MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model>;
+template class MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_problem,svm_model>;
 
 

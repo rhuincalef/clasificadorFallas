@@ -40,29 +40,41 @@
 
 
 
-EstrategiaDescriptorsAbstract::EstrategiaDescriptorsAbstract(){
+template<class PointT,class SignatureT>
+EstrategiaDescriptorsAbstract<PointT,SignatureT>::EstrategiaDescriptorsAbstract(){
 
 }
 
-std::string EstrategiaDescriptorsAbstract::getPathModeloEntrenado(){
+template<class PointT,class SignatureT>
+std::string EstrategiaDescriptorsAbstract<PointT,SignatureT>::getPathModeloEntrenado(){
 	return this->pathModeloEntrenado;
 }
 
+template<class PointT,class SignatureT>
+PointFeature<SignatureT,PointT>* EstrategiaDescriptorsAbstract<PointT,SignatureT>::generarDescriptor(Nube<PointT>* n){
+
+}
+
+/*
 template <class PointT,class SignatureT> PointFeature<SignatureT> generarDescriptor(Nube<PointT>* n){
 	
 }
+*/
 
 /************************************** Estrategia ESF **************************************/
-ESF::ESF(){
+template <class PointT>
+ESF<PointT>::ESF(){
 	this->pathModeloEntrenado = TRAIN_MODEL_ESF_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
 
-template <class PointT,class SignatureT> PointFeature<SignatureT> ESF::generarDescriptor(Nube<PointT>* n){
+template <class PointT>
+PointFeature<pcl::ESFSignature640,PointT>* ESF<PointT>::generarDescriptor(Nube<PointT>* n){
 
-	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
+	//typename pcl::PointCloud<PointT>::Ptr downsampling = n->getDownsamplingCloud();
 
 	//Se procesa el descrptor especifico de la estrategia
-	PointFeatureESF* featureESF (new PointFeatureESF);
+	//PointFeatureESF<pcl::ESFSignature640,PointT>* featureESF (new PointFeatureESF<pcl::ESFSignature640,PointT>);
+	PointFeatureESF<PointT>* featureESF (new PointFeatureESF<PointT>);
 	featureESF->procesarDescriptorPCL(n);
 	return featureESF;
 }
@@ -72,21 +84,26 @@ template <class PointT,class SignatureT> PointFeature<SignatureT> ESF::generarDe
 
 
 /************************************** Estrategia GRSD **************************************/
-GRSD::GRSD(){
+template <class PointT>
+GRSD<PointT>::GRSD(){
 	this->pathModeloEntrenado = TRAIN_MODEL_GRSD_DIR_DEFAULT + "/" + TRAIN_MODEL_NAME_DEFAULT;
 }
 
 
-template <class PointT,class SignatureT> PointFeature<SignatureT> GRSD::generarDescriptor(Nube<PointT>* n){
+template <class PointT>
+PointFeature<pcl::GRSDSignature21,PointT>* GRSD<PointT>::generarDescriptor(Nube<PointT>* n){
 
-	pcl::PointCloud<PointT> downsampling = n.getDownsamplingCloud();
+	//pcl::PointCloud<PointT>::Ptr downsampling = n->getDownsamplingCloud();
 
 	//Se procesa el descrptor especifico de la estrategia
-	PointFeatureGRSD* featureGRSD (new PointFeatureESF);
+	//PointFeatureGRSD<pcl::GRSDSignature21,PointT>* featureGRSD (new PointFeatureGRSD<pcl::GRSDSignature21,PointT>);
+	PointFeatureGRSD<PointT>* featureGRSD (new PointFeatureGRSD<PointT>);
 	featureGRSD->procesarDescriptorPCL(n);
 	return featureGRSD;
 
 }
+
+
 /*
 namespace N {
   template<class T> class Y { void mf() { } }; // template definition
@@ -100,20 +117,23 @@ template void N::Y<double>::mf(); // OK: explicit instantiation
 
 */
 
-/*
-Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
-definicion de sus templates en archivos .hpp y .cpp separados. 
-*/
-template class ESF<pcl::PointXYZRGB,pcl::ESFSignature640>;
-template class GRSD<pcl::PointXYZRGB,pcl::GRSDSignature21>;
-template class FPFH<pcl::PointXYZRGB,pcl::FPFHSignature33>;
 
 /*
-template class EstrategiaDescriptorsAbstract::generarDescriptor<pcl::PointXYZRGB,pcl::ESFSignature640>();
-template class ESF::generarDescriptor<pcl::PointXYZRGB,pcl::ESFSignature640>();
-template class GRSD::generarDescriptor<pcl::PointXYZRGB,pcl::GRSDSignature21>();
+	Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
+	definicion de sus templates en archivos .hpp y .cpp separados. 
+
+	Se definen las especializaciones de los tipos genericos de las clases templates,
+	SOLAMENTE para aquellos metodos que tengan una implementacion(aunque sea de cuerpo vacio).
+	Si existen metodos genericos que no tengan implementacion se retornara error de linkeo.
 */
 
+template class EstrategiaDescriptorsAbstract<pcl::PointXYZRGB, pcl::ESFSignature640>;
+template class EstrategiaDescriptorsAbstract<pcl::PointXYZRGB, pcl::GRSDSignature21>;
+template class EstrategiaDescriptorsAbstract<pcl::PointXYZRGB, pcl::FPFHSignature33>;
+
+template class ESF<pcl::PointXYZRGB>;
+template class GRSD<pcl::PointXYZRGB>;
+template class FPFH<pcl::PointXYZRGB>;
 
 
 

@@ -6,7 +6,8 @@
 #include <pcl/features/moment_of_inertia_estimation.h>
 
 
-template <typename PointT> PointFeature<PointT>::PointFeature(){
+template <class SignatureT,class PointT>
+PointFeature<SignatureT,PointT>::PointFeature(){
 	diffAltoAncho = 0;
 }
 
@@ -19,28 +20,32 @@ void PointFeature<pcl::ESFSignature640>::calcularAltoAncho(pcl::PointCloud<Point
 */
 
 
-template <class SignatureT> double PointFeature<SignatureT>::getDiffAltoAncho(){
-  return this.diffAltoAncho;
+template <class SignatureT,class PointT>
+double PointFeature<SignatureT,PointT>::getDiffAltoAncho(){
+  return this->diffAltoAncho;
 }
 
 
-template <class SignatureT> pcl::PointCloud<SignatureT> PointFeature<SignatureT>::getDescriptorPCL(){
-    return this.descPCL;
+template <class SignatureT,class PointT>
+typename pcl::PointCloud<SignatureT>::Ptr PointFeature<SignatureT,PointT>::getDescriptorPCL(){
+    return this->descPCL;
 }
 
 
-//Doble Template para el tipo generico de la clase PointFeature y el argumento del metodo -->
-template <class PointT>
-template <class PointT1>
-void PointFeature<PointT>::calcularAltoAncho(pcl::PointCloud<PointT1>* cloud,
-                            TipoDimensiones* dimensiones){
-
-  PointT1 min_point_OBB;
-  PointT1 max_point_OBB;
-  PointT1 position_OBB;
+/*
+template <class SignatureT,class PointT>
+void PointFeature<SignatureT,PointT>::calcularAltoAncho(pcl::PointCloud<PointT>::Ptr cloud,
+                                                        TipoDimensiones* dimensiones){
+*/
+template <class SignatureT,class PointT>
+void PointFeature<SignatureT,PointT>::calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
+                                                        TipoDimensiones* dimensiones){
+  PointT min_point_OBB;
+  PointT max_point_OBB;
+  PointT position_OBB;
   Eigen::Vector3f mass_center;
   Eigen::Matrix3f rotational_matrix_OBB;
-  pcl::MomentOfInertiaEstimation <PointT1> feature_extractor;
+  pcl::MomentOfInertiaEstimation <PointT> feature_extractor;
   
   feature_extractor.setInputCloud(cloud);
   feature_extractor.compute();
@@ -81,7 +86,7 @@ void PointFeature<PointT>::calcularAltoAncho(pcl::PointCloud<PointT1>* cloud,
   float ancho = 0;
   float profundidad = 0;
 
-  ancho = sqrt(pow(pt1.x - pt5.x,2) + pow(pt1.y-pt5.y,2) + pow(pt1.z-pt5.z,2));
+  ancho = sqrt(pow(pt1.x - pt5.x,2) + pow(pt1.y-pt5.y,2) + pow(pt1.z-pt5.z,2) );
   //alto = fabs(pt1.y - pt4.y);
   alto = sqrt(pow(pt1.x - pt4.x,2) + pow(pt1.y-pt4.y,2) + pow(pt1.z-pt4.z,2));
   //profundidad = fabs(pt1.z - pt2.z);
@@ -104,29 +109,36 @@ void PointFeature<PointT>::calcularAltoAncho(pcl::PointCloud<PointT1>* cloud,
 
 
 
-
-
 /******************************************** Metodos ESF **********************************************/
-PointFeatureESF::PointFeatureESF(){
+/*
+template <class SignatureT,class PointT>
+PointFeatureESF<SignatureT,PointT>::PointFeatureESF(){
+*/
+template <class PointT>
+PointFeatureESF<PointT>::PointFeatureESF(){
   //this->descPCL = new pcl::PointCloud<pcl::ESFSignature640>;
 }
 
-
+/*
+template <class SignatureT,class PointT>
+void PointFeatureESF<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+*/
 template <class PointT>
-pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::procesarDescriptorPCL(Nube<PointT> n){
+void PointFeatureESF<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+
 	pcl::console::TicToc tt;
 	tt.tic();
 	// ESF estimation object.
   	pcl::ESFEstimation<PointT, pcl::ESFSignature640> esf;
 
-	esf.setInputCloud(n.getDownsamplingCloud());
+	esf.setInputCloud(n->getDownsamplingCloud());
 	esf.compute(*descPCL);
 	std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
 	//Calculo de alto y ancho V2
 	TipoDimensiones dimensiones;
-	calcularAltoAncho(n.getDownsamplingCloud(),&dimensiones);
-	diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
-	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< diffAltoAncho << std::endl;
+	calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
+	this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
+	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 
 }
 
@@ -138,23 +150,30 @@ pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::getDescriptorPCL(){
 
 
 /******************************************** Metodos GRSD **********************************************/
-
-PointFeatureGRSD::PointFeatureGRSD(){
+/*
+template <class SignatureT,class PointT>
+PointFeatureGRSD<SignatureT,PointT>::PointFeatureGRSD(){
+*/
+template <class PointT>
+PointFeatureGRSD<PointT>::PointFeatureGRSD(){
   //this->descPCL = new pcl::PointCloud<pcl::GRSDSignature21>;
 }
 
-
+/*
+template <class SignatureT,class PointT>
+void PointFeatureGRSD<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+*/
 template <class PointT>
-pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD::procesarDescriptorPCL(Nube<PointT> n){
+void PointFeatureGRSD<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 
 	pcl::console::TicToc tt;
 	tt.tic();
 	typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
 	// GRSD estimation object.
 	pcl::GRSDEstimation<PointT, pcl::Normal, pcl::GRSDSignature21> grsd;
-	grsd.setInputCloud(n.getDownsamplingCloud());
+	grsd.setInputCloud(n->getDownsamplingCloud());
 	//grsd.setInputNormals(normals);
-	grsd.setInputNormals(n.getNormalsCloud());
+	grsd.setInputNormals(n->getNormalsCloud());
 	grsd.setSearchMethod(kdtree);
 	// Search radius, to look for neighbors. Note: the value given here has to be
 	// larger than the radius used to estimate the normals.
@@ -164,13 +183,28 @@ pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD::procesarDescriptorPCL(Nu
 
 	//Calculo de alto y ancho V2
 	TipoDimensiones dimensiones;
-	calcularAltoAncho(n.getDownsamplingCloud(),&dimensiones);
-	diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
-	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< diffAltoAncho << std::endl;
+	calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
+	this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
+	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 }
 
+
 /*
-pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD::getDescriptorPCL(){
-  return this->descPCL;
-}
+  Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
+  definicion de sus templates en archivos .hpp y .cpp separados. 
+
+  Se definen las especializaciones de los tipos genericos de las clases templates,
+  SOLAMENTE para aquellos metodos que tengan una implementacion(aunque sea de cuerpo vacio).
+  Si existen metodos genericos que no tengan implementacion se retornara error de linkeo.
 */
+
+template class PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>;
+template class PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>;
+template class PointFeature<pcl::FPFHSignature33,pcl::PointXYZRGB>;
+
+
+template class PointFeatureESF<pcl::PointXYZRGB>;
+template class PointFeatureGRSD<pcl::PointXYZRGB>;
+//template class PointFeatureFPFH<pcl::PointXYZRGB>;
+
+

@@ -24,16 +24,18 @@ public:
 	//TODO: REMOVER ESTOS METODOS QUE SON TEMPORALES PARA TESTEAR LA CAPTURA
 	Nube(std::string fullPathpcd);
 	typename pcl::PointCloud<PointT>::Ptr getDownsamplingCloud();
-	typename pcl::PointCloud<PointT>::Ptr getNormalsCloud();
+	pcl::PointCloud<pcl::Normal>::Ptr getNormalsCloud();
 	typename pcl::PointCloud<PointT>::Ptr getOriginalCloud();
 	typename pcl::PointCloud<PointT>::Ptr getNoOutlierCloud();
 	
 
 private:
 	typename pcl::PointCloud<PointT>::Ptr downsampling_cloud;
-	typename pcl::PointCloud<PointT>::Ptr normals_cloud;
+	//pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
+	pcl::PointCloud<pcl::Normal>::Ptr normals_cloud;
 	typename pcl::PointCloud<PointT>::Ptr original_cloud;
 	typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud;
+
 
 };
 #endif

@@ -17,14 +17,14 @@ public:
 	MainPipeLine();
 	
 	//template <class SignatureT> PointFeature<SignatureT> computarNube(std::string pcdNoEscaneado);
-	PointFeature<SignatureT> computarNube(std::string pcdNoEscaneado);
-	TipoMuestra clasificar(PointFeature<SignatureT> descriptor);
+	PointFeature<SignatureT,PointT>* computarNube(std::string pcdNoEscaneado);
+	TipoMuestra clasificar(PointFeature<SignatureT,PointT>* descriptor);
 
 
 private:
 	std::string dirAlmacenamientoCapturas;
 	EstrategiaDescriptorsAbstract<PointT,SignatureT>* estratDescriptor;
-	EstrategiaClasificacionMLAbstract<SignatureT,ProblemaT,ModeloT>* estratClasificacion;
+	EstrategiaClasificacionMLAbstract<SignatureT,ProblemaT,ModeloT,PointT>* estratClasificacion;
 	//EstrategiaClasificacionAbstract* estratClasificacion;
 
 	/*
