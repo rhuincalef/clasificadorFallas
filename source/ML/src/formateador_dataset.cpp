@@ -114,6 +114,7 @@ template <class SignatureT,class PointT>
 svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 													PointFeature<SignatureT,PointT>* descriptor){
 
+	std::cout << "Inicio SVMFormatter.adaptarDescriptor() ..." << std::endl;
 	//ProblemaT prob;
 	svm_problem prob;
 
@@ -166,6 +167,7 @@ svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 	  
 	prob.x[i][k].index = -1;
 	}
+	std::cout << "Fin SVMFormatter.adaptarDescriptor() ..." << std::endl;
 	return prob;
 };
 

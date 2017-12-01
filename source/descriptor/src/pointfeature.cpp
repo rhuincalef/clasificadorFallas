@@ -107,6 +107,30 @@ void PointFeature<SignatureT,PointT>::calcularAltoAncho(pcl::PointCloud<pcl::Poi
   
 }
 
+template <class SignatureT,class PointT>
+void PointFeature<SignatureT,PointT>::c(){
+  std::cout << "Invoque a C() de SUPERCLASE!!! " << std::endl;
+}
+
+
+
+template <class SignatureT,class PointT>
+void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+
+  pcl::console::TicToc tt;
+  tt.tic();
+
+  this->c();
+
+  std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
+  //Calculo de alto y ancho V2
+  TipoDimensiones dimensiones;
+  calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
+  this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
+  std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
+}
+
+
 
 
 /******************************************** Metodos ESF **********************************************/
@@ -119,17 +143,20 @@ PointFeatureESF<PointT>::PointFeatureESF(){
   //this->descPCL = new pcl::PointCloud<pcl::ESFSignature640>;
 }
 
+//TODO: METODO PROPIO PARA ESTIMAR SOLAMENTE EL DESCRIPTOR DE CADA FEATURE INDPENDIENTEMENTE
+template <class PointT>
+void PointFeatureESF<PointT>::c(){
+  std::cout << "Invoque a metodo C() de ESF!!! " << std::endl;
+}
+
+
 /*
-template <class SignatureT,class PointT>
-void PointFeatureESF<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
-*/
 template <class PointT>
 void PointFeatureESF<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
-
 	pcl::console::TicToc tt;
 	tt.tic();
 	// ESF estimation object.
-  	pcl::ESFEstimation<PointT, pcl::ESFSignature640> esf;
+  pcl::ESFEstimation<PointT, pcl::ESFSignature640> esf;
 
 	esf.setInputCloud(n->getDownsamplingCloud());
 	esf.compute(*descPCL);
@@ -141,6 +168,7 @@ void PointFeatureESF<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 
 }
+*/
 
 /*
 pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::getDescriptorPCL(){
@@ -159,35 +187,38 @@ PointFeatureGRSD<PointT>::PointFeatureGRSD(){
   //this->descPCL = new pcl::PointCloud<pcl::GRSDSignature21>;
 }
 
-/*
-template <class SignatureT,class PointT>
-void PointFeatureGRSD<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+//TODO: METODO PROPIO PARA ESTIMAR SOLAMENTE EL DESCRIPTOR DE CADA FEATURE INDPENDIENTEMENTE
+/*template <class PointT>
+void PointFeatureGRSD<PointT>::c(){
+  std::cout << "Invoque a metodo C() de GRSD!!! " << std::endl;
+}
 */
+
+/*
 template <class PointT>
 void PointFeatureGRSD<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 
-	pcl::console::TicToc tt;
-	tt.tic();
-	typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
-	// GRSD estimation object.
-	pcl::GRSDEstimation<PointT, pcl::Normal, pcl::GRSDSignature21> grsd;
-	grsd.setInputCloud(n->getDownsamplingCloud());
-	//grsd.setInputNormals(normals);
-	grsd.setInputNormals(n->getNormalsCloud());
-	grsd.setSearchMethod(kdtree);
-	// Search radius, to look for neighbors. Note: the value given here has to be
-	// larger than the radius used to estimate the normals.
-	grsd.setRadiusSearch(0.05);
-	grsd.compute(*descPCL);
-	std::cout << "GRSD descriptor Time(seg): " << tt.toc()/1000 << std::endl;
-
-	//Calculo de alto y ancho V2
-	TipoDimensiones dimensiones;
-	calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
-	this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
-	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
+  pcl::console::TicToc tt;
+  tt.tic();
+  typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
+  // GRSD estimation object.
+  pcl::GRSDEstimation<PointT, pcl::Normal, pcl::GRSDSignature21> grsd;
+  grsd.setInputCloud(n->getDownsamplingCloud());
+  //grsd.setInputNormals(normals);
+  grsd.setInputNormals(n->getNormalsCloud());
+  grsd.setSearchMethod(kdtree);
+  // Search radius, to look for neighbors. Note: the value given here has to be
+  // larger than the radius used to estimate the normals.
+  grsd.setRadiusSearch(0.05);
+  grsd.compute(*descPCL);
+  std::cout << "GRSD descriptor Time(seg): " << tt.toc()/1000 << std::endl;
+  //Calculo de alto y ancho V2
+  TipoDimensiones dimensiones;
+  calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
+  this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
+  std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 }
-
+*/
 
 /*
   Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 

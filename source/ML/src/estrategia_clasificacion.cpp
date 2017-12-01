@@ -11,7 +11,7 @@ EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::Estrate
 
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 ProblemaT EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-
+	std::cout << "estrategiaClasificacion.adaptarDescriptor() SUPERCLASE!!!" << std::endl;
 }
 
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
@@ -37,6 +37,7 @@ template <class SignatureT,class PointT>
 EstrategiaClasificacionSVM<SignatureT,PointT>::EstrategiaClasificacionSVM(){
 	//this->formateador = new SVMFormatter<SignatureT,ProblemaT,PointT>();
 	this->formateador = new SVMFormatter<SignatureT,PointT>();
+	std::cout << "Instanciada la EstrategiaClasificacionSVM" << std::endl;
 }
 
 
@@ -47,7 +48,12 @@ ProblemaT EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::adapt
 */
 template <class SignatureT,class PointT>
 svm_problem EstrategiaClasificacionSVM<SignatureT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-	return this->formateador->adaptarDescriptor(descriptor);
+	
+	std::cout << "Inicio estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
+	svm_problem p = this->formateador->adaptarDescriptor(descriptor);
+	std::cout << "Fin estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
+	return p;
+	//return this->formateador->adaptarDescriptor(descriptor);
 }
 
 /*
@@ -65,6 +71,7 @@ svm_model* EstrategiaClasificacionSVM<SignatureT,PointT>::cargarModelo(std::stri
 	//struct svm_model* modelo;
 	//struct svm_model* modelo;
 	svm_model* modelo;
+	std::cout << "Cargando el modelo..." << std::endl;
 	if ( (modelo=svm_load_model(pathModeloEntrenado.c_str() )) ==0) 
 	{
 		//fprintf(stderr,"can't open model file %s\n",argv[i+1]);
@@ -96,6 +103,7 @@ template <class SignatureT,class PointT>
 TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::clasificar(std::string pathModeloEntrenado, svm_problem descriptor){
 	//struct svm_model* modelo;
 	//ModeloT* modelo;
+	std::cout << "Inicio estrategiaClasificacion.clasificar() ..." << std::endl;
 	svm_model* modelo;
 	modelo = cargarModelo(pathModeloEntrenado);
 

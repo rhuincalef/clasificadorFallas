@@ -31,10 +31,8 @@ public:
 	//Constructor 
 	PointFeatureESF();
 
-	//pcl::PointCloud<pcl::ESFSignature640> procesarDescriptorPCL(Nube<PointT> n);
-	void procesarDescriptorPCL(Nube<PointT>* n);
-	//template<typename PointT> pcl::PointCloud<pcl::ESFSignature640> procesarDescriptorPCL(Nube<PointT> n);
-
+	//void procesarDescriptorPCL(Nube<PointT>* n);
+	void c();
 	//pcl::PointCloud<pcl::ESFSignature640> getDescriptorPCL();
 	
 
@@ -57,7 +55,7 @@ public:
 	//Constructor 
 	PointFeatureGRSD();
 	//pcl::PointCloud<pcl::GRSDSignature21> procesarDescriptorPCL(Nube<PointT> n);
-	void procesarDescriptorPCL(Nube<PointT>* n);
+	//void procesarDescriptorPCL(Nube<PointT>* n);
 	
 	//template<typename PointT> pcl::PointCloud<pcl::GRSDSignature21> procesarDescriptorPCL(Nube<PointT> n);
 	//pcl::PointCloud<pcl::GRSDSignature21> getDescriptorPCL();
