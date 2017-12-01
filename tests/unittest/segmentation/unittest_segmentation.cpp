@@ -39,6 +39,7 @@
 // that their results don't depend on their order.
 //
 // </TechnicalDetails>
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
 
 class PlanarAndEuclideanTest : public ::testing::Test {
  protected:
@@ -54,29 +55,92 @@ class PlanarAndEuclideanTest : public ::testing::Test {
 // Tests PlanarAndEuclidean()
 /*
 */
-TEST(PlanarAndEuclideanTest, Size)
+TEST(PlanarAndEuclideanTest, TamanioNube)
 {
   srand (time (NULL));
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr my_cloud (new pcl::PointCloud<pcl::PointXYZ>);
   // Generate pointcloud data
-  cloud->width = 1000;
-  cloud->height = 1;
-  cloud->points.resize (cloud->width * cloud->height);
+  my_cloud->width = 1000;
+  my_cloud->height = 1;
+  my_cloud->points.resize (my_cloud->width * my_cloud->height);
 
-  for (size_t i = 0; i < cloud->points.size (); ++i)
+  for (size_t i = 0; i < my_cloud->points.size (); ++i)
   {
-    cloud->points[i].x = 1024.0f * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].y = 1024.0f * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].z = 1024.0f * rand () / (RAND_MAX + 1.0f);
+    my_cloud->points[i].x = 1024.0f * rand () / (RAND_MAX + 1.0f);
+    my_cloud->points[i].y = 1024.0f * rand () / (RAND_MAX + 1.0f);
+    my_cloud->points[i].z = 1024.0f * rand () / (RAND_MAX + 1.0f);
   }
   PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  pl_ec.setNube(*cloud);
+  pl_ec.setNube(*my_cloud);
   int orig_cloud_size = 0;
-  orig_cloud_size = cloud->points.size();
+  orig_cloud_size = my_cloud->points.size();
   EXPECT_EQ(orig_cloud_size, pl_ec.getSizeNube());
 }
 
+TEST(PlanarAndEuclideanTest, DistanceThreshold)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  float distance_tresh = 9;
+  pl_ec.setDistanceThreshold(distance_tresh);
+  EXPECT_EQ(9, pl_ec.getDistanceThreshold());
+}
+
+TEST(PlanarAndEuclideanTest, MinClusterSize)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  int min_cluster_size = 1000;
+  pl_ec.setMinClusterSize(min_cluster_size);
+  EXPECT_EQ(1000, pl_ec.getMinClusterSize());
+}
+
+TEST(PlanarAndEuclideanTest, MaxClusterSize)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  int max_cluster_size = 250000;
+  pl_ec.setMaxClusterSize(max_cluster_size);
+  EXPECT_EQ(250000, pl_ec.getMaxClusterSize());
+}
+
+TEST(PlanarAndEuclideanTest, MaxIterations)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  int max_iterations = 1000;
+  pl_ec.setMaxIterations(max_iterations);
+  EXPECT_EQ(1000, pl_ec.getMaxIterations());
+}
+
+TEST(PlanarAndEuclideanTest, ClusterTolerance)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  float tolerance = .023f;
+  pl_ec.setClusterTolerance(tolerance);
+  EXPECT_EQ(.023f, pl_ec.getClusterTolerance());
+}
+
+TEST(PlanarAndEuclideanTest, PlanarSegmentation)
+{
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr plane (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr no_plane (new pcl::PointCloud<pcl::PointXYZ>);
+  pl_ec.setDistanceThreshold (.02);
+  pl_ec.setMaxIterations (1000);
+  pl_ec.planarSegmentation (*cloud, *no_plane, *plane);
+  EXPECT_EQ(26115, cloud->points.size()) << "Cloud size not match " << plane->points.size();
+  EXPECT_EQ(23316, plane->points.size()) << "CloudPlane size not match " << plane->points.size();
+  EXPECT_EQ(2799, no_plane->points.size()) << "CloudNoPlane size not match " << no_plane->points.size();
+}
+
+TEST(PlanarAndEuclideanTest, Computar)
+{
+  std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  pl_ec.setDistanceThreshold (.02);
+  pl_ec.setMaxIterations (1000);
+  v = pl_ec.computar (*cloud);
+  EXPECT_EQ(2774, v.at(0).points.size());
+  //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
+}
 // Step 3. Call RUN_ALL_TESTS() in main().
 //
 // We do this by linking in src/gtest_main.cc file, which consists of
@@ -93,6 +157,17 @@ TEST(PlanarAndEuclideanTest, Size)
 int
 main (int argc, char** argv)
 {
+  if (argc < 2)
+  {
+    std::cerr << "No test file given. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    return (-1);
+  }
+  // Read a PCD file from disk.
+  if (pcl::io::loadPCDFile<pcl::PointXYZ>(argv[1], *cloud) != 0)
+  {
+    std::cerr << "Failed to read test file. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    return -1;
+  }
   ::testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
