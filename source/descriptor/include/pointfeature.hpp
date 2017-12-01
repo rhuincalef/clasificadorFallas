@@ -28,7 +28,8 @@ public:
 	double getDiffAltoAncho();
 	typename pcl::PointCloud<SignatureT>::Ptr getDescriptorPCL();
 
-	virtual void c();
+	//virtual void c();
+	virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 
 //private:
 protected:

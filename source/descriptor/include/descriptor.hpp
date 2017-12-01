@@ -10,8 +10,10 @@
 #ifndef EstrategiaDescriptorsAbstract_DEF
 #define EstrategiaDescriptorsAbstract_DEF
 
-//template<class PointT,class SignatureT>
-//template<class PointT,class SignatureT,class PointFeatureConcretoT >
+/*
+	Se declara  como tipo plantilla el PointFeatureConcretoT, que representa una instancia generica de las
+	subclases de PointFeature.
+*/
 template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
 class EstrategiaDescriptorsAbstract{
 protected:
