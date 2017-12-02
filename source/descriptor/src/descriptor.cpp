@@ -63,6 +63,7 @@ PointFeature<SignatureT,PointT>* EstrategiaDescriptorsAbstract<PointT,SignatureT
 //template<class PointT,class SignatureT,class PointFeatureConcretoT>
 template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT >
 EstrategiaDescriptorsAbstract<PointT,SignatureT,PointFeatureConcretoT>::EstrategiaDescriptorsAbstract(){
+	std::cout << "Construido EstrategiaDescriptorsAbstract!: "<< this->pathModeloEntrenado << std::endl;
 
 }
 
@@ -100,6 +101,11 @@ PointFeature<pcl::ESFSignature640,PointT>* ESF<PointT>::generarDescriptor(Nube<P
 /*
 */
 
+template<class PointT>
+std::string ESF<PointT>::getPathModeloEntrenado(){
+	return this->pathModeloEntrenado;
+}
+
 
 
 
@@ -110,6 +116,12 @@ GRSD<PointT>::GRSD(){
 	std::cout << "GRSD->pathModeloEntrenado: "<< this->pathModeloEntrenado << std::endl;
 }
 
+
+
+template<class PointT>
+std::string GRSD<PointT>::getPathModeloEntrenado(){
+	return this->pathModeloEntrenado;
+}
 
 
 /*

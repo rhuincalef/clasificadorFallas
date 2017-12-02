@@ -28,9 +28,13 @@ public:
 
 
 	ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);	
-	ModeloT* cargarModelo(std::string pathModeloEntrenado);
-	TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
 
+	//ModeloT* cargarModelo(std::string pathModeloEntrenado);
+	virtual svm_model* cargarModelo(std::string pathModeloEntrenado);
+	virtual TipoMuestra predecir(svm_model* modelo,svm_problem problema);
+
+	TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
+	
 
 protected:
 	FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,pcl::SVMData>* formateador;
@@ -56,7 +60,9 @@ public:
 	ModeloT* cargarModelo(std::string pathModeloEntrenado);
 	*/
 	svm_problem adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);	
+
 	svm_model* cargarModelo(std::string pathModeloEntrenado);
+	TipoMuestra predecir(svm_model* modelo,svm_problem problema);
 	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
 
 
