@@ -25,17 +25,16 @@ double PointFeature<SignatureT,PointT>::getDiffAltoAncho(){
   return this->diffAltoAncho;
 }
 
-
+template <class SignatureT,class PointT>
+typename pcl::PointCloud<SignatureT>* PointFeature<SignatureT,PointT>::getDescriptorPCL(){
+    return this->descPCL;
+}
+/*
 template <class SignatureT,class PointT>
 typename pcl::PointCloud<SignatureT>::Ptr PointFeature<SignatureT,PointT>::getDescriptorPCL(){
     return this->descPCL;
 }
-
-/*
-template <class SignatureT,class PointT>
-void PointFeature<SignatureT,PointT>::computarDescriptor(){
-
-}*/
+*/
 
 
 /*
@@ -166,6 +165,8 @@ void PointFeatureESF<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
   //esf.compute(*descPCL);
   esf.compute(descPCL);
   std::cout << "2"<< std::endl;
+  std::cout << "Computado descriptor!!!" << std::endl;
+  std::cout << this->descPCL << std::endl;
   std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
 }
 

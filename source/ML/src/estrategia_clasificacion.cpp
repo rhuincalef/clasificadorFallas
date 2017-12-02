@@ -11,7 +11,12 @@ EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::Estrate
 
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 ProblemaT EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
+	
 	std::cout << "estrategiaClasificacion.adaptarDescriptor() SUPERCLASE!!!" << std::endl;
+	//std::cout << "Inicio estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
+	ProblemaT p = this->formateador->adaptarDescriptor(descriptor);
+	std::cout << "Fin estrategiaClasificacion.adaptarDescriptor() ..." << std::endl<< std::endl;
+	return p;
 }
 
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
@@ -22,6 +27,7 @@ ModeloT* EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 TipoMuestra EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::clasificar(std::string pathModeloEntrenado, ProblemaT descriptor){
 
+	std::cout << "estrategiaClasificacion de SUPERCLASE!!!" << std::endl;
 }
 
 
@@ -42,19 +48,18 @@ EstrategiaClasificacionSVM<SignatureT,PointT>::EstrategiaClasificacionSVM(){
 
 
 
+
 /*
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-ProblemaT EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-*/
 template <class SignatureT,class PointT>
 svm_problem EstrategiaClasificacionSVM<SignatureT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-	
 	std::cout << "Inicio estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
 	svm_problem p = this->formateador->adaptarDescriptor(descriptor);
 	std::cout << "Fin estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
 	return p;
 	//return this->formateador->adaptarDescriptor(descriptor);
 }
+*/
+
 
 /*
 	Carga el modelo.dat a memoira y lo retorna
@@ -131,11 +136,11 @@ TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::clasificar(std::strin
 
 template class EstrategiaClasificacionMLAbstract<pcl::ESFSignature640,svm_problem,svm_model,pcl::PointXYZRGB>;
 template class EstrategiaClasificacionMLAbstract<pcl::GRSDSignature21,svm_problem,svm_model,pcl::PointXYZRGB>;
-template class EstrategiaClasificacionMLAbstract<pcl::FPFHSignature33,svm_problem,svm_model,pcl::PointXYZRGB>;
+//template class EstrategiaClasificacionMLAbstract<pcl::FPFHSignature33,svm_problem,svm_model,pcl::PointXYZRGB>;
 
 template class EstrategiaClasificacionSVM<pcl::ESFSignature640,pcl::PointXYZRGB>;
 template class EstrategiaClasificacionSVM<pcl::GRSDSignature21,pcl::PointXYZRGB>;
-template class EstrategiaClasificacionSVM<pcl::FPFHSignature33,pcl::PointXYZRGB>;
+//template class EstrategiaClasificacionSVM<pcl::FPFHSignature33,pcl::PointXYZRGB>;
 
 
 

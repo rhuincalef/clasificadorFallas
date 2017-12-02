@@ -52,7 +52,7 @@ PointFeature<SignatureT,PointT>* MainPipeLine<PointT,SignatureT,ProblemaT,Modelo
 	std::cout << "Entre despues de instanciar la nube" << std::endl;
 	//PointFeature<pcl::ESFSignature640> pointFeature = this->estratDescriptor->generarDescriptor(n);
 	PointFeature<SignatureT,PointT>* pointFeature = this->estratDescriptor->generarDescriptor(n);
-	std::cout << "Fin de Main.ComputarNube(). Genere el descriptor" << std::endl;
+	std::cout << "Fin de Main.ComputarNube(). Genere el descriptor" << std::endl<< std::endl;
 	return pointFeature;
 };
 
@@ -77,7 +77,7 @@ TipoMuestra MainPipeLine<PointT,SignatureT,ProblemaT,ModeloT,PointFeatureT>::cla
 
 	ProblemaT problema = this->estratClasificacion->adaptarDescriptor(descriptor);
 
-	std::cout << "despues de adaptar el descriptor" << std::endl;
+	std::cout << "despues de adaptar el descriptor" << std::endl<< std::endl;
 	return this->estratClasificacion->clasificar(this->estratDescriptor->getPathModeloEntrenado(),
 											problema);
 }

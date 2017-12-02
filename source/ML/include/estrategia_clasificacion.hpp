@@ -17,6 +17,7 @@ class EstrategiaClasificacionAbstract {
 
 #ifndef EstrategiaClasificacionMLAbstract_DEF
 #define EstrategiaClasificacionMLAbstract_DEF
+//template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 class EstrategiaClasificacionMLAbstract: public EstrategiaClasificacionAbstract {
 
@@ -32,7 +33,8 @@ public:
 
 
 protected:
-	FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>* formateador;
+	FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,pcl::SVMData>* formateador;
+	//FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>* formateador;
 	//std::string pathModeloEntrenado;
 
 };

@@ -9,7 +9,11 @@
 
 #ifndef FormateadorDatasetAbstract_DEF
 #define FormateadorDatasetAbstract_DEF
+/*
 template<class SignatureT,class ProblemaT,class PointT>
+class FormateadorDatasetAbstract{
+*/
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
 class FormateadorDatasetAbstract{
 
 public:
@@ -28,6 +32,11 @@ public:
 	*/
 
 	ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
+
+	virtual void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
+
+	virtual void generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
+	virtual void generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
 	/*
 	*/
 };
@@ -41,15 +50,18 @@ public:
 //template<class SignatureT,class ProblemaT,class PointT>
 //class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT> {
 template<class SignatureT,class PointT>
-class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,svm_problem,PointT> {
+class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,svm_problem,PointT,pcl::SVMData> {
 
 public:
 	SVMFormatter();
+	void generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
+	void generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
 
 	
-	void generarMuestraSVM(PointFeature<SignatureT,PointT>* descriptor,pcl::SVMData* muestraSVM);
-	//ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
-	svm_problem adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
+	virtual void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
+
+	//void generarMuestraSVM(PointFeature<SignatureT,PointT>* descriptor,pcl::SVMData* muestraSVM);
+	//svm_problem adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
 	
 };
 #endif
