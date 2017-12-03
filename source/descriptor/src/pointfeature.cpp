@@ -20,22 +20,8 @@ double PointFeature<SignatureT,PointT>::getDiffAltoAncho(){
   return this->diffAltoAncho;
 }
 
-/*
-template <class SignatureT,class PointT>
-pcl::PointCloud<pcl::ESFSignature640>* PointFeature<SignatureT,PointT>::getDescriptorPCL(){
-    std::cout << "getDescriptorPCL() SUPERCLASE" << std::endl; 
-}
 
 template <class SignatureT,class PointT>
-pcl::PointCloud<pcl::GRSDSignature21>* PointFeature<SignatureT,PointT>::getDescriptorPCL(){
-    std::cout << "getDescriptorPCL() SUPERCLASE" << std::endl;
-    
-}
-*/
-
-template <class SignatureT,class PointT>
-//typename pcl::PointCloud<SignatureT>* PointFeature<SignatureT,PointT>::getDescriptorPCL(){
-//typename pcl::PointCloud<SignatureT>::Ptr PointFeature<SignatureT,PointT>::getDescriptorPCL(){
 typename pcl::PointCloud<SignatureT> PointFeature<SignatureT,PointT>::getDescriptorPCL(){
     std::cout << "getDescriptorPCL() SUPERCLASE" << std::endl;
     return this->descPCL;
@@ -147,21 +133,15 @@ void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 
 
 /******************************************** Metodos ESF **********************************************/
-/*
-template <class SignatureT,class PointT>
-PointFeatureESF<SignatureT,PointT>::PointFeatureESF(){
-*/
+
 template <class PointT>
 PointFeatureESF<PointT>::PointFeatureESF(){
   //this->descPCL = new pcl::PointCloud<pcl::ESFSignature640>;
-
 }
 
 
 
 template <class PointT>
-//pcl::PointCloud<pcl::ESFSignature640>* PointFeatureESF<PointT>::getDescriptorPCL(){
-//pcl::PointCloud<pcl::ESFSignature640>::Ptr PointFeatureESF<PointT>::getDescriptorPCL(){
 pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF<PointT>::getDescriptorPCL(){
     std::cout << "getDescriptorPCL() ESF subclase" << std::endl;
     return this->descPCL;
@@ -191,58 +171,24 @@ void PointFeatureESF<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 }
 
 
-/*
-template <class PointT>
-void PointFeatureESF<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
-	pcl::console::TicToc tt;
-	tt.tic();
-	// ESF estimation object.
-  pcl::ESFEstimation<PointT, pcl::ESFSignature640> esf;
-
-	esf.setInputCloud(n->getDownsamplingCloud());
-	esf.compute(*descPCL);
-	std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
-	//Calculo de alto y ancho V2
-	TipoDimensiones dimensiones;
-	calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
-	this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
-	std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
-
-}
-*/
-
-/*
-pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF::getDescriptorPCL(){
-  return this->descPCL;
-}
-*/
-
 
 /******************************************** Metodos GRSD **********************************************/
-/*
-template <class SignatureT,class PointT>
-PointFeatureGRSD<SignatureT,PointT>::PointFeatureGRSD(){
-*/
+
 template <class PointT>
 PointFeatureGRSD<PointT>::PointFeatureGRSD(){
   //this->descPCL = new pcl::PointCloud<pcl::GRSDSignature21>;
 }
 
-
-/*
 template <class PointT>
-//pcl::PointCloud<pcl::GRSDSignature21>::Ptr PointFeatureGRSD<PointT>::getDescriptorPCL(){
-pcl::PointCloud<pcl::GRSDSignature21>::Ptr PointFeatureGRSD<PointT>::getDescriptorPCL(){
+pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD<PointT>::getDescriptorPCL(){
     std::cout << "getDescriptorPCL() GRSD subclase" << std::endl;
-    //return this->descPCL;
+    return this->descPCL;
 }
-*/
+
 
 template <class PointT>
 void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
-  /*
-  //TODO: DESCOMENTAR ESTO!!!
-  std::cout << "Invoque a metodo C() de GRSD!!! " << std::endl;
+  std::cout << "Invoque a computarDescriptor() de GRSD!!! " << std::endl;
 
   pcl::console::TicToc tt;
   tt.tic();
@@ -256,17 +202,11 @@ void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
   // Search radius, to look for neighbors. Note: the value given here has to be
   // larger than the radius used to estimate the normals.
   grsd.setRadiusSearch(0.05);
-  grsd.compute(*descPCL);
+  //grsd.compute(*descPCL);
+  grsd.compute(this->descPCL);
   std::cout << "GRSD descriptor Time(seg): " << tt.toc()/1000 << std::endl;
-  */
 }
 
-//TODO: METODO PROPIO PARA ESTIMAR SOLAMENTE EL DESCRIPTOR DE CADA FEATURE INDPENDIENTEMENTE
-/*template <class PointT>
-void PointFeatureGRSD<PointT>::c(){
-  std::cout << "Invoque a metodo C() de GRSD!!! " << std::endl;
-}
-*/
 
 /*
 template <class PointT>

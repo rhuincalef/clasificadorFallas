@@ -25,27 +25,14 @@ public:
 
 	void calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,TipoDimensiones* dimensiones);
 
-	double getDiffAltoAncho();
-	//typename pcl::PointCloud<SignatureT>::Ptr getDescriptorPCL();
-	//typename pcl::PointCloud<SignatureT>* getDescriptorPCL();
-
-	//virtual typename pcl::PointCloud<SignatureT>* getDescriptorPCL();
-	//virtual typename pcl::PointCloud<SignatureT>::Ptr getDescriptorPCL();
-	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
-
-
-	//virtual pcl::PointCloud<pcl::ESFSignature640>* getDescriptorPCL();
-	//virtual pcl::PointCloud<pcl::GRSDSignature21>* getDescriptorPCL();
-
-
-	//virtual void c();
 	virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 
-//private:
+	double getDiffAltoAncho();
+	
+	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
+
 protected:
 	typename pcl::PointCloud<SignatureT> descPCL;
-	//typename pcl::PointCloud<SignatureT>::Ptr descPCL;
-	//typename pcl::PointCloud<SignatureT>* descPCL;
 	double diffAltoAncho;
 
 };
