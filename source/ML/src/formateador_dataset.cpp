@@ -241,25 +241,26 @@ void SVMFormatter<SignatureT,PointT>::generarMuestra(
 
 	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
 	int indexador = 0;
+	pcl::PointCloud<pcl::ESFSignature640> descriptores = descriptor->getDescriptorPCL();
 	//pcl::PointCloud<pcl::ESFSignature640>::Ptr descriptores = descriptor->getDescriptorPCL();
-	pcl::PointCloud<pcl::ESFSignature640>* descriptores = descriptor->getDescriptorPCL();
+	//pcl::PointCloud<pcl::ESFSignature640>* descriptores = descriptor->getDescriptorPCL();
 	std::cout << "2..." << std::endl;
 	std::cout << descriptores << std::endl;
 
+	std::cout << "descriptores->points.size(): " << descriptores.points.size() << std::endl; 
 
 	//Recorrer para cada punto del descriptor, cada histograma y por
 	//cada histograma iterar cada valor.
-	//for (int j= 0; j < descriptores.points.size() ; ++j)
-	for (int j= 0; j < descriptores->points.size() ; ++j)
+	//for (int j= 0; j < descriptores->points.size() ; ++j)
+	for (int j= 0; j < descriptores.points.size() ; ++j)
 	{	
-		
 		for (int k = 0; k < 640; ++k)
 		{
 			pcl::SVMDataPoint dataPoint;
 			indexador = 640*j + k;			
 			dataPoint.idx = indexador;
-			dataPoint.value = descriptores->points[j].histogram[k];
-			//dataPoint.value = descriptores.points[j].histogram[k];
+			dataPoint.value = descriptores.points[j].histogram[k];
+			//dataPoint.value = descriptores->points[j].histogram[k];
 			vectorFeatures.push_back(dataPoint);
 		 //End For - Histogram Signatures 
 		}
@@ -276,11 +277,16 @@ void SVMFormatter<SignatureT,PointT>::generarMuestra(
 }
 
 
+
+
+
 template <class SignatureT,class PointT> 
 void SVMFormatter<SignatureT,PointT>::generarMuestra(
 													PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,
 													pcl::SVMData* muestraSVM){
 
+	/*
+	//TODO: DESCOMENTAR ESTO!!!
 	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
 	std::vector<pcl::SVMDataPoint> vectorFeatures;
 
@@ -314,6 +320,7 @@ void SVMFormatter<SignatureT,PointT>::generarMuestra(
 	diffAltoAncho.value = descriptor->getDiffAltoAncho();
 	vectorFeatures.push_back(diffAltoAncho);
 	muestraSVM->SV = vectorFeatures;
+	*/
 }
 
 
