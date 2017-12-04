@@ -14,93 +14,93 @@ EstrategiaSegmentationAbstract<PointT>::computar(pcl::PointCloud<PointT> &input)
 template <typename PointT> float
 PlanarAndEuclidean<PointT>::getDistanceThreshold () const
 {
-  return distance_threshold_;
+  return this->distance_threshold_;
 }
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setDistanceThreshold (float thresh)
 {
-  distance_threshold_ = thresh;
+  this->distance_threshold_ = thresh;
 }
 
 template <typename PointT> int
 PlanarAndEuclidean<PointT>::getMinClusterSize () const
 {
-  return min_cluster_size_;
+  return this->min_cluster_size_;
 }
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setMinClusterSize (int min_cluster_size)
 {
-  min_cluster_size_ = min_cluster_size;
+  this->min_cluster_size_ = min_cluster_size;
 }
 
 template <typename PointT> int
 PlanarAndEuclidean<PointT>::getMaxClusterSize () const
 {
-  return max_cluster_size_;
+  return this->max_cluster_size_;
 }
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setMaxClusterSize (int max_cluster_size)
 {
-  max_cluster_size_ = max_cluster_size;
+  this->max_cluster_size_ = max_cluster_size;
 }
 
 template <typename PointT> int 
 PlanarAndEuclidean<PointT>::getMaxIterations () const
 {
-  return max_iterations_;
+  return this->max_iterations_;
 }
 
 template <typename PointT> void 
 PlanarAndEuclidean<PointT>::setMaxIterations (int max_iterations)
 {
-  max_iterations_ = max_iterations;
+  this->max_iterations_ = max_iterations;
 }
 
 template <typename PointT> double 
 PlanarAndEuclidean<PointT>::getClusterTolerance () const
 {
-  return tolerance_;
+  return this->tolerance_;
 }
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setClusterTolerance (double tolerance)
 {
-  tolerance_ = tolerance;
+  this->tolerance_ = tolerance;
 }
 
 /* Utilizados en 1er test - Deprecated */
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setNube (const pcl::PointCloud<PointT> &input)
 {
-  nube = input;
+  this->nube = input;
 }
 
 template <typename PointT> int
 PlanarAndEuclidean<PointT>::getSizeNube ()
 {
-  return nube.points.size();
+  return this->nube.points.size();
 }
 
 template <typename PointT> pcl::PointCloud<PointT>
 PlanarAndEuclidean<PointT>::getNube ()
 {
-  return nube;
+  return this->nube;
 }
 /* Fin Utilizados en 1er test - Deprecated */
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::setNube (Nube<PointT> &n)
 {
-  nube_ = n;
+  this->nube_ = n;
 }
 
 template <typename PointT> Nube<PointT>
 PlanarAndEuclidean<PointT>::getNube () const
 {
-  return nube_;
+  return this->nube_;
 }
 
 template <typename PointT> void

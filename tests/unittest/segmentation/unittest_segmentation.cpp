@@ -131,7 +131,7 @@ TEST(PlanarAndEuclideanTest, PlanarSegmentation)
   EXPECT_EQ(23316, plane->points.size()) << "CloudPlane size not match " << plane->points.size();
   EXPECT_EQ(2799, no_plane->points.size()) << "CloudNoPlane size not match " << no_plane->points.size();
 }
-
+/*
 TEST(PlanarAndEuclideanTest, ComputarDeprecated)
 {
   std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
@@ -142,7 +142,7 @@ TEST(PlanarAndEuclideanTest, ComputarDeprecated)
   EXPECT_EQ(2774, v.at(0).points.size());
   //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
 }
-
+*/
 TEST(PlanarAndEuclideanTest, Computar)
 {
   Nube<pcl::PointXYZ> n (cloud);
@@ -153,7 +153,7 @@ TEST(PlanarAndEuclideanTest, Computar)
   pl_ec.setNube (n);
   v = pl_ec.computar ();
   EXPECT_EQ(2774, v.at(0).points.size());
-  //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
+  pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
 }
 // Step 3. Call RUN_ALL_TESTS() in main().
 //
