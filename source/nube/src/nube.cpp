@@ -74,31 +74,31 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	downsampling_cloud (new pcl::PointCloud<PointT>);
 	normals_cloud (new pcl::PointCloud<pcl::Normal>);
 	*/
-	std::cout << "Construyendo nube nueva..." << std::endl;
+	//std::cout << "Construyendo nube nueva..." << std::endl;
 	//if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *original_cloud) == -1) //* load the file
 	if (pcl::io::loadPCDFile<PointT> (fullPathCaptura, *abc) == -1) //* load the file
 	{
-		std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
+		//std::cout << "No se pudo leer el archivo: "<< fullPathCaptura << std::endl;
 		return;
 	}
-	std::cout << "Leida muestra " << std::endl;
+	//std::cout << "Leida muestra " << std::endl;
 	this->original_cloud = abc;
 	this->downsampling_cloud = abc;
-	std::cout << "Leida muestra 2" << std::endl;
+	//std::cout << "Leida muestra 2" << std::endl;
 	pcl::PointCloud<pcl::Normal>::Ptr normals_cloud1 (new pcl::PointCloud<pcl::Normal>);
 
-	//std::cout << "Leida muestra " << fullPathCaptura << " con " << original_cloud->points.size () << std::endl;
+	////std::cout << "Leida muestra " << fullPathCaptura << " con " << original_cloud->points.size () << std::endl;
 
 	//pcl::copyPointCloud(*original_cloud, *downsampling_cloud);
 	
 
-	std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
+	//std::cout << "Copiada muestra a downsampling_cloud " << fullPathCaptura << " con " << downsampling_cloud->points.size () << std::endl;
 	//pcl::NormalEstimationOMP<pcl::PointXYZRGB, pcl::Normal> normalEstimation(0);
 
 	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
-	std::cout << "Instanciado NormalEstimationOMP " << std::endl;
+	//std::cout << "Instanciado NormalEstimationOMP " << std::endl;
 	normalEstimation.setInputCloud(original_cloud);
-	std::cout << "Seteado original_cloud" << std::endl;
+	//std::cout << "Seteado original_cloud" << std::endl;
 
 	// For every point, use all neighbors in a radius of 3cm.
 	normalEstimation.setRadiusSearch(0.008);
@@ -109,13 +109,13 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	normalEstimation.setSearchMethod(kdtree);
 
 	
-	std::cout << "Por computar..." << std::endl;
+	//std::cout << "Por computar..." << std::endl;
 	// Calculate the normals.
 	normalEstimation.compute(*normals_cloud1);
 	this->normals_cloud = normals_cloud1;
-	std::cout << "Computada normals_cloud!!" << std::endl;
+	//std::cout << "Computada normals_cloud!!" << std::endl;
 
-	std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
+	//std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
 
 
 }

@@ -21,16 +21,18 @@ public:
 	//Constructor 
 	PointFeature();
 
-
 	void procesarDescriptorPCL(Nube<PointT>* n);
+
 	void calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,TipoDimensiones* dimensiones);
 
-	double getDiffAltoAncho();
-	typename pcl::PointCloud<SignatureT>::Ptr getDescriptorPCL();
+	virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 
-//private:
+	double getDiffAltoAncho();
+	
+	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
+
 protected:
-	typename pcl::PointCloud<SignatureT>::Ptr descPCL;
+	typename pcl::PointCloud<SignatureT> descPCL;
 	double diffAltoAncho;
 
 };

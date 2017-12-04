@@ -4,28 +4,52 @@
 
 
 
-/**************************** Clase Abstract ****************************/
+/************************************************** Clase Abstract ******************************************/
 
+/*
 template<class SignatureT,typename ProblemaT,class PointT>
 FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>::FormateadorDatasetAbstract(){
-
-}
-
-template<class SignatureT,typename ProblemaT,class PointT>
-ProblemaT FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-
-}
-
-/*
-template<class SignatureT,class ProblemaT>
-SignatureT FormateadorDatasetAbstract<SignatureT,ProblemaT>::ab(ProblemaT a){
-}
 */
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,MuestraT>::FormateadorDatasetAbstract(){
 
+}
+
+
+
+
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+ProblemaT FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT, MuestraT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
+
+	//Se genera la muestra en una estructura de SVMData con el descriptor PointFeature
+	std::cout << "Inicio FormateadorDatasetAbstract.adaptarDescriptor() SUPERCLASE!!! ..." << std::endl;
+	ProblemaT prob;
+	//pcl::SVMData muestraSVM;
+	MuestraT muestra;
+	this->generarMuestra(descriptor,&muestra);	
+	this->adaptarDescriptorAFormatoEspecifico(muestra,&prob);
+	return prob;
+}
+
+
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+void FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT, MuestraT>::generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
+	std::cout << "generarMuestra() SUPERCLASE!!!" << std::endl;
+}
+
+
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+void FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT, MuestraT>::generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
+	std::cout << "generarMuestra() SUPERCLASE!!!" << std::endl;
+}
+
+
+template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+void FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT, MuestraT>::adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob){
+	std::cout << "adaptarDescriptorAFormatoEspecifico() SUPERCLASE!!!" << std::endl;
+}
 
 /*
-
-
 void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM, 
 												std::string dirSalidaTmp,
 												std::string nombreTmp){
@@ -72,27 +96,48 @@ void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM,
 */
 
 
-/**************************** SVMFormatter ****************************/
-/*
-template<class SignatureT,class ProblemaT,class PointT>
-SVMFormatter<SignatureT,ProblemaT,PointT>::SVMFormatter(){
 
-}
-*/
+
+
+/***************************************************** SVMFormatter ***************************************/
+
 
 template<class SignatureT,class PointT>
 SVMFormatter<SignatureT,PointT>::SVMFormatter(){
 
 }
 
+template<class SignatureT,class PointT>
+void SVMFormatter<SignatureT,PointT>::adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob){
+	std::vector<pcl::SVMData> training_set; 
+	training_set.push_back(muestraSVM);
 
-//Se especializa el metodo
-/*
-template<class SignatureT,class ProblemaT> ProblemaT SVMFormatter<SignatureT,ProblemaT>::ab(){
-	ProblemaT problema;
-	return problema;
+	prob->l = int (training_set.size ()); // n of elements/points
+	prob->y = Malloc (double, prob->l);
+	prob->x = Malloc (struct svm_node *, prob->l);
+
+	for (int i = 0; i < prob->l; i++)
+	{
+
+		prob->x[i] = Malloc (struct svm_node, training_set[i].SV.size() + 1);
+		int k = 0;
+		for (size_t j = 0; j < training_set[i].SV.size(); j++)
+		  if (training_set[i].SV[j].idx != -1 && pcl_isfinite (training_set[i].SV[j].value))
+		  {
+		    prob->x[i][k].index = training_set[i].SV[j].idx;
+
+
+	    prob->x[i][k].value = training_set[i].SV[j].value;
+	    k++;
+	  }
+	  
+	prob->x[i][k].index = -1;
+	}
+	std::cout << "Fin SVMFormatter.adaptarDescriptor() ..." << std::endl;
+	//return prob;
 }
-*/
+
+
 
 
 /* 
@@ -105,15 +150,13 @@ template <class SignatureT>
 svm_problem SVMFormatter<SignatureT>::adaptarDescriptor(PointFeature<SignatureT> descriptor)
 */
 
+
 /*
-template <class SignatureT, class ProblemaT,class PointT>
-ProblemaT SVMFormatter<SignatureT,ProblemaT,PointT>::adaptarDescriptor(
-													PointFeature<SignatureT,PointT>* descriptor){
-*/
 template <class SignatureT,class PointT>
 svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 													PointFeature<SignatureT,PointT>* descriptor){
 
+	std::cout << "Inicio SVMFormatter.adaptarDescriptor() ..." << std::endl;
 	//ProblemaT prob;
 	svm_problem prob;
 
@@ -132,7 +175,7 @@ svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 
 	for (int i = 0; i < prob.l; i++)
 	{
-
+	*/
 	/*
 	//NO DESCOMENTAR!
 	if (pcl_isfinite (training_set[i].label) && labelled_training_set_)
@@ -143,7 +186,7 @@ svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 	else
 	  labelled_training_set_ = 0;
 	*/
-
+	/*
 	prob.x[i] = Malloc (struct svm_node, training_set[i].SV.size() + 1);
 
 	int k = 0;
@@ -151,6 +194,7 @@ svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 	  if (training_set[i].SV[j].idx != -1 && pcl_isfinite (training_set[i].SV[j].value))
 	  {
 	    prob.x[i][k].index = training_set[i].SV[j].idx;
+	*/
 
 	    /*
 	    //No DESCOMENTAR!
@@ -160,62 +204,124 @@ svm_problem SVMFormatter<SignatureT,PointT>::adaptarDescriptor(
 	      prob.x[i][k].value = training_set[i].SV[j].value;
 	    */
 
+	/*
 	    prob.x[i][k].value = training_set[i].SV[j].value;
 	    k++;
 	  }
 	  
 	prob.x[i][k].index = -1;
 	}
+	std::cout << "Fin SVMFormatter.adaptarDescriptor() ..." << std::endl;
 	return prob;
 };
+*/
 
 
 //Genera las features de una muestra y las guarda en un vector
 
+
+
+
+
 /*
-template <class SignatureT,class ProblemaT,class PointT> 
-void SVMFormatter<SignatureT,ProblemaT,PointT>::generarMuestraSVM(
-													PointFeature<SignatureT,PointT>* descriptor,
+template <> 
+void SVMFormatter<pcl::ESFSignature640,pcl::PointXYZRGB>::generarMuestra(
+													PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,
 													pcl::SVMData* muestraSVM){
 */
 template <class SignatureT,class PointT> 
-void SVMFormatter<SignatureT,PointT>::generarMuestraSVM(
-													PointFeature<SignatureT,PointT>* descriptor,
+void SVMFormatter<SignatureT,PointT>::generarMuestra(
+													PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,
 													pcl::SVMData* muestraSVM){
 
-
+	std::cout << "Inicio SVMFormatter->generarMuestra()..." << std::endl;
 	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
+	std::cout << "1..." << std::endl;
 	std::vector<pcl::SVMDataPoint> vectorFeatures;
 
 	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
 	int indexador = 0;
-	typename pcl::PointCloud<SignatureT>::Ptr descriptores = descriptor->getDescriptorPCL();
+	pcl::PointCloud<pcl::ESFSignature640> descriptores = descriptor->getDescriptorPCL();
+	//pcl::PointCloud<pcl::ESFSignature640>::Ptr descriptores = descriptor->getDescriptorPCL();
+	//pcl::PointCloud<pcl::ESFSignature640>* descriptores = descriptor->getDescriptorPCL();
+	std::cout << "2..." << std::endl;
+	std::cout << descriptores << std::endl;
+
+	std::cout << "descriptores->points.size(): " << descriptores.points.size() << std::endl; 
+
 	//Recorrer para cada punto del descriptor, cada histograma y por
 	//cada histograma iterar cada valor.
-	for (int j= 0; j < descriptores->points.size() ; ++j)
+	//for (int j= 0; j < descriptores->points.size() ; ++j)
+	for (int j= 0; j < descriptores.points.size() ; ++j)
 	{	
-		
 		for (int k = 0; k < 640; ++k)
 		{
 			pcl::SVMDataPoint dataPoint;
 			indexador = 640*j + k;			
 			dataPoint.idx = indexador;
-			dataPoint.value = descriptores->points[j].histogram[k];
+			dataPoint.value = descriptores.points[j].histogram[k];
+			//dataPoint.value = descriptores->points[j].histogram[k];
 			vectorFeatures.push_back(dataPoint);
 		 //End For - Histogram Signatures 
 		}
 
 	}
-
+	std::cout << "Despues del for...()..." << std::endl;
 	//Calculo ancho-alto
 	pcl::SVMDataPoint diffAltoAncho;
 	diffAltoAncho.idx = ++indexador;
 	diffAltoAncho.value = descriptor->getDiffAltoAncho();
 	vectorFeatures.push_back(diffAltoAncho);
 	muestraSVM->SV = vectorFeatures;
+	std::cout << "Fin SVMFormatter->generarMuestra()..." << std::endl;
 }
 
 
+
+
+
+template <class SignatureT,class PointT> 
+void SVMFormatter<SignatureT,PointT>::generarMuestra(
+													PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,
+													pcl::SVMData* muestraSVM){
+
+	/*
+	//TODO: DESCOMENTAR ESTO!!!
+	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
+	std::vector<pcl::SVMDataPoint> vectorFeatures;
+
+	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
+	int indexador = 0;
+	//typename pcl::PointCloud<pcl::GRSDSignature21>::Ptr descriptores = descriptor->getDescriptorPCL();
+
+	typename pcl::PointCloud<pcl::GRSDSignature21>* descriptores =  descriptor->getDescriptorPCL();
+
+	//Recorrer para cada punto del descriptor, cada histograma y por
+	//cada histograma iterar cada valor.
+	for (int j= 0; j < descriptores->points.size() ; ++j)
+	//for (int j= 0; j < descriptores.points.size() ; ++j)
+	{	
+		
+		for (int k = 0; k < 21; ++k)
+		{
+			pcl::SVMDataPoint dataPoint;
+			indexador = 21*j + k;			
+			dataPoint.idx = indexador;
+			dataPoint.value = descriptores->points[j].histogram[k];
+			//dataPoint.value = descriptores.points[j].histogram[k];
+			vectorFeatures.push_back(dataPoint);
+		 //End For - Histogram Signatures 
+		}
+
+	}
+	//Calculo ancho-alto
+	pcl::SVMDataPoint diffAltoAncho;
+	diffAltoAncho.idx = ++indexador;
+	diffAltoAncho.value = descriptor->getDiffAltoAncho();
+	vectorFeatures.push_back(diffAltoAncho);
+	muestraSVM->SV = vectorFeatures;
+	*/
+}
 
 
 /*
@@ -246,10 +352,10 @@ template <class SignatureT> void SVMFormatter::dumpearDescriptor(PointFeature<Si
 */
 template class SVMFormatter<pcl::ESFSignature640,pcl::PointXYZRGB>;
 template class SVMFormatter<pcl::GRSDSignature21,pcl::PointXYZRGB>;
-template class SVMFormatter<pcl::FPFHSignature33,pcl::PointXYZRGB>;
+//template class SVMFormatter<pcl::FPFHSignature33,pcl::PointXYZRGB>;
 
-template class FormateadorDatasetAbstract<pcl::ESFSignature640, svm_problem, pcl::PointXYZRGB>;
-template class FormateadorDatasetAbstract<pcl::GRSDSignature21, svm_problem,pcl::PointXYZRGB>;
-template class FormateadorDatasetAbstract<pcl::FPFHSignature33, svm_problem,pcl::PointXYZRGB>;
+template class FormateadorDatasetAbstract<pcl::ESFSignature640, svm_problem, pcl::PointXYZRGB,pcl::SVMData>;
+template class FormateadorDatasetAbstract<pcl::GRSDSignature21, svm_problem,pcl::PointXYZRGB,pcl::SVMData>;
+//template class FormateadorDatasetAbstract<pcl::FPFHSignature33, svm_problem,pcl::PointXYZRGB,pcl::SVMData>;
 
 

@@ -17,6 +17,7 @@ class EstrategiaClasificacionAbstract {
 
 #ifndef EstrategiaClasificacionMLAbstract_DEF
 #define EstrategiaClasificacionMLAbstract_DEF
+//template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
 class EstrategiaClasificacionMLAbstract: public EstrategiaClasificacionAbstract {
 
@@ -27,12 +28,17 @@ public:
 
 
 	ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);	
-	ModeloT* cargarModelo(std::string pathModeloEntrenado);
-	TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
 
+	//ModeloT* cargarModelo(std::string pathModeloEntrenado);
+	virtual svm_model* cargarModelo(std::string pathModeloEntrenado);
+	virtual TipoMuestra predecir(svm_model* modelo,svm_problem problema);
+
+	TipoMuestra clasificar(std::string pathModeloEntrenado, ProblemaT descriptor);
+	
 
 protected:
-	FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>* formateador;
+	FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,pcl::SVMData>* formateador;
+	//FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT>* formateador;
 	//std::string pathModeloEntrenado;
 
 };
@@ -54,7 +60,9 @@ public:
 	ModeloT* cargarModelo(std::string pathModeloEntrenado);
 	*/
 	svm_problem adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);	
+
 	svm_model* cargarModelo(std::string pathModeloEntrenado);
+	TipoMuestra predecir(svm_model* modelo,svm_problem problema);
 	TipoMuestra clasificar(std::string pathModeloEntrenado, svm_problem descriptor);
 
 

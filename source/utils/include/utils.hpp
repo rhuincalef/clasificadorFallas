@@ -45,10 +45,13 @@ typedef struct {
 #ifndef MODEL_TRAINED_PATHS_DEF
 #define MODEL_TRAINED_PATHS_DEF
 
+//TODO: CAMBIAR EL ROOT DEL DIR RAIZ CON LOS MODELOS ENTRENADOS
+const std::string ROOT_MODELO = "/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/";
+
 const std::string TRAIN_MODEL_NAME_DEFAULT = "modelo.dat";
 
-const std::string TRAIN_MODEL_ESF_DIR_DEFAULT = "vfh/";
-const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "grsd/";
+const std::string TRAIN_MODEL_ESF_DIR_DEFAULT = "modelo_esf/";
+const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "modelo_grsd/";
 
 #endif
 
