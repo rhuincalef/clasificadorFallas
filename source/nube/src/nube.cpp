@@ -1,15 +1,49 @@
 #include "../../utils/include/utils.hpp"
-
 #include "../include/nube.hpp"
 
+/*
 template <typename PointT>
-Nube<PointT>::Nube(){
-	//this->abc = new pcl::PointCloud<PointT>;
-
+Nube<PointT>::Nube()
+{
 }
 
-//Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
+template <typename PointT>
+Nube<PointT>::Nube(typename pcl::PointCloud<PointT>::Ptr input)
+{
+  typename pcl::PointCloud<PointT>::Ptr downsampling_cloud (new pcl::PointCloud<PointT>);
+  this->downsampling_cloud = downsampling_cloud;
+  typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud (new pcl::PointCloud<PointT>);
+  this->no_outlier_cloud = no_outlier_cloud;
+  this->original_cloud = input;
+  Nube<PointT>::setAllClouds ();
+}
+*/
 
+template <typename PointT>
+Nube<PointT>::Nube(const pcl::PointCloud<PointT> &input)
+{
+  typename pcl::PointCloud<PointT>::Ptr downsampling_cloud (new pcl::PointCloud<PointT>);
+  this->downsampling_cloud = downsampling_cloud;
+  typename pcl::PointCloud<PointT>::Ptr original_cloud (new pcl::PointCloud<PointT>);
+  this->original_cloud = original_cloud;
+  typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud (new pcl::PointCloud<PointT>);
+  this->no_outlier_cloud = no_outlier_cloud;
+  *this->original_cloud = input;
+  Nube<PointT>::setAllClouds ();
+}
+
+/*
+template <typename PointT> void
+Nube<PointT>::setAllClouds()
+{
+  pcl::VoxelGrid<PointT> voxel_grid_filter;
+  voxel_grid_filter.setInputCloud(this->original_cloud);
+  voxel_grid_filter.setLeafSize(0.01f, 0.01f, 0.01f);
+  voxel_grid_filter.filter(*this->downsampling_cloud);
+}
+*/
+
+//Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
 template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
 	//Se computa la nube completa
@@ -86,26 +120,34 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
 }
 
-
+/*
 template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getDownsamplingCloud(){
-	return downsampling_cloud;
+Nube<PointT>::getDownsamplingCloud()
+{
+  return downsampling_cloud;
+}
+template<typename PointT> std::shared_ptr<pcl::PointCloud<PointT>>
+Nube<PointT>::getDownsamplingCloud()
+{
+  return std::make_shared<pcl::PointCloud<PointT>>(downsampling_cloud);
+}
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getOriginalCloud()
+{
+}
+*/
+
+template<class PointT> typename pcl::PointCloud<pcl::Normal>::Ptr
+Nube<PointT>::getNormalsCloud()
+{
+  return this->normals_cloud;
 }
 
-template<class PointT>
-typename pcl::PointCloud<pcl::Normal>::Ptr Nube<PointT>::getNormalsCloud(){
-	return normals_cloud;
-}
-
 
 template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getOriginalCloud(){
-
-}
-
-template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getNoOutlierCloud(){
-	
+Nube<PointT>::getNoOutlierCloud()
+{
+  return this->no_outlier_cloud;
 }
 
 /*
@@ -116,7 +158,5 @@ Nube<PointT>::getNoOutlierCloud(){
 	SOLAMENTE para aquellos metodos que tengan una implementacion(aunque sea de cuerpo vacio).
 	Si existen metodos genericos que no tengan implementacion se retornara error de linkeo.
 */
+template class Nube<pcl::PointXYZ>;
 template class Nube<pcl::PointXYZRGB>;
-
-
-
