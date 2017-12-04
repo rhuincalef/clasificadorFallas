@@ -208,31 +208,6 @@ void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 }
 
 
-/*
-template <class PointT>
-void PointFeatureGRSD<PointT>::procesarDescriptorPCL(Nube<PointT>* n){
-
-  pcl::console::TicToc tt;
-  tt.tic();
-  typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
-  // GRSD estimation object.
-  pcl::GRSDEstimation<PointT, pcl::Normal, pcl::GRSDSignature21> grsd;
-  grsd.setInputCloud(n->getDownsamplingCloud());
-  //grsd.setInputNormals(normals);
-  grsd.setInputNormals(n->getNormalsCloud());
-  grsd.setSearchMethod(kdtree);
-  // Search radius, to look for neighbors. Note: the value given here has to be
-  // larger than the radius used to estimate the normals.
-  grsd.setRadiusSearch(0.05);
-  grsd.compute(*descPCL);
-  std::cout << "GRSD descriptor Time(seg): " << tt.toc()/1000 << std::endl;
-  //Calculo de alto y ancho V2
-  TipoDimensiones dimensiones;
-  calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
-  this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
-  std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
-}
-*/
 
 /*
   Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 

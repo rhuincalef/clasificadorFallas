@@ -4,7 +4,7 @@
 
 
 
-/**************************** Clase Abstract ****************************/
+/************************************************** Clase Abstract ******************************************/
 
 /*
 template<class SignatureT,typename ProblemaT,class PointT>
@@ -99,7 +99,7 @@ void FormateadorDatasetAbstract::almacenarDatasetTmp(pcl::SVMData muestraSVM,
 
 
 
-/**************************** SVMFormatter ****************************/
+/***************************************************** SVMFormatter ***************************************/
 
 
 template<class SignatureT,class PointT>
