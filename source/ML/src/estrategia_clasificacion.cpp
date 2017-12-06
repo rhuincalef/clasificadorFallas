@@ -48,6 +48,15 @@ TipoMuestra EstrategiaClasificacionMLAbstract::predecir(svm_model* modelo,svm_pr
 }
 
 
+void EstrategiaClasificacionMLAbstract::setFormateador(FormateadorDatasetAbstract* f){
+	this->formateador = f;
+}
+
+FormateadorDatasetAbstract* EstrategiaClasificacionMLAbstract::getFormateador(){
+	return this->formateador;
+}
+
+
 
 
 /************************** Estrategia clasificacion SVM **************************/
@@ -83,13 +92,13 @@ svm_model* EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::carg
 	{
 		//fprintf(stderr,"can't open model file %s\n",argv[i+1]);
 		std::cout << "No se puede abrir el modelo entrenado!: "<< pathModeloEntrenado.c_str()  << std::endl; 
-		exit(1);
+		//exit(1);
+		return 1;
 	}
 	std::cout << "Leido el modelo: "<< pathModeloEntrenado << std::endl; 
 	std::cout << "Fin de EstrategiaClasificacionSVM.cargarModelo()..." << std::endl << std::endl;
 	return modelo;
 }
-
 
 
 

@@ -66,10 +66,12 @@ public:
 	}
 
 
+	void setFormateador(FormateadorDatasetAbstract* f);
+	FormateadorDatasetAbstract* getFormateador();
 
 protected:
 	//FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,pcl::SVMData>* formateador;
-	FormateadorDatasetAbstract* formateador;
+	FormateadorDatasetAbstract* formateador = NULL;
 
 };
 #endif
