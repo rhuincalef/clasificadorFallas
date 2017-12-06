@@ -1,0 +1,18 @@
+{
+	"clasificador": {
+		"tipo": "svm",
+		"path_modelo": "un/path/modelo.dat",
+		"dir_salida_dataset": "un/path/dir_salida/"
+	},
+	"estrategia_segmentador":{
+		"planar_euclidean":{
+			"dist_thresh": 0.009,
+			"max_it": 1000,
+			"tolerance": 0.023,
+			"min_cluster_size": 20,
+			"max_cluster_size": 25000
+		}
+	},
+	"point_feature": "PointXYZ",
+	"estrategia_descriptor": "GRSD"
+}

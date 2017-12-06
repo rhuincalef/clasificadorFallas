@@ -12,6 +12,7 @@
 // 
 #include "../../utils/include/utils.hpp"
 #include "../../nube/include/nube.hpp"
+#include "../../parser/include/parametrizador.hpp"
 
 #ifndef EstrategiaSegmentationAbstract_DEF
 #define EstrategiaSegmentationAbstract_DEF
@@ -38,10 +39,7 @@ class PlanarAndEuclidean : public EstrategiaSegmentationAbstract<PointT>
 
 public:
   /** \brief Constructor that sets default values for member variables. */
-  PlanarAndEuclidean ()
-  {
-
-  }
+  PlanarAndEuclidean ();
 
   /** \brief Returns the distance threshold. If the distance between two points is less or equal to
     * distance threshold value, then those points assumed to be neighbouring points.
@@ -109,6 +107,15 @@ public:
 
   void
   planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane);
+
+  static Parametrizador
+  getParametrizador();
+
+  static void
+  configurarParametrizador();
+
+  static Parametrizador parametrizador_;
+  static bool configurado_;
 
 protected:
   // Planar Segmentation variables.
