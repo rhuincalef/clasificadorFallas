@@ -4,76 +4,72 @@
 
 
 //Constructores 
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::EstrategiaClasificacionMLAbstract(){
+//template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+EstrategiaClasificacionMLAbstract::EstrategiaClasificacionMLAbstract(){
 
-}
-
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-ProblemaT EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
-	
-	std::cout << "estrategiaClasificacion.adaptarDescriptor() SUPERCLASE!!!" << std::endl;
-	//std::cout << "Inicio estrategiaClasificacion.adaptarDescriptor() ..." << std::endl;
-	ProblemaT p = this->formateador->adaptarDescriptor(descriptor);
-	std::cout << "Fin estrategiaClasificacion.adaptarDescriptor() ..." << std::endl<< std::endl;
-	return p;
 }
 
 /*
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-ModeloT* EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::cargarModelo(std::string pathModeloEntrenado){
+//template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+template <class SignatureT,class PointT,class ProblemaT>
+ProblemaT EstrategiaClasificacionMLAbstract::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
+	std::cout << "estrategiaClasificacion.adaptarDescriptor() SUPERCLASE!!!" << std::endl;
+	ProblemaT p = this->formateador->template adaptarDescriptor<SignatureT,PointT,ProblemaT>(descriptor);
+	std::cout << "Fin estrategiaClasificacion.adaptarDescriptor() ..." << std::endl<< std::endl;
+	return p;
+}
+*/
+
+/*
+template <class SignatureT,class PointT,class ProblemaT,class ModeloT>
+TipoMuestra EstrategiaClasificacionMLAbstract::clasificar(std::string pathModeloEntrenado,
+															PointFeature<SignatureT,PointT>* descriptor){
+	
+	std::cout << "Inicio EstrategiaClasificacionMLAbstract.clasificar() SUPERCLASE ..." << std::endl;
+
+	ProblemaT problema = this->template adaptarDescriptor<SignatureT,PointT,ProblemaT>(descriptor);
+	//svm_model* modelo;
+	ModeloT* modelo;
+	modelo = this->cargarModelo(pathModeloEntrenado);
+
+	this->predecir(modelo,descriptor);
 
 }
 */
 
 
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-svm_model* EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::cargarModelo(std::string pathModeloEntrenado){
+svm_model* EstrategiaClasificacionMLAbstract::cargarModelo(std::string pathModeloEntrenado){
 	std::cout << "cargarModelo() SUPERCLASE!!!" << std::endl;
 }
 
 
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-TipoMuestra EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::clasificar(std::string pathModeloEntrenado, ProblemaT descriptor){
-
-	std::cout << "estrategiaClasificacion de SUPERCLASE!!!" << std::endl;
-	std::cout << "Inicio estrategiaClasificacion.clasificar() ..." << std::endl;
-	//svm_model* modelo;
-	ModeloT* modelo;
-	modelo = this->cargarModelo(pathModeloEntrenado);
-
-
-	this->predecir(modelo,descriptor);
-
-	/*	
-	int result = (int) svm_predict(modelo, *(descriptor.x) );
-	switch(result) {
-		case TIPO_BACHE: 
-			std::cout << "Muestra clasificada como: BACHE" << std::endl;
-			return TIPO_BACHE;
-
-	    case TIPO_GRIETA:
-			std::cout << "Muestra clasificada como: GRIETA" << std::endl; 
-	        return TIPO_GRIETA;
-	}
-	*/
+TipoMuestra EstrategiaClasificacionMLAbstract::predecir(svm_model* modelo,svm_problem problema){
+	std::cout << "estrategiaClasificacion.predecir() de SUPERCLASE!!!" << std::endl;	
 }
 
 
-template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
-TipoMuestra EstrategiaClasificacionMLAbstract<SignatureT, ProblemaT,ModeloT,PointT>::predecir(svm_model* modelo,
-																								svm_problem problema){
-
+void EstrategiaClasificacionMLAbstract::setFormateador(FormateadorDatasetAbstract* f){
+	this->formateador = f;
 }
+
+FormateadorDatasetAbstract* EstrategiaClasificacionMLAbstract::getFormateador(){
+	return this->formateador;
+}
+
+
 
 
 /************************** Estrategia clasificacion SVM **************************/
 
 
-template <class SignatureT,class PointT>
-EstrategiaClasificacionSVM<SignatureT,PointT>::EstrategiaClasificacionSVM(){
-	this->formateador = new SVMFormatter<SignatureT,PointT>();
+//template <class SignatureT,class PointT>
+template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::EstrategiaClasificacionSVM(){
+
+	//template<class PointT,class SignatureT,class ProblemaT,class MuestraT>
+	this->formateador = new SVMFormatter<PointT,SignatureT,ProblemaT,pcl::SVMData>();
 	std::cout << "Instanciada la EstrategiaClasificacionSVM" << std::endl;
+
 }
 
 
@@ -84,8 +80,10 @@ EstrategiaClasificacionSVM<SignatureT,PointT>::EstrategiaClasificacionSVM(){
 //struct svm_model *svm_load_model(const char *model_file_name);
 //
 
-template <class SignatureT,class PointT>
-svm_model* EstrategiaClasificacionSVM<SignatureT,PointT>::cargarModelo(std::string pathModeloEntrenado){
+
+template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+svm_model* EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::cargarModelo(
+																			std::string pathModeloEntrenado){
 	
 	//struct svm_model* modelo;
 	svm_model* modelo;
@@ -94,12 +92,16 @@ svm_model* EstrategiaClasificacionSVM<SignatureT,PointT>::cargarModelo(std::stri
 	{
 		//fprintf(stderr,"can't open model file %s\n",argv[i+1]);
 		std::cout << "No se puede abrir el modelo entrenado!: "<< pathModeloEntrenado.c_str()  << std::endl; 
-		exit(1);
+		//exit(1);
+		return 1;
 	}
 	std::cout << "Leido el modelo: "<< pathModeloEntrenado << std::endl; 
 	std::cout << "Fin de EstrategiaClasificacionSVM.cargarModelo()..." << std::endl << std::endl;
 	return modelo;
 }
+
+
+
 
 
 /*
@@ -112,8 +114,9 @@ svm_model* EstrategiaClasificacionSVM<SignatureT,PointT>::cargarModelo(std::stri
   };
 	//double svm_predict (const struct svm_model *model, const struct svm_node *x);
 */
-template <class SignatureT,class PointT>
-TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::predecir(svm_model* modelo,
+
+template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+TipoMuestra EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::predecir(svm_model* modelo,
 																		svm_problem problema){
 	std::cout << "En EstrategiaClasificacionSVM.predecir()" << std::endl;
 
@@ -137,29 +140,22 @@ TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::predecir(svm_model* m
 }
 
 
-template <class SignatureT,class PointT>
-TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::clasificar(std::string pathModeloEntrenado,
-																		svm_problem descriptor){
+/*	
+template <class SignatureT,class ProblemaT,class ModeloT,class PointT>
+TipoMuestra EstrategiaClasificacionSVM<SignatureT,ProblemaT,ModeloT,PointT>::clasificar(
+																	std::string pathModeloEntrenado){
 	
-	/*
-	//struct svm_model* modelo;
-	//ModeloT* modelo;
+
 	std::cout << "Inicio estrategiaClasificacion.clasificar() ..." << std::endl;
-	svm_model* modelo;
-	modelo = cargarModelo(pathModeloEntrenado);
 
-	int result = (int) svm_predict(modelo, *(descriptor.x) );
-	switch(result) {
-		case TIPO_BACHE: 
-			std::cout << "Muestra clasificada como: BACHE" << std::endl;
-			return TIPO_BACHE;
+	ProblemaT problema = this->estratClasificacion->template adaptarDescriptor<>(descriptor);
+	//svm_model* modelo;
+	ModeloT* modelo;
+	modelo = this->cargarModelo(pathModeloEntrenado);
 
-	    case TIPO_GRIETA:
-			std::cout << "Muestra clasificada como: GRIETA" << std::endl; 
-	        return TIPO_GRIETA;
-	}
-	*/
+	this->predecir(modelo,descriptor);
 }
+*/
 
 /*
 	Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
@@ -170,13 +166,17 @@ TipoMuestra EstrategiaClasificacionSVM<SignatureT,PointT>::clasificar(std::strin
 	Si existen metodos genericos que no tengan implementacion se retornara error de linkeo.
 */
 
+template class EstrategiaClasificacionSVM<pcl::ESFSignature640,svm_problem,svm_model,pcl::PointXYZRGB>;
+template class EstrategiaClasificacionSVM<pcl::GRSDSignature21,svm_problem,svm_model,pcl::PointXYZRGB>;
+
+
+/*
 template class EstrategiaClasificacionMLAbstract<pcl::ESFSignature640,svm_problem,svm_model,pcl::PointXYZRGB>;
 template class EstrategiaClasificacionMLAbstract<pcl::GRSDSignature21,svm_problem,svm_model,pcl::PointXYZRGB>;
-//template class EstrategiaClasificacionMLAbstract<pcl::FPFHSignature33,svm_problem,svm_model,pcl::PointXYZRGB>;
 
 template class EstrategiaClasificacionSVM<pcl::ESFSignature640,pcl::PointXYZRGB>;
 template class EstrategiaClasificacionSVM<pcl::GRSDSignature21,pcl::PointXYZRGB>;
-//template class EstrategiaClasificacionSVM<pcl::FPFHSignature33,pcl::PointXYZRGB>;
+*/
 
 
 

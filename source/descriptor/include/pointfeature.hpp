@@ -31,9 +31,13 @@ public:
 	
 	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
 
+	virtual int getTamanioDescriporPCL();
+
 protected:
 	typename pcl::PointCloud<SignatureT> descPCL;
 	double diffAltoAncho;
+	//AGREGADO
+	int tamanioDescriptor;
 
 };
 #endif

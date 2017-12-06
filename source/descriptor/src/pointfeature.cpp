@@ -27,6 +27,14 @@ typename pcl::PointCloud<SignatureT> PointFeature<SignatureT,PointT>::getDescrip
     return this->descPCL;
 }
 
+template <class SignatureT,class PointT>
+int PointFeature<SignatureT,PointT>::getTamanioDescriporPCL(){
+    std::cout << "getTamanioDescriporPCL() SUPERCLASE" << std::endl;
+    return this->tamanioDescriptor;
+}
+
+
+
 
 
 /*
@@ -117,8 +125,6 @@ void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
   pcl::console::TicToc tt;
   tt.tic();
 
-  //this->c();
-  //this->computarDescriptor();
   this->computarDescriptor(n);
 
   std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
@@ -136,7 +142,8 @@ void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 
 template <class PointT>
 PointFeatureESF<PointT>::PointFeatureESF(){
-  //this->descPCL = new pcl::PointCloud<pcl::ESFSignature640>;
+  this->tamanioDescriptor = 640;
+  std::cout << "Llamado constructor de descriptor ESF()!: " << this->tamanioDescriptor << std::endl;
 }
 
 
@@ -146,6 +153,15 @@ pcl::PointCloud<pcl::ESFSignature640> PointFeatureESF<PointT>::getDescriptorPCL(
     std::cout << "getDescriptorPCL() ESF subclase" << std::endl;
     return this->descPCL;
 }
+
+
+template <class PointT>
+int PointFeatureESF<PointT>::getTamanioDescriporPCL(){
+    std::cout << "getTamanioDescriporPCL() subclase" << std::endl;
+    return this->tamanioDescriptor;
+}
+
+
 
 //Este metodo computa el descriptor de PCL de cada subclase de PointFeature
 template <class PointT>
@@ -176,7 +192,8 @@ void PointFeatureESF<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 
 template <class PointT>
 PointFeatureGRSD<PointT>::PointFeatureGRSD(){
-  //this->descPCL = new pcl::PointCloud<pcl::GRSDSignature21>;
+  std::cout << "Llamado constructor de descriptor GRSD()!"<< this->tamanioDescriptor  << std::endl;
+  this->tamanioDescriptor = 21;
 }
 
 template <class PointT>
@@ -184,6 +201,15 @@ pcl::PointCloud<pcl::GRSDSignature21> PointFeatureGRSD<PointT>::getDescriptorPCL
     std::cout << "getDescriptorPCL() GRSD subclase" << std::endl;
     return this->descPCL;
 }
+
+
+template <class PointT>
+int PointFeatureGRSD<PointT>::getTamanioDescriporPCL(){
+    std::cout << "getTamanioDescriporPCL() subclase" << std::endl;
+    return this->tamanioDescriptor;
+}
+
+
 
 
 template <class PointT>

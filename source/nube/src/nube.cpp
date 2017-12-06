@@ -3,6 +3,7 @@
 
 
 template <typename PointT>
+
 Nube<PointT>::Nube()
 {
   typename pcl::PointCloud<PointT>::Ptr downsampling_cloud (new pcl::PointCloud<PointT>);
@@ -20,6 +21,7 @@ Nube<PointT>::Nube(typename pcl::PointCloud<PointT>::Ptr input) : Nube()
 {
   this->original_cloud = input;
   this->setAllClouds ();
+
 }
 
 template <typename PointT>
