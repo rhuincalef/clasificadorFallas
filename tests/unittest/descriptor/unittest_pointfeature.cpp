@@ -15,6 +15,9 @@
 // Don't forget gtest.h, which declares the testing framework.
 #include <gtest/gtest.h>
 #include "../../../source/descriptor/include/pointfeaturederivadas.hpp"
+#include "../../../source/descriptor/include/descriptor.hpp"
+#include "../../../source/segmentation/include/segmentation.hpp"
+#include "../../../source/nube/include/nube.hpp"
 
 // Step 2. Use the TEST macro to define your tests.
 //
@@ -39,6 +42,7 @@
 // that their results don't depend on their order.
 //
 // </TechnicalDetails>
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
 
 class PointFeatureTest : public ::testing::Test {
  protected:
@@ -54,29 +58,28 @@ class PointFeatureTest : public ::testing::Test {
 // Tests PlanarAndEuclidean()
 /*
 */
-TEST(PointFeatureTest, Tamanio)
+TEST(PointFeatureTest, PlanarAndEuclideanYGRSD)
 {
-  srand (time (NULL));
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-  // Generate pointcloud data
-  cloud->width = 1000;
-  cloud->height = 1;
-  cloud->points.resize (cloud->width * cloud->height);
-
-  for (size_t i = 0; i < cloud->points.size (); ++i)
-  {
-    cloud->points[i].x = 1024.0f * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].y = 1024.0f * rand () / (RAND_MAX + 1.0f);
-    cloud->points[i].z = 1024.0f * rand () / (RAND_MAX + 1.0f);
-  }
-  /*
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  pl_ec.setNube(*cloud);
-  int orig_cloud_size = 0;
-  orig_cloud_size = cloud->points.size();
-  EXPECT_EQ(orig_cloud_size, pl_ec.getSizeNube());
-  */
+  Nube<pcl::PointXYZRGB>* n (new Nube<pcl::PointXYZRGB>(*cloud));
+  std::vector<pcl::PointCloud<pcl::PointXYZRGB>> v;
+  PlanarAndEuclidean<pcl::PointXYZRGB> pl_ec;
+  pl_ec.setDistanceThreshold (.02);
+  pl_ec.setMaxIterations (1000);
+  pl_ec.setNube (*n);
+  v = pl_ec.computar ();
+  EXPECT_EQ(2774, v.at(0).points.size());
+  EstrategiaDescriptorsAbstract<pcl::PointXYZRGB,pcl::GRSDSignature21,PointFeatureGRSD>* estratDescriptor;
+  estratDescriptor = new GRSD<pcl::PointXYZRGB>();
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster (new pcl::PointCloud<pcl::PointXYZRGB>);
+  *cloud_cluster = v.at(0);
+  Nube<pcl::PointXYZRGB>* nueva_nube (new Nube<pcl::PointXYZRGB>(cloud_cluster));
+  PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* pointFeature = estratDescriptor->generarDescriptor (nueva_nube);
+  pcl::PointCloud<pcl::GRSDSignature21> descriptores = pointFeature->getDescriptorPCL();
+  int pos_6 = descriptores.points[0].histogram[6];
+  EXPECT_EQ(2932, pos_6);
+  EXPECT_EQ(2033, descriptores.points[0].histogram[10]);
+  //pcl::PCDWriter writer;
+  //writer.write<pcl::GRSDSignature21>("grsd.pcd", descriptores, false);
 }
 
 // Step 3. Call RUN_ALL_TESTS() in main().
@@ -95,6 +98,17 @@ TEST(PointFeatureTest, Tamanio)
 int
 main (int argc, char** argv)
 {
+  if (argc < 2)
+  {
+    std::cerr << "No test file given. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    return (-1);
+  }
+  // Read a PCD file from disk.
+  if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(argv[1], *cloud) != 0)
+  {
+    std::cerr << "Failed to read test file. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    return -1;
+  }
   ::testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }

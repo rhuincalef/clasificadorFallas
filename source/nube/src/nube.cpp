@@ -1,15 +1,37 @@
 #include "../../utils/include/utils.hpp"
-
 #include "../include/nube.hpp"
 
+
 template <typename PointT>
-Nube<PointT>::Nube(){
-	//this->abc = new pcl::PointCloud<PointT>;
-	
+
+Nube<PointT>::Nube()
+{
+  typename pcl::PointCloud<PointT>::Ptr downsampling_cloud (new pcl::PointCloud<PointT>);
+  this->downsampling_cloud = downsampling_cloud;
+  typename pcl::PointCloud<PointT>::Ptr original_cloud (new pcl::PointCloud<PointT>);
+  this->original_cloud = original_cloud;
+  typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud (new pcl::PointCloud<PointT>);
+  this->no_outlier_cloud = no_outlier_cloud;
+  pcl::PointCloud<pcl::Normal>::Ptr normals_cloud (new pcl::PointCloud<pcl::Normal>);
+  this->normals_cloud = normals_cloud;
+}
+
+template <typename PointT>
+Nube<PointT>::Nube(typename pcl::PointCloud<PointT>::Ptr input) : Nube()
+{
+  this->original_cloud = input;
+  this->setAllClouds ();
+
+}
+
+template <typename PointT>
+Nube<PointT>::Nube(const pcl::PointCloud<PointT> &input) : Nube()
+{
+  *this->original_cloud = input;
+  this->setAllClouds ();
 }
 
 //Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
-
 template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
 	//Se computa la nube completa
@@ -82,30 +104,63 @@ template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 	//std::cout << "Computada normals_cloud!!" << std::endl;
 
 	//std::cout << "Computadas las normales para Nube con: " << normals_cloud->points.size() << " puntos." << std::endl;
+}
 
+template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getOriginalCloud()
+{
+  return this->original_cloud;
+}
 
+template<class PointT> typename pcl::PointCloud<PointT>::Ptr
+Nube<PointT>::getDownsamplingCloud()
+{
+  return this->downsampling_cloud;
+}
+
+template<class PointT> typename pcl::PointCloud<pcl::Normal>::Ptr
+Nube<PointT>::getNormalsCloud()
+{
+  return this->normals_cloud;
 }
 
 
 template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getDownsamplingCloud(){
-	return downsampling_cloud;
+Nube<PointT>::getNoOutlierCloud()
+{
+  return this->no_outlier_cloud;
 }
 
-template<class PointT>
-typename pcl::PointCloud<pcl::Normal>::Ptr Nube<PointT>::getNormalsCloud(){
-	return normals_cloud;
-}
-
-
-template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getOriginalCloud(){
-
-}
-
-template<typename PointT> typename pcl::PointCloud<PointT>::Ptr
-Nube<PointT>::getNoOutlierCloud(){
-	
+template<typename PointT> void
+Nube<PointT>::setAllClouds()
+{
+  // Create the filtering object
+  typename pcl::StatisticalOutlierRemoval<PointT> sor;
+  sor.setInputCloud (this->original_cloud);
+  // setMeanK - Set the number of nearest neighbors to use for mean distance estimation.
+  sor.setMeanK (50);
+  sor.setStddevMulThresh (1);
+  sor.filter (*this->no_outlier_cloud);
+  // The mapping tells you to what points of the old cloud the new ones correspond,
+  // but we will not use it. Avoiding Nan
+  std::vector<int> mapping;
+  pcl::removeNaNFromPointCloud(*this->no_outlier_cloud, *this->no_outlier_cloud, mapping);
+  pcl::VoxelGrid<PointT> voxel_grid_filter;
+  voxel_grid_filter.setInputCloud(this->original_cloud);
+  //voxel_grid_filter.setInputCloud(this->no_outlier_cloud);
+  voxel_grid_filter.setLeafSize(0.01f, 0.01f, 0.01f);
+  voxel_grid_filter.filter(*this->downsampling_cloud);
+  pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
+  normalEstimation.setInputCloud(this->downsampling_cloud);
+  // For every point, use all neighbors in a radius of 3cm.
+  //normalEstimation.setRadiusSearch(0.008);
+  normalEstimation.setRadiusSearch(0.03);
+  // A kd-tree is a data structure that makes searches efficient. More about it later.
+  // The normal estimation object will use it to find nearest neighbors.
+  typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
+  normalEstimation.setSearchMethod(kdtree);
+  // Calculate the normals.
+  normalEstimation.compute(*this->normals_cloud);
 }
 
 /*
@@ -117,6 +172,4 @@ Nube<PointT>::getNoOutlierCloud(){
 	Si existen metodos genericos que no tengan implementacion se retornara error de linkeo.
 */
 template class Nube<pcl::PointXYZRGB>;
-
-
-
+template class Nube<pcl::PointXYZ>;

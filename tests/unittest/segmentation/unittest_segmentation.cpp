@@ -15,6 +15,7 @@
 // Don't forget gtest.h, which declares the testing framework.
 #include <gtest/gtest.h>
 #include "../../../source/segmentation/include/segmentation.hpp"
+#include "../../../source/nube/include/nube.hpp"
 
 // Step 2. Use the TEST macro to define your tests.
 //
@@ -130,8 +131,8 @@ TEST(PlanarAndEuclideanTest, PlanarSegmentation)
   EXPECT_EQ(23316, plane->points.size()) << "CloudPlane size not match " << plane->points.size();
   EXPECT_EQ(2799, no_plane->points.size()) << "CloudNoPlane size not match " << no_plane->points.size();
 }
-
-TEST(PlanarAndEuclideanTest, Computar)
+/*
+TEST(PlanarAndEuclideanTest, ComputarDeprecated)
 {
   std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
   PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
@@ -140,6 +141,19 @@ TEST(PlanarAndEuclideanTest, Computar)
   v = pl_ec.computar (*cloud);
   EXPECT_EQ(2774, v.at(0).points.size());
   //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
+}
+*/
+TEST(PlanarAndEuclideanTest, Computar)
+{
+  Nube<pcl::PointXYZ> n (cloud);
+  std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
+  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
+  pl_ec.setDistanceThreshold (.02);
+  pl_ec.setMaxIterations (1000);
+  pl_ec.setNube (n);
+  v = pl_ec.computar ();
+  EXPECT_EQ(2774, v.at(0).points.size());
+  pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
 }
 // Step 3. Call RUN_ALL_TESTS() in main().
 //
@@ -159,13 +173,13 @@ main (int argc, char** argv)
 {
   if (argc < 2)
   {
-    std::cerr << "No test file given. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    std::cerr << "No test file given. Please download `voxel_bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
     return (-1);
   }
   // Read a PCD file from disk.
   if (pcl::io::loadPCDFile<pcl::PointXYZ>(argv[1], *cloud) != 0)
   {
-    std::cerr << "Failed to read test file. Please download `bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
+    std::cerr << "Failed to read test file. Please download `voxel_bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
     return -1;
   }
   ::testing::InitGoogleTest (&argc, argv);

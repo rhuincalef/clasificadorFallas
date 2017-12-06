@@ -13,25 +13,25 @@ Parametro::Parametro(){
 std::string
 Parametro::getNombre()
 {
-  return nombre;
+  return this->nombre;
 }
 
 void
 Parametro::setNombre(std::string valor)
 {
-  nombre = valor;
+  this->nombre = valor;
 }
 
 void
 Parametro::setEsOpcional(bool b)
 {
-  es_opcional = b;
+  this->es_opcional = b;
 }
 
 void
 Parametro::setValorEsperado(std::string valor)
 {
-  valor_esperado = valor;
+  this->valor_esperado = valor;
 }
 
 Parametrizador::Parametrizador(){
@@ -40,11 +40,11 @@ Parametrizador::Parametrizador(){
 void
 Parametrizador::agregar(Parametro p)
 {
-  parametros.push_back(p);
+  this->parametros.push_back(p);
 }
 
 std::vector<Parametro>
 Parametrizador::getParametros()
 {
-  return parametros;
+  return this->parametros;
 }

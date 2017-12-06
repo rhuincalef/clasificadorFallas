@@ -7,6 +7,8 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/segmentation/extract_clusters.h>
 #include <pcl/filters/extract_indices.h>
+#include <pcl/features/principal_curvatures.h>
+#include <pcl/features/normal_3d_omp.h>
 // 
 #include "../../utils/include/utils.hpp"
 #include "../../nube/include/nube.hpp"
@@ -33,8 +35,7 @@ public:
 template <typename PointT>
 class PlanarAndEuclidean : public EstrategiaSegmentationAbstract<PointT>
 {
-  typedef typename pcl::PointCloud<PointT> PointCloud;
-  //typedef typename pcl::EuclideanClusterExtraction<PointT> EuclideanClusterExtraction;
+
 public:
   /** \brief Constructor that sets default values for member variables. */
   PlanarAndEuclidean ()
@@ -82,6 +83,7 @@ public:
   void
   setClusterTolerance (double tolerance);
 
+  /* Uilizados en 1er test - Deprecated */
   void
   setNube (const pcl::PointCloud<PointT> &input);
 
@@ -93,6 +95,17 @@ public:
 
   std::vector<pcl::PointCloud<PointT>>
   computar(pcl::PointCloud<PointT> &input);
+  /* Fin Uilizados en 1er test - Deprecated */
+
+  void
+  setNube (Nube<PointT> &n);
+
+  Nube<PointT>
+  getNube() const;
+
+  //computar(pcl::PointCloud<PointT>::Ptr &input);
+  std::vector<pcl::PointCloud<PointT>>
+  computar ();
 
   void
   planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane);
@@ -106,6 +119,7 @@ protected:
   int min_cluster_size_ = 220;
   int max_cluster_size_ = 25000;
   pcl::PointCloud<PointT> nube;
+  Nube<PointT> nube_;
   pcl::SACSegmentation<PointT> sac_seg_;
   pcl::ExtractIndices<PointT> extract_;
   pcl::EuclideanClusterExtraction<PointT> ec;
@@ -117,6 +131,18 @@ protected:
   
   void
   euclideanClusterExtraction(const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>> &clusters_cloud);
+
+  /*
+  TODO: cambiar nombre metodo.
+    Metodo usado por euclideanClusterExtraction para separar los cluster que cumplan con lo siguiente:
+    if (!(pc1>0.003 && pc1<0.06))
+      continue;
+    if (!(pc2>0.0012 && pc2<0.0155))
+      continue;
+    Donde, pc1 es maxPrincipalCurvature y pc2 es minPrincipalCurvature
+  */
+  bool
+  principalCurvaturesEstimationProm(typename pcl::PointCloud<PointT>::Ptr input);
 
 };
 #endif
