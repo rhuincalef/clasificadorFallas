@@ -14,7 +14,8 @@
 	Se declara  como tipo plantilla el PointFeatureConcretoT, que representa una instancia generica de las
 	subclases de PointFeature.
 */
-template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+//template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+template<class PointT1>
 class EstrategiaDescriptorsAbstract{
 
 protected:
@@ -24,7 +25,20 @@ public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
 	
-	PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n);
+	/*
+	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+		PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n);
+	*/
+	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+	PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n){
+
+		std::cout << "EstrategiaDescriptorsAbstract.generarDescriptor() SUPERCLASE!!!" << std::endl;
+		//PointFeatureGRSD<PointT>* featureGRSD (new PointFeatureGRSD<PointT>);
+		PointFeatureConcretoT<PointT>* feature (new PointFeatureConcretoT<PointT>);
+		feature->procesarDescriptorPCL(n);
+		return feature;
+	
+	}
 
 	//Se establece como virutal este metodo para sobreescribirlo en las clases derivadas y poder
 	//acceder al metodo correspondiente para pathModeloEntrenado;
@@ -36,27 +50,23 @@ public:
 #ifndef ESF_DEF
 #define ESF_DEF
 
-//template <class SignatureT,class PointT> PointFeatureESF<PointT>;
 
-//class ESF : public EstrategiaDescriptorsAbstract<PointT,pcl::ESFSignature640>
-template <class PointT>
-//class ESF : public EstrategiaDescriptorsAbstract<PointT,pcl::ESFSignature640,PointFeatureESF<PointT>>
-class ESF : public EstrategiaDescriptorsAbstract<PointT,pcl::ESFSignature640,PointFeatureESF>
+template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+class ESF : public EstrategiaDescriptorsAbstract<PointT>
 {
   
 protected:
 	std::string pathModeloEntrenado;
-	//std::string getPathModeloEntrenado() override;
-	std::string getPathModeloEntrenado();
+
 
 public:
 	//Constructor 
 	ESF();
 
-	PointFeature<pcl::ESFSignature640,PointT>* generarDescriptor(Nube<PointT>* n);
+	std::string getPathModeloEntrenado();
+	
+	//PointFeature<pcl::ESFSignature640,PointT>* generarDescriptor(Nube<PointT>* n);
 
-
-	//template <class PointT> PointFeature<pcl::ESFSignature640> generarDescriptor(Nube<PointT>* n);	
 };
 #endif
 
@@ -64,9 +74,9 @@ public:
 
 #ifndef GRSD_DEF
 #define GRSD_DEF
-//class GRSD : public EstrategiaDescriptorsAbstract<PointT,pcl::GRSDSignature21>
-template <class PointT>
-class GRSD : public EstrategiaDescriptorsAbstract<PointT,pcl::GRSDSignature21,PointFeatureGRSD>
+
+template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
+class GRSD : public EstrategiaDescriptorsAbstract<PointT>
 {
   
 protected:
@@ -75,13 +85,11 @@ protected:
 public:
 	//Constructor 
 	GRSD();
-	PointFeature<pcl::GRSDSignature21,PointT>* generarDescriptor(Nube<PointT>* n);
-	
-	//std::string getPathModeloEntrenado() override;
-	std::string getPathModeloEntrenado();
 
-	//std::string getPathModeloEntrenado() override;
-	//template <class PointT> PointFeature<pcl::GRSDSignature21> generarDescriptor(Nube<PointT>* n);
+	std::string getPathModeloEntrenado();
+	
+	//PointFeature<pcl::GRSDSignature21,PointT>* generarDescriptor(Nube<PointT>* n);
+	
 
 };
 #endif

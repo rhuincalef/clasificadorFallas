@@ -5,7 +5,7 @@
 template <typename PointT>
 Nube<PointT>::Nube(){
 	//this->abc = new pcl::PointCloud<PointT>;
-
+	
 }
 
 //Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)

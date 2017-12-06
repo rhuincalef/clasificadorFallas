@@ -9,59 +9,90 @@
 
 #ifndef FormateadorDatasetAbstract_DEF
 #define FormateadorDatasetAbstract_DEF
-/*
-template<class SignatureT,class ProblemaT,class PointT>
-class FormateadorDatasetAbstract{
-*/
-template<class SignatureT,typename ProblemaT,class PointT,class MuestraT>
+
 class FormateadorDatasetAbstract{
 
 public:
 	//Constructor 
 	FormateadorDatasetAbstract();
-	//SignatureT ab(ProblemaT a);
-	void almacenarDatasetTmp(pcl::SVMData muestraSVM,
-								std::string dirSalidaTmp,
-								std::string nombreTmp);
 
-
-	/*template <class PointT>
-	 void dumpearDescriptor(PointFeature<SignatureT,PointT> descriptor,
-														std::string dirSalidaTmp,
-														std::string nombreTmp);
+	/*
+	template<class SignatureT,class ProblemaT,class PointT,class MuestraT>
+	ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
+		//Se genera la muestra en una estructura de SVMData con el descriptor PointFeature
+		std::cout << "Inicio FormateadorDatasetAbstract.adaptarDescriptor() SUPERCLASE!!! ..." << std::endl;
+		ProblemaT prob;
+		//pcl::SVMData muestraSVM;
+		MuestraT muestra;
+		this->generarMuestra(descriptor,&muestra);	
+		this->adaptarDescriptorAFormatoEspecifico(muestra,&prob);
+		return prob;
+	}
 	*/
-
+	
+	
+	
+	template <class SignatureT,class PointT,class ProblemaT,class MuestraT>
 	ProblemaT adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
+	
+	/*
+	template <class S,class PR,class PT,class M>
+	PR generica(PointFeature<S,PT>* b);
+	*/
+	//A generica(PointFeature<A,B>* b);
 
+	//Sub-metodos
 	virtual void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
-
+	
 	virtual void generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
 	virtual void generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
-	/*
-	*/
+		
+	
 };
+/*
+template <class SignatureT,class PointT,class ProblemaT,class MuestraT>
+ProblemaT FormateadorDatasetAbstract::adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor){
 
+	//Se genera la muestra en una estructura de SVMData con el descriptor PointFeature
+	std::cout << "Inicio FormateadorDatasetAbstract.adaptarDescriptor() SUPERCLASE!!! ..." << std::endl;
+	ProblemaT prob;
+	//pcl::SVMData muestraSVM;
+	MuestraT muestra;
+	this->generarMuestra(descriptor,&muestra);	
+	this->adaptarDescriptorAFormatoEspecifico(muestra,&prob);
+	return prob;
+}
+*/
+
+/*
+template<class A,class B>
+A FormateadorDatasetAbstract::generica(PointFeature<A,B>* b){
+
+}
+*/
 #endif
 
 
 #ifndef FormateadorSVM_DEF
 #define FormateadorSVM_DEF
 
-//template<class SignatureT,class ProblemaT,class PointT>
-//class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT> {
-template<class SignatureT,class PointT>
-class SVMFormatter: public FormateadorDatasetAbstract<SignatureT,svm_problem,PointT,pcl::SVMData> {
+template<class PointT,class SignatureT,class ProblemaT,class MuestraT>
+class SVMFormatter: public FormateadorDatasetAbstract {
 
 public:
 	SVMFormatter();
-	void generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
-	void generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM);
 
 	
-	virtual void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
+	
+	void generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,
+								pcl::SVMData* muestraSVM);
+	void generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,
+								pcl::SVMData* muestraSVM);
+	
+	
 
-	//void generarMuestraSVM(PointFeature<SignatureT,PointT>* descriptor,pcl::SVMData* muestraSVM);
-	//svm_problem adaptarDescriptor(PointFeature<SignatureT,PointT>* descriptor);
+	//virtual void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
+	void adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob);
 	
 };
 #endif

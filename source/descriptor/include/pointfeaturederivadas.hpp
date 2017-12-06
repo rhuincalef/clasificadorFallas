@@ -35,6 +35,8 @@ public:
 	void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 	
 	pcl::PointCloud<pcl::ESFSignature640> getDescriptorPCL();
+
+	int getTamanioDescriporPCL();
 	
 
 private:
@@ -59,6 +61,8 @@ public:
 	void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 	
 	pcl::PointCloud<pcl::GRSDSignature21> getDescriptorPCL();
+
+	int getTamanioDescriporPCL();
 	
 
 private:

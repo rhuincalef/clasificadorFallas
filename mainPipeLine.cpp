@@ -41,16 +41,16 @@ int main(int argc,char** argv)
 {
 	std::cout << "Iniciado main pipeLine..." << std::endl;
 	
-	/*
+	
 	MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model,PointFeatureESF>* pipeLineESF = new MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_problem,svm_model,PointFeatureESF>;
 	TipoMuestra tipo = testESF(pipeLineESF,argv[1]);
 	std::cout << "El tipo de muestra clasificado con ESF es: "<< tipo << std::endl;
-	*/
-
+	
+	/*
 	MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_problem,svm_model,PointFeatureGRSD>* pipeLineGRSD = new MainPipeLine<pcl::PointXYZRGB,pcl::GRSDSignature21,svm_problem,svm_model,PointFeatureGRSD>;
 	TipoMuestra tipo = testGRSD(pipeLineGRSD,argv[1]);
 	std::cout << "El tipo de muestra clasificado con GRSD es: "<< tipo << std::endl;
-	
+	*/
 	
 	std::cout << "Fin main xx pipeLine..." << std::endl;
 }

@@ -26,17 +26,12 @@ public:
 private:
 	std::string dirAlmacenamientoCapturas;
 
-	//EstrategiaDescriptorsAbstract<PointT,SignatureT>* estratDescriptor;
-	EstrategiaDescriptorsAbstract<PointT,SignatureT,PointFeatureT>* estratDescriptor;
+	//EstrategiaDescriptorsAbstract<PointT,SignatureT,PointFeatureT>* estratDescriptor;
+	EstrategiaDescriptorsAbstract<PointT>* estratDescriptor;
 
 
-	EstrategiaClasificacionMLAbstract<SignatureT,ProblemaT,ModeloT,PointT>* estratClasificacion;
-	//EstrategiaClasificacionAbstract* estratClasificacion;
-
-	/*
-	template <class SignatureT1,typename ProblemaT,typename ModeloT>
-	EstrategiaClasificacionMLAbstract<SignatureT1,ProblemaT,ModeloT>* estratClasificacion;
-	*/
+	//EstrategiaClasificacionMLAbstract<SignatureT,ProblemaT,ModeloT,PointT>* estratClasificacion;
+	EstrategiaClasificacionMLAbstract* estratClasificacion;
 
 //protected:
 };
