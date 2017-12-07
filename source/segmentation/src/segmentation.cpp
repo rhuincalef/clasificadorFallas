@@ -1,7 +1,5 @@
-
+// segmentation.cpp
 #include <pcl/impl/instantiate.hpp>
-
-#include "../../utils/include/utils.hpp"
 #include "../include/segmentation.hpp"
 
 template <typename PointT> std::vector<pcl::PointCloud<PointT>>
@@ -10,6 +8,12 @@ EstrategiaSegmentationAbstract<PointT>::computar(pcl::PointCloud<PointT> &input)
 }
 
 /******************************************** Metodos PlanarAndEuclidean **********************************************/
+
+template <typename PointT>
+PlanarAndEuclidean<PointT>::PlanarAndEuclidean ()
+{
+  //PlanarAndEuclidean<PointT>::configurarParametrizador();
+}
 
 template <typename PointT> float
 PlanarAndEuclidean<PointT>::getDistanceThreshold () const
@@ -236,6 +240,42 @@ PlanarAndEuclidean<PointT>::computar ()
   this->planarSegmentation (*downsampling_cloud, *no_plane, *plane);
   this->euclideanClusterExtraction(*no_plane, clusters_cloud);
   return clusters_cloud;
+}
+
+template <typename PointT>
+Parametrizador PlanarAndEuclidean<PointT>::parametrizador_;
+
+template <typename PointT>
+bool PlanarAndEuclidean<PointT>::configurado_ = false;
+
+template <typename PointT> void
+PlanarAndEuclidean<PointT>::configurarParametrizador()
+{
+  if (PlanarAndEuclidean<PointT>::configurado_)
+    return;
+  PlanarAndEuclidean<PointT>::parametrizador_.setNombre("planar_euclidean");
+  Parametro p1;
+  p1.setNombre("dist_thresh");
+  p1.setEsOpcional(false);
+  p1.setValorEsperado("float");
+  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p1);
+  Parametro p2;
+  p2.setNombre("max_it");
+  p2.setEsOpcional(false);
+  p2.setValorEsperado("int");
+  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p2);
+  Parametro p3;
+  p3.setNombre("tolerance");
+  p3.setEsOpcional(false);
+  p3.setValorEsperado("float");
+  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
+  p3.setNombre("min_cluster_size");
+  p3.setValorEsperado("int");
+  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
+  p3.setNombre("max_cluster_size");
+  p3.setValorEsperado("int");
+  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
+  PlanarAndEuclidean<PointT>::configurado_ = true;
 }
 
 //The explicit instantiation part

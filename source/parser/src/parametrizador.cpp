@@ -34,7 +34,14 @@ Parametro::setValorEsperado(std::string valor)
   this->valor_esperado = valor;
 }
 
-Parametrizador::Parametrizador(){
+Parametrizador::~Parametrizador()
+{
+  this->parametros.clear();
+}
+
+Parametrizador::Parametrizador()
+{
+  this->parametros.clear();
 }
 
 void
@@ -47,4 +54,16 @@ std::vector<Parametro>
 Parametrizador::getParametros()
 {
   return this->parametros;
+}
+
+std::string
+Parametrizador::getNombre()
+{
+  return this->nombre_;
+}
+
+void
+Parametrizador::setNombre(std::string nombre)
+{
+  this->nombre_ = nombre;
 }

@@ -5,7 +5,8 @@
 
 #ifndef Parametro_DEF
 #define Parametro_DEF
-class Parametro{
+class Parametro
+{
 
 public:
   //Constructor 
@@ -33,11 +34,14 @@ private:
 
 #ifndef Parametrizador_DEF
 #define Parametrizador_DEF
-class Parametrizador{
+class Parametrizador
+{
 
 public:
   //Constructor
   Parametrizador();
+
+  ~Parametrizador();
 
   void
   agregar(Parametro p);
@@ -45,8 +49,15 @@ public:
   std::vector<Parametro>
   getParametros();
 
+  std::string
+  getNombre();
+
+  void
+  setNombre(std::string nombre);
+
 private:
   std::vector<Parametro> parametros;
+  std::string nombre_;
 
 };
 #endif
