@@ -204,42 +204,47 @@ template class Nube<pcl::PointXYZ>;
 
 /*
 */
-template<PointT>
+template<class PointT>
 Cluster<PointT>::Cluster(){
-
+  this->alto = 0;
+  this->ancho = 0;
+  this->profundidad = 0;
+  this->tipo = "";
 }
 
-template<PointT>
-Cluster<PointT>::Cluster(typename pcl::PointCloud<PointT>::Ptr input,std::string nombre){
+template<class PointT>
+Cluster<PointT>::Cluster(typename pcl::PointCloud<PointT>::Ptr input,std::string nombre): Cluster(){
 	this->original_cloud = input;
 	this->nombre = nombre;
 }
 
-template<PointT>
-void Cluster<PointT>::setOriginalCloud(pcl::PointCloud<PointT>::Ptr p){
+template<class PointT>
+void Cluster<PointT>::setOriginalCloud(typename pcl::PointCloud<PointT>::Ptr p){
 	this->original_cloud = p;
 }
 
-template<PointT>
+template<class PointT>
 void Cluster<PointT>::setNombre(std::string nombre){
 	this->nombre = nombre;
 }
 
 
-template<PointT>
+template<class PointT>
 std::string Cluster<PointT>::getNombre(){
 	return this->nombre;
 }
 
-template<PointT>
+template<class PointT>
 typename pcl::PointCloud<PointT>::Ptr Cluster<PointT>::getOriginalCloud(){
 	return this->original_cloud;
 }
 
-template<PointT>
+template<class PointT>
 void Cluster<PointT>::computarNormales(){
-	this->normals_cloud = new pcl::NormalEstimationOMP<PointT, pcl::Normal>;
 	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
+	pcl::PointCloud<pcl::Normal>::Ptr normales (new pcl::PointCloud<pcl::Normal>);
+	this->normals_cloud = normales;
+	
 	normalEstimation.setInputCloud(this->original_cloud);
 	// For every point, use all neighbors in a radius of 3cm.
 	//normalEstimation.setRadiusSearch(0.008);
@@ -252,9 +257,54 @@ void Cluster<PointT>::computarNormales(){
 	normalEstimation.compute(*this->normals_cloud);
 }
 
-
+template<class PointT>
 pcl::PointCloud<pcl::Normal>::Ptr Cluster<PointT>::getNormalsCloud(){
 	return this->normals_cloud;
+}
+
+
+
+
+template<class PointT>
+double Cluster<PointT>::getAlto(){
+	return this->alto;
+}
+
+template<class PointT>
+void Cluster<PointT>::setAlto(double a){
+	this->alto = a;
+}
+
+template<class PointT>
+double Cluster<PointT>::getAncho(){
+	return this->ancho;
+}
+
+template<class PointT>
+void Cluster<PointT>::setAncho(double a){
+	this->ancho = a;
+}
+
+template<class PointT>
+double Cluster<PointT>::getProfundidad(){
+	return this->profundidad;
+}
+
+template<class PointT>
+void Cluster<PointT>::setProfundidad(double a){
+	this->profundidad = a;
+}
+
+
+
+template<class PointT>
+std::string Cluster<PointT>::getTipo(){
+	return this->tipo;
+}
+
+template<class PointT>
+void Cluster<PointT>::setTipo(std::string t){
+	this->tipo = t;
 }
 
 

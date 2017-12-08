@@ -20,9 +20,20 @@ TipoMuestra testESF(MainPipeLine<pcl::PointXYZRGB,pcl::ESFSignature640,svm_probl
 	features = pipeline->computarNube(muestraPcd);
 	return pipeline->clasificar(features);
 }
-
-
 */
+
+std::string splitear(std::string nombre){
+    std::vector<std::string> result;
+    std::vector<std::string> strs;
+    boost::split(strs,nombre,boost::is_any_of("."));
+    if (strs.size() > 1)
+    {
+      boost::split(result,strs[0],boost::is_any_of("/"));
+    }
+    std::cout << "Cadena spliteada: "<< result[result.size()-1] << std::endl;
+    return result[result.size()-1];    
+}
+
 
 //Ejemplo de invocacion -->
 // ./mainPipeLine REAL_BACHE.pcd
@@ -63,59 +74,65 @@ int main(int argc,char** argv)
 		std::cout << "Clasificando capturas["<<i << "] = " << capturas[i] << std::endl;
 
 		std::string cap = capturas[i];
-		typename pcl::PointCloud<PointT>::Ptr p (new pcl::PointCloud<PointT>);
+		typename pcl::PointCloud<pcl::PointXYZRGB>::Ptr p (new pcl::PointCloud<pcl::PointXYZRGB>);
 	
-		if (pcl::io::loadPCDFile<PointT>(cap, *p) != 0)
+		if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(cap, *p) != 0)
 		{
 		  std::cerr << "Failed to read PCD test file." << std::endl;
 		  return -1;
 		}
-		Nube<PointT>* n = new Nube<PointT>(p);
+		Nube<pcl::PointXYZRGB>* n = new Nube<pcl::PointXYZRGB>(p);
 		n->setNombre(splitear(cap));
+		std::cout << "" << std::endl;
+		//n->setNombre("");
 
 		std::vector <pcl::PointCloud<pcl::PointXYZRGB>> clusters = pipeLine->computarNube(n);
 		//std::vector <Cluster<pcl::PointXYZRGB>> clusters = pipeLine->computarNube(cap);
 		for (int i = 0; i < clusters.size(); ++i)
 		{	
-			Cluster<pcl::PointXYZRGB> c  = new Cluster<pcl::PointXYZRGB>(clusters[i]);
-			std::string aux = std::to_string("_cluster_") + std::to_string(i);
-			c->setNombre(aux);
+			pcl::PointCloud<pcl::PointXYZRGB>::Ptr c1 (new pcl::PointCloud<pcl::PointXYZRGB>);
+			*c1 = clusters[i];
+
+			std::string aux = "_cluster_" + std::to_string(i);
+			Cluster<pcl::PointXYZRGB> c (c1,aux);
+			//Cluster<pcl::PointXYZRGB> c (clusters[i],aux);
+			//c->setNombre(aux);
 			n->agregarCluster(c); 
 		}
 
 
-		std::vector<Cluster<pcl::PointXYZRGB>> clustersReales = n->getClusters();
+		std::vector< Cluster<pcl::PointXYZRGB> > clustersReales = n->getClusters();
 		for (int i = 0; i < clustersReales.size(); ++i)
 		{
-			std::cout << "Clasificando clusters[" << i << "] = " << clusters[i] << std::endl;
-			pcl::PCDWriter writer;
-  			//writer.write<pcl::PointXYZRGB>( "lala.pcd", clusters[i], false);
-  			writer.write<pcl::PointXYZRGB>( "cluster" + std::to_string(i) + ".pcd", clusters[i], false);
-
-			//Nube<pcl::PointXYZRGB>* n = new Nube<pcl::PointXYZRGB>(clusters[i]);
-
-
-
+			std::cout << "Clasificando clusters[" << i << "] = " << clusters[i] << std::endl;  			
 			PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* pointFeature = pipeLine->getEstrategiaDescriptor()->template generarDescriptor<pcl::PointXYZRGB,
 																												pcl::ESFSignature640,
-																												PointFeatureESF>(n);
-			std::cout << "Fin de Main.ComputarNube(). Genere el descriptor" << std::endl<< std::endl;			
-			//TipoMuestra tipo = pipeLine->clasificar(pointFeature);
+																												PointFeatureESF>(&clustersReales[i]);
+
+			TipoDimensiones dimensiones;
+			pointFeature->calcularDimensiones(clustersReales[i].getOriginalCloud(),
+																&dimensiones);
+			clustersReales[i].setAlto(dimensiones.alto);
+			clustersReales[i].setAncho(dimensiones.ancho);
+			clustersReales[i].setProfundidad(dimensiones.profundidad);
+
+			std::cout << "Fin de Main.ComputarNube(). Genere el descriptor" << std::endl<< std::endl;
 			TipoMuestra tipo = pipeLine->template clasificar<pcl::ESFSignature640,
 																svm_problem,svm_model>(pointFeature);
 			switch(tipo) {
 				case TIPO_BACHE: 
 					std::cout << "El cluster se clasifico como: BACHE" << std::endl;
+					clustersReales[i].setTipo("Bache");
 					break;
 			    case TIPO_GRIETA:
 					std::cout << "El cluster se clasifico como: GRIETA" << std::endl; 
+					clustersReales[i].setTipo("Grieta");
 			        break;
 			}
 
-			std::cout << std::endl;
 
-			//TODO: VER SI ALMACENAR EN CLUSTER ALTO,ANCHO Y PROFUNIDAD CALCULADO AL GENERAR POINTFEATURE
-			pipeLine->almacenarCluster(n,clustersReales[i],pointFeature->getAlto(),pointFeature->getAncho());
+			std::cout << std::endl;
+			pipeLine->almacenarCluster(n,clustersReales[i]);
 
 			std::cout << "---------------------------------------------------"<< std::endl<< std::endl;			
 		}

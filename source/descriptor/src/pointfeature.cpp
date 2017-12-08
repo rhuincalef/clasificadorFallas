@@ -136,14 +136,21 @@ void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Cluster<PointT>* n){
   //calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
   this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
 
-  //AGREGADO
-  this->alto = dimensiones.alto;
-  this->ancho = dimensiones.ancho;
 
   std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 }
 
 
+template <class SignatureT,class PointT>
+void PointFeature<SignatureT,PointT>::calcularDimensiones(
+                                                typename pcl::PointCloud<PointT>::Ptr cloud,
+                                                TipoDimensiones* dimensiones){
+  
+  this->calcularAltoAncho(cloud,dimensiones);
+}
+
+
+/*
 template <class SignatureT,class PointT>
 double PointFeature<SignatureT,PointT>::getAlto(){
   return this->alto;
@@ -153,7 +160,7 @@ template <class SignatureT,class PointT>
 double PointFeature<SignatureT,PointT>::getAncho(){
   return this->ancho;
 }
-  
+*/
 
 
 /******************************************** Metodos ESF **********************************************/

@@ -9,6 +9,7 @@
 #include <pcl/point_types.h>
 
 #include "../../utils/include/utils.hpp"
+//#include "../../utils/include/help.h"
 #include "../../nube/include/nube.hpp"
 
 
@@ -35,15 +36,14 @@ public:
 
 	virtual int getTamanioDescriporPCL();
 
-	double getAlto();
-	double getAncho();
+
+	void calcularDimensiones(typename pcl::PointCloud<PointT>::Ptr cloud,
+								TipoDimensiones* dimensiones);
 	
 protected:
 	typename pcl::PointCloud<SignatureT> descPCL;
 	double diffAltoAncho;
 	//AGREGADO
-	double alto;
-	double ancho;
 	int tamanioDescriptor;
 
 };

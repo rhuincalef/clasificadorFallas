@@ -8,6 +8,11 @@ find_package (Threads)
 find_package(PCL 1.8 REQUIRED)
 find_package(GTest REQUIRED)
 
+pkg_check_modules(JSONCPP jsoncpp)
+link_libraries(${JSONCPP_LIBRARIES})
+
+
+
 #set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive ../libs/libsvm.so")
 #set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -lgtest")
 
@@ -68,6 +73,7 @@ add_executable (mainPipeLine "mainPipeLine.cpp" "${SOURCES}")
 #target_link_libraries(unittest_estrategia_clasificacion ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 #target_link_libraries(unittest_pointfeature ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 
-target_link_libraries (mainPipeLine ${PCL_LIBRARIES} )
+target_link_libraries (mainPipeLine ${PCL_LIBRARIES} ${JSONCPP_LIBRARIES})
+
 
 

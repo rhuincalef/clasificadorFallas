@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../../utils/include/utils.hpp"
+//#include "../../utils/include/help.h"
 
 #include "../../descriptor/include/pointfeaturederivadas.hpp"
 #include "../../nube/include/nube.hpp"
@@ -7,6 +8,9 @@
 #include "../../segmentation/include/segmentation.hpp"
 #include "../../descriptor/include/descriptor.hpp"
 #include "../../ML/include/estrategia_clasificacion.hpp"
+
+#include <json/json.h>
+#include <json/writer.h>
 
 
 #ifndef MainPipeLine_DEF
@@ -29,7 +33,7 @@ public:
 	
 	//template <class SignatureT>
 	//std::vector<pcl::PointCloud<PointT>> computarNube(std::string pcdNoEscaneado);
-	std::vector<pcl::PointCloud<PointT>> computarNube(Nube<PointT>* n);
+	typename std::vector<pcl::PointCloud<PointT>> computarNube(Nube<PointT>* n);
 
 	template <class SignatureT,class ProblemaT,class ModeloT>
 	TipoMuestra clasificar(PointFeature<SignatureT,PointT>* descriptor){
@@ -62,12 +66,8 @@ public:
 	EstrategiaClasificacionMLAbstract* getEstrategiaClasificacion();
 
 
-
-	void 
-	almacenarCluster(Nube<pcl::PointXYZRGB>n,clustersReales[i],pointFeature->getAlto(),pointFeature->getAncho());
-
-
-
+	void
+	almacenarCluster(Nube<PointT>* n,Cluster<PointT> c);
 
 
 

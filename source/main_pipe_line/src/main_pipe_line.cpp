@@ -1,6 +1,7 @@
 // Mediciones
 #include <stdio.h>
 #include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
 // using for print_highlight, print_value, print_info
 #include <pcl/console/print.h>
 #include "../include/main_pipe_line.hpp"
@@ -153,6 +154,51 @@ int MainPipeLine<PointT>::leerCaptura(std::string pathCaptura,
 	}
 
 }
+
+/*
+{
+	nombre:"",
+	alto:0,
+	ancho:0,
+	profundidad:0
+}
+*/
+
+template <class PointT>
+void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c){
+
+
+	
+	std::string nombreNube = n->getNombre();
+	std::string nombreCluster = nombreNube + c.getNombre();
+	std::string nombreFinalCluster =  nombreCluster + ".pcd";
+
+	//Se intenta crear el directorio para la muestra
+	std::string subDirMuestra;
+	subDirMuestra = DIR_GUARDADO_CLUSTER + nombreNube + "/";
+	if (boost::filesystem::create_directory(subDirMuestra) == false){
+		std::cout <<"El directorio de salida para grietas ya existe" << std::endl; 
+	}else{
+		std::cout << "Creado el directorio de salida para grietas "<< std::endl;
+	}
+
+	pcl::PCDWriter writer;
+	writer.write<PointT>(subDirMuestra + nombreFinalCluster, *c.getOriginalCloud(), false);
+
+	Json::Value info;
+	info["nombre"] = nombreFinalCluster;
+	info["alto"] = c.getAlto();
+	info["ancho"] = c.getAncho();
+	info["profundidad"] = c.getProfundidad();
+	info["tipoMuestra"] = c.getTipo();
+
+	std::ofstream salida;
+	salida.open(subDirMuestra + nombreCluster + ".json");
+	Json::StyledWriter styledWriter;
+	salida << styledWriter.write(info);
+	salida.close();
+}
+
 
 
 

@@ -1,5 +1,6 @@
 //Se agrega esta macro de preprocesador para que no se defina el TipoMuestra mas de una vez con cada #include 
 #include <string>
+#include <iostream>
 
 #ifndef _TIPO_MUESTRA
 #define _TIPO_MUESTRA
@@ -38,14 +39,16 @@ typedef struct {
 } TipoDimensiones;
 #endif
 
+#ifndef _SPLITEAR_NOMBRE_NUBE
+#define _SPLITEAR_NOMBRE_NUBE
 
-#ifndef SPLITEAR_NOMBRE_NUBE
-#define SPLITEAR_NOMBRE_NUBE
   #include <boost/algorithm/string.hpp>
 
+  std::string splitear(std::string nombre);
+/*
   std::string splitear(std::string nombre){
     std::vector<std::string> result;
-    std::vector<string> strs;
+    std::vector<std::string> strs;
     boost::split(strs,nombre,boost::is_any_of("."));
     if (strs.size() > 1)
     {
@@ -53,10 +56,9 @@ typedef struct {
     }
     std::cout << "Cadena spliteada: "<< result[result.size()-1] << std::endl;
     return result[result.size()-1];    
-  }
-
+  };
+*/
 #endif
-
 
 //Paths a los modelos entrenados (previamente a la ejecucion del script) para levantar el modelo entrenado
 // segun el tipo de descriptor  

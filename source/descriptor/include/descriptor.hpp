@@ -1,6 +1,7 @@
 // Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
 #include <iostream>
 #include "../../utils/include/utils.hpp"
+//#include "../../utils/include/help.h"
 #include "../include/pointfeature.hpp"
 #include "../include/pointfeaturederivadas.hpp"
 
@@ -36,6 +37,8 @@ public:
 		return feature;
 	
 	}
+
+
 
 	//Se establece como virutal este metodo para sobreescribirlo en las clases derivadas y poder
 	//acceder al metodo correspondiente para pathModeloEntrenado;
