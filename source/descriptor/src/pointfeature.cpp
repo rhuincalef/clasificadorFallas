@@ -112,15 +112,17 @@ void PointFeature<SignatureT,PointT>::calcularAltoAncho(pcl::PointCloud<pcl::Poi
   
 }
 
+//void PointFeature<SignatureT,PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 template <class SignatureT,class PointT>
-void PointFeature<SignatureT,PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
+void PointFeature<SignatureT,PointT>::computarDescriptor(Cluster<pcl::PointXYZRGB>* n){
   //std::cout << "Invoque a C() de SUPERCLASE!!! " << std::endl;
 }
 
 
 
+//void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
 template <class SignatureT,class PointT>
-void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
+void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Cluster<PointT>* n){
 
   pcl::console::TicToc tt;
   tt.tic();
@@ -130,12 +132,28 @@ void PointFeature<SignatureT,PointT>::procesarDescriptorPCL(Nube<PointT>* n){
   std::cout << "ESF descriptor Time(seg): " << tt.toc()/1000 << std::endl;
   //Calculo de alto y ancho V2
   TipoDimensiones dimensiones;
-  calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
+  calcularAltoAncho(n->getOriginalCloud(),&dimensiones);
+  //calcularAltoAncho(n->getDownsamplingCloud(),&dimensiones);
   this->diffAltoAncho = fabs(dimensiones.alto - dimensiones.ancho);
+
+  //AGREGADO
+  this->alto = dimensiones.alto;
+  this->ancho = dimensiones.ancho;
+
   std::cout << "Calculada la diferencia alto-ancho para la muestra: "<< this->diffAltoAncho << std::endl;
 }
 
 
+template <class SignatureT,class PointT>
+double PointFeature<SignatureT,PointT>::getAlto(){
+  return this->alto;
+}
+
+template <class SignatureT,class PointT>
+double PointFeature<SignatureT,PointT>::getAncho(){
+  return this->ancho;
+}
+  
 
 
 /******************************************** Metodos ESF **********************************************/
@@ -164,15 +182,17 @@ int PointFeatureESF<PointT>::getTamanioDescriporPCL(){
 
 
 //Este metodo computa el descriptor de PCL de cada subclase de PointFeature
+//void PointFeatureESF<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 template <class PointT>
-void PointFeatureESF<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
+void PointFeatureESF<PointT>::computarDescriptor(Cluster<pcl::PointXYZRGB>* n){
   std::cout << "Invoque a computarDescriptor() de PointFeatureESF!!! " << std::endl;
   pcl::console::TicToc tt;
   tt.tic();
   // ESF estimation object.
   pcl::ESFEstimation<PointT, pcl::ESFSignature640> esf;
 
-  esf.setInputCloud(n->getDownsamplingCloud());
+  //esf.setInputCloud(n->getDownsamplingCloud());
+  esf.setInputCloud(n->getOriginalCloud());
   std::cout << "1"<< std::endl;
   std::cout << this->descPCL << std::endl;
   esf.compute(this->descPCL);
@@ -212,8 +232,9 @@ int PointFeatureGRSD<PointT>::getTamanioDescriporPCL(){
 
 
 
+//void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
 template <class PointT>
-void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
+void PointFeatureGRSD<PointT>::computarDescriptor(Cluster<pcl::PointXYZRGB>* n){
   std::cout << "Invoque a computarDescriptor() de GRSD!!! " << std::endl;
 
   pcl::console::TicToc tt;
@@ -221,9 +242,13 @@ void PointFeatureGRSD<PointT>::computarDescriptor(Nube<pcl::PointXYZRGB>* n){
   typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
   // GRSD estimation object.
   pcl::GRSDEstimation<PointT, pcl::Normal, pcl::GRSDSignature21> grsd;
-  grsd.setInputCloud(n->getDownsamplingCloud());
+  //grsd.setInputCloud(n->getDownsamplingCloud());
+  grsd.setInputCloud(n->getOriginalCloud());
+
   //grsd.setInputNormals(normals);
+  n->computarNormales();
   grsd.setInputNormals(n->getNormalsCloud());
+
   grsd.setSearchMethod(kdtree);
   // Search radius, to look for neighbors. Note: the value given here has to be
   // larger than the radius used to estimate the normals.

@@ -31,6 +31,34 @@ Nube<PointT>::Nube(const pcl::PointCloud<PointT> &input) : Nube()
   this->setAllClouds ();
 }
 
+
+
+
+template <typename PointT>
+void Nube<PointT>::setNombre(std::string n){
+	this->nombre = n;
+}
+
+template <typename PointT>
+std::string Nube<PointT>::getNombre(){
+	return this->nombre;
+}
+
+
+
+template <typename PointT>
+typename std::vector<Cluster<PointT>> Nube<PointT>::getClusters(){
+	return this->clusters;
+}
+ 
+
+
+template <typename PointT>
+void  Nube<PointT>::agregarCluster(Cluster<PointT> c){
+	this->clusters.push_back(c);
+}
+
+
 //Constructor que simula incializar una muestra pcd cropeada,downsampleada y con normales (Prueba de training cropeada)
 template <typename PointT> Nube<PointT>::Nube(std::string fullPathCaptura){
 
@@ -173,3 +201,65 @@ Nube<PointT>::setAllClouds()
 */
 template class Nube<pcl::PointXYZRGB>;
 template class Nube<pcl::PointXYZ>;
+
+/*
+*/
+template<PointT>
+Cluster<PointT>::Cluster(){
+
+}
+
+template<PointT>
+Cluster<PointT>::Cluster(typename pcl::PointCloud<PointT>::Ptr input,std::string nombre){
+	this->original_cloud = input;
+	this->nombre = nombre;
+}
+
+template<PointT>
+void Cluster<PointT>::setOriginalCloud(pcl::PointCloud<PointT>::Ptr p){
+	this->original_cloud = p;
+}
+
+template<PointT>
+void Cluster<PointT>::setNombre(std::string nombre){
+	this->nombre = nombre;
+}
+
+
+template<PointT>
+std::string Cluster<PointT>::getNombre(){
+	return this->nombre;
+}
+
+template<PointT>
+typename pcl::PointCloud<PointT>::Ptr Cluster<PointT>::getOriginalCloud(){
+	return this->original_cloud;
+}
+
+template<PointT>
+void Cluster<PointT>::computarNormales(){
+	this->normals_cloud = new pcl::NormalEstimationOMP<PointT, pcl::Normal>;
+	pcl::NormalEstimationOMP<PointT, pcl::Normal> normalEstimation(0);
+	normalEstimation.setInputCloud(this->original_cloud);
+	// For every point, use all neighbors in a radius of 3cm.
+	//normalEstimation.setRadiusSearch(0.008);
+	normalEstimation.setRadiusSearch(0.03);
+	// A kd-tree is a data structure that makes searches efficient. More about it later.
+	// The normal estimation object will use it to find nearest neighbors.
+	typename pcl::search::KdTree<PointT>::Ptr kdtree(new pcl::search::KdTree<PointT>);
+	normalEstimation.setSearchMethod(kdtree);
+	// Calculate the normals.
+	normalEstimation.compute(*this->normals_cloud);
+}
+
+
+pcl::PointCloud<pcl::Normal>::Ptr Cluster<PointT>::getNormalsCloud(){
+	return this->normals_cloud;
+}
+
+
+
+template class Cluster<pcl::PointXYZRGB>;
+template class Cluster<pcl::PointXYZ>;
+
+

@@ -25,12 +25,9 @@ public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
 	
-	/*
 	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
-		PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n);
-	*/
-	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
-	PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n){
+	//PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n){
+	PointFeature<SignatureT,PointT>* generarDescriptor(Cluster<PointT>* n){
 
 		std::cout << "EstrategiaDescriptorsAbstract.generarDescriptor() SUPERCLASE!!!" << std::endl;
 		//PointFeatureGRSD<PointT>* featureGRSD (new PointFeatureGRSD<PointT>);

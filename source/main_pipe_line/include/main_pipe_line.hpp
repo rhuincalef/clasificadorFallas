@@ -26,33 +26,50 @@ public:
 	//typename pcl::PointCloud<PointT>::Ptr leerCaptura(std::string dir);
 	int leerCaptura(std::string pathCaptura, typename pcl::PointCloud<PointT>::Ptr cloud);
 
-	template <class PointT1,class SignatureT>
-	std::vector<pcl::PointCloud<PointT1>> computarNube(std::string pcdNoEscaneado);
-
 	
-	template <class SignatureT>
-	TipoMuestra clasificar(PointFeature<SignatureT,PointT>* descriptor);
+	//template <class SignatureT>
+	//std::vector<pcl::PointCloud<PointT>> computarNube(std::string pcdNoEscaneado);
+	std::vector<pcl::PointCloud<PointT>> computarNube(Nube<PointT>* n);
+
+	template <class SignatureT,class ProblemaT,class ModeloT>
+	TipoMuestra clasificar(PointFeature<SignatureT,PointT>* descriptor){
+
+		//template <class SignatureT,class PointT,class ProblemaT,class ModeloT,class MuestraT>
+		return this->estratClasificacion->template clasificar<SignatureT,PointT,ProblemaT,
+															ModeloT,pcl::SVMData>(
+													this->estratDescriptor->getPathModeloEntrenado(),
+													descriptor);
+	}
 
 
 	//Getters y setters
 	void setDirAlmacenamientoCapturasClasificadas(std::string dirCapturas);
 	std::string getDirAlmacenamientoCapturasClasificadas();
 
-	template <template <class> class EstrategiaSegmentationT>
-	void setEstrategiaSegmentacion(EstrategiaSegmentationT<PointT>* estrategia);
+
+	
+	void setEstrategiaSegmentacion(EstrategiaSegmentationAbstract<PointT>* estrategia);
+	
+	EstrategiaSegmentationAbstract<PointT>* getEstrategiaSegmentacion();
+	
+
+	void setEstrategiaDescriptor(EstrategiaDescriptorsAbstract<PointT>* descriptor);	
+	EstrategiaDescriptorsAbstract<PointT>* getEstrategiaDescriptor();
 
 
-	template <template <class> class EstrategiaSegmentationT>
-	EstrategiaSegmentationT<PointT>* getEstrategiaSegmentacion();
-
-	template < template<class> class EstrategiaDescriptorsT>
-		void setEstrategiaDescriptor(EstrategiaDescriptorsT<PointT>* descriptor);
-
-	template < template<class> class EstrategiaDescriptorsT >
-		EstrategiaDescriptorsT<PointT>* getEstrategiaDescriptor();
 
 	void setEstrategiaClasificacion(EstrategiaClasificacionMLAbstract* clasificacion);
 	EstrategiaClasificacionMLAbstract* getEstrategiaClasificacion();
+
+
+
+	void 
+	almacenarCluster(Nube<pcl::PointXYZRGB>n,clustersReales[i],pointFeature->getAlto(),pointFeature->getAncho());
+
+
+
+
+
 
 
 private:

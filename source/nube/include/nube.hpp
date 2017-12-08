@@ -37,14 +37,72 @@ public:
   typename pcl::PointCloud<PointT>::Ptr
   getOriginalCloud();
 
+
+  typename std::vector<Cluster<PointT>>
+  getClusters();
+  
+  void 
+  agregarCluster(Cluster<PointT> c);
+
+  void
+  setNombre(std::string n);
+
+  std::string
+  getNombre();
+  
+
 private:
   typename pcl::PointCloud<PointT>::Ptr downsampling_cloud;
   pcl::PointCloud<pcl::Normal>::Ptr normals_cloud;
   typename pcl::PointCloud<PointT>::Ptr original_cloud;
   typename pcl::PointCloud<PointT>::Ptr no_outlier_cloud;
 
+  typename std::vector<Cluster<PointT>> clusters;
+  std::string nombre;
+
   void
   setAllClouds();
 
 };
 #endif
+
+
+#ifndef CLUSTER_DEF
+#define CLUSTER_DEF
+template <class PointT>
+class Cluster
+{
+
+public:
+  //Constructor
+  Cluster();
+
+  Cluster(typename pcl::PointCloud<PointT>::Ptr input,
+                                                    std::string nombre);
+
+  void setOriginalCloud(pcl::PointCloud<PointT>::Ptr p);
+  
+  typename pcl::PointCloud<PointT>::Ptr
+  getOriginalCloud();
+
+  void setNombre(std::string nombre);
+
+  std::string getNombre();
+
+  void
+  computarNormales();
+
+  pcl::PointCloud<pcl::Normal>::Ptr
+  getNormalsCloud();
+
+private:
+  typename pcl::PointCloud<PointT>::Ptr original_cloud;
+  pcl::PointCloud<pcl::Normal>::Ptr normals_cloud;
+  std::string nombre;
+
+
+};
+#endif
+
+
+

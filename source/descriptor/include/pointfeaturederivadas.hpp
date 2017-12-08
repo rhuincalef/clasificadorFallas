@@ -32,7 +32,8 @@ public:
 	PointFeatureESF();
 
 	
-	void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	//void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	void computarDescriptor(Cluster<pcl::PointXYZRGB>* n);
 	
 	pcl::PointCloud<pcl::ESFSignature640> getDescriptorPCL();
 
@@ -58,7 +59,8 @@ public:
 	//Constructor 
 	PointFeatureGRSD();	
 
-	void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	void computarDescriptor(Cluster<pcl::PointXYZRGB>* n);
+	//void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
 	
 	pcl::PointCloud<pcl::GRSDSignature21> getDescriptorPCL();
 

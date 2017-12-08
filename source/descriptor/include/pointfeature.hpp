@@ -21,22 +21,29 @@ public:
 	//Constructor 
 	PointFeature();
 
-	void procesarDescriptorPCL(Nube<PointT>* n);
+	//void procesarDescriptorPCL(Nube<PointT>* n);
+	void procesarDescriptorPCL(Cluster<PointT>* n);
 
 	void calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,TipoDimensiones* dimensiones);
 
-	virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	virtual void computarDescriptor(Cluster<pcl::PointXYZRGB>* n);
+	//virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	
 
 	double getDiffAltoAncho();
-	
 	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
 
 	virtual int getTamanioDescriporPCL();
 
+	double getAlto();
+	double getAncho();
+	
 protected:
 	typename pcl::PointCloud<SignatureT> descPCL;
 	double diffAltoAncho;
 	//AGREGADO
+	double alto;
+	double ancho;
 	int tamanioDescriptor;
 
 };
