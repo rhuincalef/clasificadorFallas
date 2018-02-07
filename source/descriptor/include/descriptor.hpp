@@ -1,6 +1,7 @@
 // Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
 #include <iostream>
 #include "../../utils/include/utils.hpp"
+//#include "../../utils/include/help.h"
 #include "../include/pointfeature.hpp"
 #include "../include/pointfeaturederivadas.hpp"
 
@@ -25,12 +26,9 @@ public:
 	//Constructor 
 	EstrategiaDescriptorsAbstract();
 	
-	/*
 	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
-		PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n);
-	*/
-	template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>
-	PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n){
+	//PointFeature<SignatureT,PointT>* generarDescriptor(Nube<PointT>* n){
+	PointFeature<SignatureT,PointT>* generarDescriptor(Cluster<PointT>* n){
 
 		std::cout << "EstrategiaDescriptorsAbstract.generarDescriptor() SUPERCLASE!!!" << std::endl;
 		//PointFeatureGRSD<PointT>* featureGRSD (new PointFeatureGRSD<PointT>);
@@ -39,6 +37,8 @@ public:
 		return feature;
 	
 	}
+
+
 
 	//Se establece como virutal este metodo para sobreescribirlo en las clases derivadas y poder
 	//acceder al metodo correspondiente para pathModeloEntrenado;

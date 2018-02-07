@@ -28,6 +28,19 @@ public:
   virtual std::vector<pcl::PointCloud<PointT>>
   computar(pcl::PointCloud<PointT> &input);
 
+  virtual std::vector<pcl::PointCloud<PointT>>
+  computar ();
+
+
+  void
+  setNube (Nube<PointT> &n);
+
+  Nube<PointT>
+  getNube() const;
+
+protected:
+  Nube<PointT> nube_;
+
 };
 #endif
 
@@ -95,12 +108,6 @@ public:
   computar(pcl::PointCloud<PointT> &input);
   /* Fin Uilizados en 1er test - Deprecated */
 
-  void
-  setNube (Nube<PointT> &n);
-
-  Nube<PointT>
-  getNube() const;
-
   //computar(pcl::PointCloud<PointT>::Ptr &input);
   std::vector<pcl::PointCloud<PointT>>
   computar ();
@@ -126,7 +133,7 @@ protected:
   int min_cluster_size_ = 220;
   int max_cluster_size_ = 25000;
   pcl::PointCloud<PointT> nube;
-  Nube<PointT> nube_;
+  
   pcl::SACSegmentation<PointT> sac_seg_;
   pcl::ExtractIndices<PointT> extract_;
   pcl::EuclideanClusterExtraction<PointT> ec;

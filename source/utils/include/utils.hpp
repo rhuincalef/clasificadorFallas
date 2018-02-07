@@ -1,5 +1,6 @@
 //Se agrega esta macro de preprocesador para que no se defina el TipoMuestra mas de una vez con cada #include 
 #include <string>
+#include <iostream>
 
 #ifndef _TIPO_MUESTRA
 #define _TIPO_MUESTRA
@@ -38,6 +39,26 @@ typedef struct {
 } TipoDimensiones;
 #endif
 
+#ifndef _SPLITEAR_NOMBRE_NUBE
+#define _SPLITEAR_NOMBRE_NUBE
+
+  #include <boost/algorithm/string.hpp>
+
+  std::string splitear(std::string nombre);
+/*
+  std::string splitear(std::string nombre){
+    std::vector<std::string> result;
+    std::vector<std::string> strs;
+    boost::split(strs,nombre,boost::is_any_of("."));
+    if (strs.size() > 1)
+    {
+      boost::split(result,strs[0],boost::is_any_of("."));
+    }
+    std::cout << "Cadena spliteada: "<< result[result.size()-1] << std::endl;
+    return result[result.size()-1];    
+  };
+*/
+#endif
 
 //Paths a los modelos entrenados (previamente a la ejecucion del script) para levantar el modelo entrenado
 // segun el tipo de descriptor  
@@ -56,6 +77,14 @@ const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "modelo_grsd/";
 #endif
 
 
+
+#ifndef PATH_SAVE_CLUSTER
+#define PATH_SAVE_CLUSTER
+
+const std::string DIR_GUARDADO_CLUSTER = "/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/dirGuardadoClusters/";
+const std::string EXTENSION_CLUSTERS_DEFAULT = ".pcd";
+
+#endif
 
 
 

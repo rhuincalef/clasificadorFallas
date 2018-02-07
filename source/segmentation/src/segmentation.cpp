@@ -6,6 +6,24 @@ template <typename PointT> std::vector<pcl::PointCloud<PointT>>
 EstrategiaSegmentationAbstract<PointT>::computar(pcl::PointCloud<PointT> &input)
 {
 }
+template <typename PointT>
+std::vector<pcl::PointCloud<PointT>> EstrategiaSegmentationAbstract<PointT>::computar (){
+
+}
+
+
+
+template <typename PointT> void
+EstrategiaSegmentationAbstract<PointT>::setNube (Nube<PointT> &n)
+{
+  this->nube_ = n;
+}
+
+template <typename PointT> Nube<PointT>
+EstrategiaSegmentationAbstract<PointT>::getNube () const
+{
+  return this->nube_;
+}
 
 /******************************************** Metodos PlanarAndEuclidean **********************************************/
 
@@ -93,19 +111,10 @@ PlanarAndEuclidean<PointT>::getNube ()
 {
   return this->nube;
 }
+
+
+
 /* Fin Utilizados en 1er test - Deprecated */
-
-template <typename PointT> void
-PlanarAndEuclidean<PointT>::setNube (Nube<PointT> &n)
-{
-  this->nube_ = n;
-}
-
-template <typename PointT> Nube<PointT>
-PlanarAndEuclidean<PointT>::getNube () const
-{
-  return this->nube_;
-}
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::planarSegmentation (const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane)
@@ -279,8 +288,10 @@ PlanarAndEuclidean<PointT>::configurarParametrizador()
 
 //The explicit instantiation part
 /*
+*/
 template class EstrategiaSegmentationAbstract<pcl::PointXYZRGB>; 
 template class EstrategiaSegmentationAbstract<pcl::PointXYZ>; 
-*/
+
 template class PlanarAndEuclidean<pcl::PointXYZ>;
 template class PlanarAndEuclidean<pcl::PointXYZRGB>; 
+

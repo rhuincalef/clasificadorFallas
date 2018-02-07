@@ -9,6 +9,7 @@
 #include <pcl/point_types.h>
 
 #include "../../utils/include/utils.hpp"
+//#include "../../utils/include/help.h"
 #include "../../nube/include/nube.hpp"
 
 
@@ -21,18 +22,24 @@ public:
 	//Constructor 
 	PointFeature();
 
-	void procesarDescriptorPCL(Nube<PointT>* n);
+	//void procesarDescriptorPCL(Nube<PointT>* n);
+	void procesarDescriptorPCL(Cluster<PointT>* n);
 
 	void calcularAltoAncho(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,TipoDimensiones* dimensiones);
 
-	virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	virtual void computarDescriptor(Cluster<pcl::PointXYZRGB>* n);
+	//virtual void computarDescriptor(Nube<pcl::PointXYZRGB>* n);
+	
 
 	double getDiffAltoAncho();
-	
 	virtual typename pcl::PointCloud<SignatureT> getDescriptorPCL();
 
 	virtual int getTamanioDescriporPCL();
 
+
+	void calcularDimensiones(typename pcl::PointCloud<PointT>::Ptr cloud,
+								TipoDimensiones* dimensiones);
+	
 protected:
 	typename pcl::PointCloud<SignatureT> descPCL;
 	double diffAltoAncho;
