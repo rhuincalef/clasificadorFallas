@@ -19,14 +19,20 @@ public:
   setNombre(std::string valor);
   
   void
-  setEsOpcional(bool b);
+  setEsRequerido(bool b);
+
+  bool
+  esRequerido() const;
   
   void
   setValorEsperado(std::string valor);
 
+  std::string
+  getValorEsperado() const;
+
 private:
   std::string nombre;
-  bool es_opcional = true;
+  bool es_requerido = true;
   std::string valor_esperado;
 
 };
@@ -48,6 +54,9 @@ public:
 
   std::vector<Parametro>
   getParametros();
+
+  int
+  getCantParametros();
 
   std::string
   getNombre();

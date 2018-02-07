@@ -63,22 +63,24 @@ TEST(PointFeatureTest, PlanarAndEuclideanYGRSD)
   Nube<pcl::PointXYZRGB>* n (new Nube<pcl::PointXYZRGB>(*cloud));
   std::vector<pcl::PointCloud<pcl::PointXYZRGB>> v;
   PlanarAndEuclidean<pcl::PointXYZRGB> pl_ec;
-  pl_ec.setDistanceThreshold (.02);
+  pl_ec.setDistanceThreshold (.005);
   pl_ec.setMaxIterations (1000);
   pl_ec.setNube (*n);
   v = pl_ec.computar ();
   EXPECT_EQ(2774, v.at(0).points.size());
-  EstrategiaDescriptorsAbstract<pcl::PointXYZRGB,pcl::GRSDSignature21,PointFeatureGRSD>* estratDescriptor;
-  estratDescriptor = new GRSD<pcl::PointXYZRGB>();
+  //EstrategiaDescriptorsAbstract<pcl::PointXYZRGB,pcl::GRSDSignature21,PointFeatureGRSD>* estratDescriptor;
+  EstrategiaDescriptorsAbstract<pcl::PointXYZRGB>* estratDescriptor;
+  estratDescriptor = new GRSD<pcl::PointXYZRGB, pcl::GRSDSignature21, PointFeatureGRSD>();
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster (new pcl::PointCloud<pcl::PointXYZRGB>);
   *cloud_cluster = v.at(0);
+  pcl::PCDWriter writer;
+  writer.write<pcl::PointXYZRGB>("setDistanceThreshold.pcd", v.at(0), false);
   Nube<pcl::PointXYZRGB>* nueva_nube (new Nube<pcl::PointXYZRGB>(cloud_cluster));
-  PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* pointFeature = estratDescriptor->generarDescriptor (nueva_nube);
+  PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* pointFeature = estratDescriptor->template generarDescriptor<pcl::PointXYZRGB, pcl::GRSDSignature21, PointFeatureGRSD> (nueva_nube);
   pcl::PointCloud<pcl::GRSDSignature21> descriptores = pointFeature->getDescriptorPCL();
   int pos_6 = descriptores.points[0].histogram[6];
   EXPECT_EQ(2932, pos_6);
   EXPECT_EQ(2033, descriptores.points[0].histogram[10]);
-  //pcl::PCDWriter writer;
   //writer.write<pcl::GRSDSignature21>("grsd.pcd", descriptores, false);
 }
 

@@ -1,4 +1,7 @@
 {
+	"dir_entrada" : "un_dir_entrada",
+	"dir_salida" : "un_dir_salida",
+	"database_muestras" : "path_database",
 	"clasificador": {
 		"tipo": "svm",
 		"path_modelo": "un/path/modelo.dat",

@@ -133,7 +133,6 @@ TEST(PlanarAndEuclideanTest, PlanarSegmentation)
   EXPECT_EQ(23316, plane->points.size()) << "CloudPlane size not match " << plane->points.size();
   EXPECT_EQ(2799, no_plane->points.size()) << "CloudNoPlane size not match " << no_plane->points.size();
 }
-/*
 TEST(PlanarAndEuclideanTest, ComputarDeprecated)
 {
   std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
@@ -144,7 +143,6 @@ TEST(PlanarAndEuclideanTest, ComputarDeprecated)
   EXPECT_EQ(2774, v.at(0).points.size());
   //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
 }
-*/
 TEST(PlanarAndEuclideanTest, Computar)
 {
   Nube<pcl::PointXYZ> n (cloud);
@@ -198,8 +196,19 @@ TEST(PlanarAndEuclideanTest, Parametrizador)
     Json::Value p = s.get(param.getParametros()[i].getNombre(), "defValue");
     std::cout << "Param " << param.getParametros()[i].getNombre() << " value: " << p.asString() << std::endl;
   }
-/*
-  Json::Value s = root.get("estrategia_segmentador", "defValue");
+  for (auto itr : s) {
+    std::string name = itr.asString();
+    std::cout << "\t" << "value: " << name << std::endl;
+  }
+  Json::Value::Members memberNames = s.getMemberNames();
+  for(unsigned int i=0; i<memberNames.size(); ++i)
+  {
+    //string memberName = memberNames[i];
+    Json::Value value = s[memberNames[i]];
+    std::cout << "Key: " << memberNames[i] << std::endl;
+    std::cout << "Value: " << value.toStyledString() << std::endl;
+  }
+
   s = s.get("planar_euclidean", "defValue");
   std::cout << "planar_euclidean" << std::endl;
   for (auto itr : s) {
@@ -218,8 +227,8 @@ TEST(PlanarAndEuclideanTest, Parametrizador)
   const Json::Value descriptor = root.get("estrategia_descriptor", "defValue");
   std::cout << "estrategia_descriptor" << std::endl;
   std::cout << "\t" << descriptor.asString() << std::endl;
-*/
 }
+
 // Step 3. Call RUN_ALL_TESTS() in main().
 //
 // We do this by linking in src/gtest_main.cc file, which consists of
