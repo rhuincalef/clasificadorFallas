@@ -17,9 +17,6 @@ MainPipeLine<PointT>::MainPipeLine(){
 	//this->estratClasificacion = new EstrategiaClasificacionSVM<pcl::GRSDSignature21,svm_problem,svm_model,pcl::PointXYZRGB>();
 }
 
-
-
-
 //Computar la nube
 template <class PointT>
 std::vector<pcl::PointCloud<PointT>> MainPipeLine<PointT>::computarNube(
@@ -199,8 +196,37 @@ void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c){
 	salida.close();
 }
 
+template <class PointT>
+Parametrizador MainPipeLine<PointT>::parametrizador_;
 
+template <class PointT>
+bool MainPipeLine<PointT>::configurado_ = false;
 
+template <class PointT>
+void MainPipeLine<PointT>::configurarParametrizador()
+{
+  if (MainPipeLine<PointT>::configurado_)
+    return;
+  MainPipeLine<PointT>::parametrizador_.setNombre("configuracion_global");
+  Parametro p2;
+  p2.setNombre("dir_entrada");
+  p2.setTipoValorEsperado("string");
+  MainPipeLine<PointT>::parametrizador_.agregar(p2);
+  p2.setNombre("dir_salida");
+  p2.setTipoValorEsperado("string");
+  MainPipeLine<PointT>::parametrizador_.agregar(p2);
+  p2.setNombre("database_muestras");
+  p2.setTipoValorEsperado("string");
+  MainPipeLine<PointT>::parametrizador_.agregar(p2);
+  MainPipeLine<PointT>::configurado_ = true;
+}
+
+template <class PointT>
+Parametrizador MainPipeLine<PointT>::getParametrizador()
+{
+  MainPipeLine<PointT>::configurarParametrizador();
+  return MainPipeLine<PointT>::parametrizador_;
+}
 
 //Instanciacion explicita de la clase
 template class MainPipeLine<pcl::PointXYZRGB>;

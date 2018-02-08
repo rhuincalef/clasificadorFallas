@@ -1,17 +1,13 @@
 #include <iostream>
+#include <json/json.h>
+#include <json/writer.h>
 #include "../../utils/include/utils.hpp"
-//#include "../../utils/include/help.h"
-
 #include "../../descriptor/include/pointfeaturederivadas.hpp"
 #include "../../nube/include/nube.hpp"
-
 #include "../../segmentation/include/segmentation.hpp"
 #include "../../descriptor/include/descriptor.hpp"
 #include "../../ML/include/estrategia_clasificacion.hpp"
-
-#include <json/json.h>
-#include <json/writer.h>
-
+#include "../../parser/include/parametrizador.hpp"
 
 #ifndef MainPipeLine_DEF
 #define MainPipeLine_DEF
@@ -69,8 +65,8 @@ public:
 	void
 	almacenarCluster(Nube<PointT>* n,Cluster<PointT> c);
 
-
-
+	static Parametrizador
+	getParametrizador();
 
 private:
 	std::string dirAlmacenamientoCapturasClasificadas;//TODO: Cambiar esto en el diagrama de clases
@@ -78,9 +74,11 @@ private:
 	EstrategiaDescriptorsAbstract<PointT>* estratDescriptor;
 	EstrategiaClasificacionMLAbstract* estratClasificacion;
 
+	static Parametrizador parametrizador_;
+	static bool configurado_;
+
+	static void
+	configurarParametrizador();
 
 };
 #endif
-
-
-

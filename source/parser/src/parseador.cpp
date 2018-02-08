@@ -1,6 +1,4 @@
-// Descriptor ESF con downsampling + diff. Alto y Ancho -->
-#include "../../utils/include/utils.hpp"
-
+// 
 #include "../include/parseador.hpp"
 
 Parseador::Parseador()
@@ -123,14 +121,14 @@ ParseadorJSON::parser_rapid(Parametrizador *p, std::unordered_map<std::string, s
     switch (root[nombre].GetType())
     {
       case 6: // Number is a JSON type, but C++ needs more specific type.
-        if (param.getValorEsperado().compare("float") == 0)
+        if (param.getTipoValorEsperado().compare("float") == 0)
         {
           if (root[nombre].IsDouble())
             values.emplace(param.getNombre(), std::to_string(root[nombre].GetDouble()));
           else
             return false;
         }
-        if (param.getValorEsperado().compare("int") == 0)
+        if (param.getTipoValorEsperado().compare("int") == 0)
         {
           if (root[nombre].IsInt()) // In this case, IsUint()/IsInt64()/IsUInt64() also return true.
             values.emplace(param.getNombre(), std::to_string(root[nombre].GetInt()));

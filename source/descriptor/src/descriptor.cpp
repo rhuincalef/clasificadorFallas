@@ -34,8 +34,6 @@
 #include <pcl/surface/gp3.h>
 #include <pcl/features/moment_of_inertia_estimation.h>
 
-#include "../../utils/include/utils.hpp"
-
 #include "../include/descriptor.hpp"
 
 
@@ -83,9 +81,37 @@ PointFeature<SignatureT,PointT>* EstrategiaDescriptorsAbstract<PointT>::generarD
 }
 */
 
+template<class PointT>
+Parametrizador EstrategiaDescriptorsAbstract<PointT>::parametrizador_;
 
+template<class PointT>
+bool EstrategiaDescriptorsAbstract<PointT>::configurado_ = false;
 
+template<class PointT>
+void EstrategiaDescriptorsAbstract<PointT>::configurarParametrizador()
+{
+  if (EstrategiaDescriptorsAbstract<PointT>::configurado_)
+    return;
+  EstrategiaDescriptorsAbstract<PointT>::parametrizador_.setNombre("estrategia_descriptor");
+  Parametro p1;
+  p1.setNombre("tipo_descriptor");
+  p1.setTipoValorEsperado("string");
+  std::vector<std::string> v;
+  for (int i = 0; i < sizeof FormateadorFeatureTypes / sizeof FormateadorFeatureTypes[0]; ++i)
+  {
+  	v.push_back(FormateadorFeatureTypes[i]);
+  }
+  p1.setValorEsperado(v);
+  EstrategiaDescriptorsAbstract<PointT>::parametrizador_.agregar(p1);
+  EstrategiaDescriptorsAbstract<PointT>::configurado_ = true;
+}
 
+template<class PointT>
+Parametrizador EstrategiaDescriptorsAbstract<PointT>::getParametrizador()
+{
+  EstrategiaDescriptorsAbstract<PointT>::configurarParametrizador();
+  return EstrategiaDescriptorsAbstract<PointT>::parametrizador_;
+}
 
 /************************************** Estrategia ESF **************************************/
 template<class PointT,class SignatureT,template<class> class PointFeatureConcretoT>

@@ -1,12 +1,15 @@
-// Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
+// Clases: 
 #include <iostream>
 #include "../../utils/include/utils.hpp"
-//#include "../../utils/include/help.h"
 #include "../include/pointfeature.hpp"
 #include "../include/pointfeaturederivadas.hpp"
-
 #include "../../nube/include/nube.hpp"
+#include "../../parser/include/parametrizador.hpp"
 
+#ifndef FormateadorFeatureTypes_DEF
+#define FormateadorFeatureTypes_DEF
+static const char* FormateadorFeatureTypes[] = { "GRSD", "ESF"};
+#endif
 
 #ifndef EstrategiaDescriptorsAbstract_DEF
 #define EstrategiaDescriptorsAbstract_DEF
@@ -38,11 +41,19 @@ public:
 	
 	}
 
-
-
 	//Se establece como virutal este metodo para sobreescribirlo en las clases derivadas y poder
 	//acceder al metodo correspondiente para pathModeloEntrenado;
 	virtual std::string getPathModeloEntrenado();
+
+	static Parametrizador
+	getParametrizador();
+
+private:
+  static Parametrizador parametrizador_;
+  static bool configurado_;
+
+  static void
+  configurarParametrizador();
 
 };
 #endif

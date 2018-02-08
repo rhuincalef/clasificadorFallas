@@ -1,10 +1,13 @@
 // Clases: EstrategiaClasificacionMLAbstract, EstrategiaClasificacionSVM
 #include <iostream>
 #include "../../utils/include/utils.hpp"
-
 #include "formateador_dataset.hpp"
 #include "../../descriptor/include/pointfeaturederivadas.hpp"
 
+#ifndef FormateadorClasificadorTypes_DEF
+#define FormateadorClasificadorTypes_DEF
+static const char* FormateadorClasificadorTypes[] = { "svm"};
+#endif
 
 #ifndef EstrategiaClasificacionAbstract_DEF
 #define EstrategiaClasificacionAbstract_DEF
@@ -65,13 +68,22 @@ public:
 		this->predecir(modelo,problema);
 	}
 
-
 	void setFormateador(FormateadorDatasetAbstract* f);
 	FormateadorDatasetAbstract* getFormateador();
+
+	static Parametrizador
+ 	getParametrizador();
 
 protected:
 	//FormateadorDatasetAbstract<SignatureT,ProblemaT,PointT,pcl::SVMData>* formateador;
 	FormateadorDatasetAbstract* formateador = NULL;
+
+private:
+	static Parametrizador parametrizador_;
+	static bool configurado_;
+
+	static void
+	configurarParametrizador();
 
 };
 #endif

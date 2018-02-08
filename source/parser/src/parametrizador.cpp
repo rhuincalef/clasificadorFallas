@@ -1,7 +1,6 @@
-// Descriptor ESF con downsampling + diff. Alto y Ancho -->
+// 
 #include <iostream>
 #include "../../utils/include/utils.hpp"
-
 #include "../include/parametrizador.hpp"
 
 Parametro::Parametro()
@@ -32,16 +31,30 @@ Parametro::esRequerido() const
 }
 
 void
-Parametro::setValorEsperado(std::string valor)
+Parametro::setTipoValorEsperado(std::string valor)
 {
-  this->valor_esperado = valor;
+  this->tipo_valor_esperado = valor;
 }
 
 std::string
+Parametro::getTipoValorEsperado() const
+{
+  return this->tipo_valor_esperado;
+}
+
+std::vector<std::string>
 Parametro::getValorEsperado() const
 {
   return this->valor_esperado;
 }
+
+void
+Parametro::setValorEsperado(std::vector<std::string> v)
+{
+  this->valor_esperado = v;
+}
+
+/**************************************************** Parametrizador ***************************************/
 
 Parametrizador::~Parametrizador()
 {

@@ -31,15 +31,24 @@ public:
   virtual std::vector<pcl::PointCloud<PointT>>
   computar ();
 
-
   void
   setNube (Nube<PointT> &n);
 
   Nube<PointT>
   getNube() const;
 
+  static Parametrizador
+  getParametrizador();
+
 protected:
   Nube<PointT> nube_;
+
+private:
+  static Parametrizador parametrizador_;
+  static bool configurado_;
+
+  static void
+  configurarParametrizador();
 
 };
 #endif
@@ -94,35 +103,11 @@ public:
   void
   setClusterTolerance (double tolerance);
 
-  /* Uilizados en 1er test - Deprecated */
-  void
-  setNube (const pcl::PointCloud<PointT> &input);
-
-  int
-  getSizeNube ();
-
-  pcl::PointCloud<PointT>
-  getNube ();
-
-  std::vector<pcl::PointCloud<PointT>>
-  computar(pcl::PointCloud<PointT> &input);
-  /* Fin Uilizados en 1er test - Deprecated */
-
-  //computar(pcl::PointCloud<PointT>::Ptr &input);
   std::vector<pcl::PointCloud<PointT>>
   computar ();
 
   void
   planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane);
-
-  static Parametrizador
-  getParametrizador();
-
-  static void
-  configurarParametrizador();
-
-  static Parametrizador parametrizador_;
-  static bool configurado_;
 
 protected:
   // Planar Segmentation variables.
@@ -137,11 +122,6 @@ protected:
   pcl::SACSegmentation<PointT> sac_seg_;
   pcl::ExtractIndices<PointT> extract_;
   pcl::EuclideanClusterExtraction<PointT> ec;
-
-  /*
-  void
-  planarSegmentation(const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> cloud_no_plane, pcl::PointCloud<PointT> cloud_plane);
-  */
   
   void
   euclideanClusterExtraction(const pcl::PointCloud<PointT> &input, std::vector<pcl::PointCloud<PointT>> &clusters_cloud);

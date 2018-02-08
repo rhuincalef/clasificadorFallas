@@ -16,8 +16,10 @@
 #include <gtest/gtest.h>
 #include <json/json.h>
 #include <fstream>
+#include <unordered_map>
 #include "../../../source/segmentation/include/segmentation.hpp"
 #include "../../../source/nube/include/nube.hpp"
+#include "../../../source/parser/include/parseador.hpp"
 
 // Step 2. Use the TEST macro to define your tests.
 //
@@ -43,6 +45,8 @@
 //
 // </TechnicalDetails>
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+char **test_margv;
+int test_margc;
 
 class PlanarAndEuclideanTest : public ::testing::Test {
  protected:
@@ -57,7 +61,6 @@ class PlanarAndEuclideanTest : public ::testing::Test {
 
 // Tests PlanarAndEuclidean()
 /*
-*/
 TEST(PlanarAndEuclideanTest, TamanioNube)
 {
   srand (time (NULL));
@@ -80,6 +83,7 @@ TEST(PlanarAndEuclideanTest, TamanioNube)
   orig_cloud_size = my_cloud->points.size();
   EXPECT_EQ(orig_cloud_size, pl_ec.getSizeNube());
 }
+*/
 
 TEST(PlanarAndEuclideanTest, DistanceThreshold)
 {
@@ -133,16 +137,7 @@ TEST(PlanarAndEuclideanTest, PlanarSegmentation)
   EXPECT_EQ(23316, plane->points.size()) << "CloudPlane size not match " << plane->points.size();
   EXPECT_EQ(2799, no_plane->points.size()) << "CloudNoPlane size not match " << no_plane->points.size();
 }
-TEST(PlanarAndEuclideanTest, ComputarDeprecated)
-{
-  std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
-  PlanarAndEuclidean<pcl::PointXYZ> pl_ec;
-  pl_ec.setDistanceThreshold (.02);
-  pl_ec.setMaxIterations (1000);
-  v = pl_ec.computar (*cloud);
-  EXPECT_EQ(2774, v.at(0).points.size());
-  //pcl::io::savePCDFileASCII ("pl_ec_cloud.pcd", v.at(0));
-}
+
 TEST(PlanarAndEuclideanTest, Computar)
 {
   Nube<pcl::PointXYZ> n (cloud);
@@ -161,9 +156,12 @@ TEST(PlanarAndEuclideanTest, ComputarAbstract)
   Nube<pcl::PointXYZ> n (cloud);
   std::vector<pcl::PointCloud<pcl::PointXYZ>> v;
   EstrategiaSegmentationAbstract<pcl::PointXYZ> *p;
-  PlanarAndEuclidean<pcl::PointXYZ> *pl_ec;
+  //PlanarAndEuclidean<pcl::PointXYZ> *pl_ec = new PlanarAndEuclidean<pcl::PointXYZ>;
   p = new PlanarAndEuclidean<pcl::PointXYZ>;
+  PlanarAndEuclidean<pcl::PointXYZ> *pl_ec;
   pl_ec = dynamic_cast<PlanarAndEuclidean<pcl::PointXYZ> *> (p);
+  /*
+  */
   pl_ec->setDistanceThreshold (.02);
   pl_ec->setMaxIterations (1000);
   pl_ec->setNube (n);
@@ -174,59 +172,23 @@ TEST(PlanarAndEuclideanTest, ComputarAbstract)
 
 TEST(PlanarAndEuclideanTest, Parametrizador)
 {
-  Json::CharReaderBuilder reader;
-  Json::Value root;
-  std::string errs;
-  std::ifstream file("/home/manjaro-guille/mis_proyectos/clasificadorFallas/tests/unittest/segmentation/config_pipeline.json", std::ifstream::binary);
-  bool ok = Json::parseFromStream(reader, file, &root, &errs);
-  if(!ok) {
-    std::cout << errs << std::endl;
-  }
+  ParseadorJSON parser;
+  std::vector<int> v = parser.parse_file_extension_argument(test_margc, test_margv, ".json");
+  bool ok = parser.openRapid(test_margv[v[0]]);
+  EXPECT_TRUE(ok);
   EstrategiaSegmentationAbstract<pcl::PointXYZ> *p;
-  PlanarAndEuclidean<pcl::PointXYZ>::configurarParametrizador();
   PlanarAndEuclidean<pcl::PointXYZ> *pl_ec;
   p = new PlanarAndEuclidean<pcl::PointXYZ>;
   pl_ec = dynamic_cast<PlanarAndEuclidean<pcl::PointXYZ> *> (p);
-  Parametrizador param = PlanarAndEuclidean<pcl::PointXYZ>::parametrizador_;
-  Json::Value s = root.get("estrategia_segmentador", "defValue");
-  s = s.get(param.getNombre(), "defValue");
-  std::cout << "Parametrizador nombre: " << s << std::endl;
-  for (int i = 0; i < param.getParametros().size(); ++i)
+  Parametrizador parametrizador = PlanarAndEuclidean<pcl::PointXYZ>::getParametrizador();
+  std::unordered_map<std::string, std::string> values;
+  bool result = parser.parser_rapid(&parametrizador, values);
+  EXPECT_TRUE(result);
+  for (auto i = values.begin(); i != values.end(); ++i)
   {
-    Json::Value p = s.get(param.getParametros()[i].getNombre(), "defValue");
-    std::cout << "Param " << param.getParametros()[i].getNombre() << " value: " << p.asString() << std::endl;
+    std::cout << "Name: " << i->first << std::endl;
+    std::cout << "Value: " << i->second << std::endl;
   }
-  for (auto itr : s) {
-    std::string name = itr.asString();
-    std::cout << "\t" << "value: " << name << std::endl;
-  }
-  Json::Value::Members memberNames = s.getMemberNames();
-  for(unsigned int i=0; i<memberNames.size(); ++i)
-  {
-    //string memberName = memberNames[i];
-    Json::Value value = s[memberNames[i]];
-    std::cout << "Key: " << memberNames[i] << std::endl;
-    std::cout << "Value: " << value.toStyledString() << std::endl;
-  }
-
-  s = s.get("planar_euclidean", "defValue");
-  std::cout << "planar_euclidean" << std::endl;
-  for (auto itr : s) {
-      std::string name = itr.asString();
-      std::cout << "\t" << name << std::endl;
-  }
-  s = root.get("clasificador", "defValue");
-  std::cout << "clasificador" << std::endl;
-  for (auto itr : s) {
-      std::string name = itr.asString();
-      std::cout << "\t" << name << std::endl;
-  }
-  const Json::Value point_feature = root.get("point_feature", "defValue");
-  std::cout <<"point_feature" << std::endl;
-  std::cout << "\t" <<  point_feature.asString() << std::endl;
-  const Json::Value descriptor = root.get("estrategia_descriptor", "defValue");
-  std::cout << "estrategia_descriptor" << std::endl;
-  std::cout << "\t" << descriptor.asString() << std::endl;
 }
 
 // Step 3. Call RUN_ALL_TESTS() in main().
@@ -256,6 +218,8 @@ main (int argc, char** argv)
     std::cerr << "Failed to read test file. Please download `voxel_bachecitos_tw_4.pcd` and pass its path to the test." << std::endl;
     return -1;
   }
+  test_margv = argv;
+  test_margc = argc;
   ::testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }

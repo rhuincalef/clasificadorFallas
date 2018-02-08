@@ -1,8 +1,4 @@
-#include "../../utils/include/utils.hpp"
-
 #include "../include/formateador_dataset.hpp"
-
-
 
 /************************************************** Clase Abstract ******************************************/
 
@@ -22,25 +18,50 @@ ProblemaT FormateadorDatasetAbstract::adaptarDescriptor(PointFeature<SignatureT,
 	return prob;
 }
 
-/*
-*/
-void FormateadorDatasetAbstract::generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
+void
+FormateadorDatasetAbstract::generarMuestra(PointFeature<pcl::ESFSignature640,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
 	std::cout << "generarMuestra() SUPERCLASE!!!" << std::endl;
 }
 
 
 
-void FormateadorDatasetAbstract::generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
+void
+FormateadorDatasetAbstract::generarMuestra(PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,pcl::SVMData* muestraSVM){
 	std::cout << "generarMuestra() SUPERCLASE!!!" << std::endl;
 }
 
-void FormateadorDatasetAbstract::adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob){
+void
+FormateadorDatasetAbstract::adaptarDescriptorAFormatoEspecifico(pcl::SVMData muestraSVM,svm_problem* prob){
 	std::cout << "adaptarDescriptorAFormatoEspecifico() SUPERCLASE!!!" << std::endl;
 }
 
+Parametrizador FormateadorDatasetAbstract::parametrizador_;
 
+bool FormateadorDatasetAbstract::configurado_ = false;
 
+void FormateadorDatasetAbstract::configurarParametrizador()
+{
+  if (FormateadorDatasetAbstract::configurado_)
+    return;
+  FormateadorDatasetAbstract::parametrizador_.setNombre("point_feature");
+  Parametro p1;
+  p1.setNombre("point_type");
+  p1.setTipoValorEsperado("string");
+  std::vector<std::string> v;
+  for (int i = 0; i < sizeof FormateadorPointTypes / sizeof FormateadorPointTypes[0]; ++i)
+  {
+  	v.push_back(FormateadorPointTypes[i]);
+  }
+  p1.setValorEsperado(v);
+  FormateadorDatasetAbstract::parametrizador_.agregar(p1);
+  FormateadorDatasetAbstract::configurado_ = true;
+}
 
+Parametrizador FormateadorDatasetAbstract::getParametrizador()
+{
+  FormateadorDatasetAbstract::configurarParametrizador();
+  return FormateadorDatasetAbstract::parametrizador_;
+}
 
 /***************************************************** SVMFormatter ***************************************/
 
@@ -152,26 +173,17 @@ void SVMFormatter<PointT,SignatureT,ProblemaT,MuestraT>::generarMuestra(
 /*
 */
 
-
-
-
-
 template<class PointT,class SignatureT,class ProblemaT,class MuestraT>
 void SVMFormatter<PointT,SignatureT,ProblemaT,MuestraT>::generarMuestra(
 													PointFeature<pcl::GRSDSignature21,pcl::PointXYZRGB>* descriptor,
 													pcl::SVMData* muestraSVM){
-
-	//this->_generarMuestraSVMEspecifica(descriptor,muestraSVM);
 
 	muestraSVM->label = 1;//Label por defecto. No influye en la prediccion del resultado final.
 	std::vector<pcl::SVMDataPoint> vectorFeatures;
 
 	// Indexador lleva la cuenta global de los features de cada punto de cada nube de puntos
 	int indexador = 0;
-	//typename pcl::PointCloud<pcl::GRSDSignature21>::Ptr descriptores = descriptor->getDescriptorPCL();
-
 	pcl::PointCloud<pcl::GRSDSignature21> descriptores = descriptor->getDescriptorPCL();
-
 	//Recorrer para cada punto del descriptor, cada histograma y por
 	//cada histograma iterar cada valor.
 	//for (int j= 0; j < descriptores->points.size() ; ++j)

@@ -11,8 +11,6 @@ std::vector<pcl::PointCloud<PointT>> EstrategiaSegmentationAbstract<PointT>::com
 
 }
 
-
-
 template <typename PointT> void
 EstrategiaSegmentationAbstract<PointT>::setNube (Nube<PointT> &n)
 {
@@ -25,12 +23,60 @@ EstrategiaSegmentationAbstract<PointT>::getNube () const
   return this->nube_;
 }
 
-/******************************************** Metodos PlanarAndEuclidean **********************************************/
+template <typename PointT>
+Parametrizador EstrategiaSegmentationAbstract<PointT>::parametrizador_;
 
 template <typename PointT>
-PlanarAndEuclidean<PointT>::PlanarAndEuclidean ()
+bool EstrategiaSegmentationAbstract<PointT>::configurado_ = false;
+
+template <typename PointT> void
+EstrategiaSegmentationAbstract<PointT>::configurarParametrizador()
 {
-  //PlanarAndEuclidean<PointT>::configurarParametrizador();
+  if (EstrategiaSegmentationAbstract<PointT>::configurado_)
+    return;
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.setNombre("estrategia_segmentador");
+  Parametro p1;
+  p1.setNombre("dist_thresh");
+  p1.setTipoValorEsperado("float");
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p1);
+  Parametro p2;
+  p2.setNombre("max_it");
+  p2.setTipoValorEsperado("int");
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p2);
+  Parametro p3;
+  p3.setNombre("tolerance");
+  p3.setTipoValorEsperado("float");
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p3);
+  p3.setEsRequerido(false);
+  p3.setNombre("min_cluster_size");
+  p3.setTipoValorEsperado("int");
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p3);
+  p3.setNombre("max_cluster_size");
+  p3.setEsRequerido(false);
+  p3.setTipoValorEsperado("int");
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p3);
+  p3.setNombre("tipo");
+  p3.setEsRequerido(false);
+  p3.setTipoValorEsperado("string");
+  std::vector<std::string> valores_esp;
+  valores_esp.push_back("planar_euclidean");
+  p3.setValorEsperado(valores_esp);
+  EstrategiaSegmentationAbstract<PointT>::parametrizador_.agregar(p3);
+  EstrategiaSegmentationAbstract<PointT>::configurado_ = true;
+}
+
+template <typename PointT> Parametrizador
+EstrategiaSegmentationAbstract<PointT>::getParametrizador()
+{
+  EstrategiaSegmentationAbstract<PointT>::configurarParametrizador();
+  return EstrategiaSegmentationAbstract<PointT>::parametrizador_;
+}
+
+/******************************************** PlanarAndEuclidean **********************************************/
+
+template <typename PointT>
+PlanarAndEuclidean<PointT>::PlanarAndEuclidean () : EstrategiaSegmentationAbstract<PointT>()
+{
 }
 
 template <typename PointT> float
@@ -92,29 +138,6 @@ PlanarAndEuclidean<PointT>::setClusterTolerance (double tolerance)
 {
   this->tolerance_ = tolerance;
 }
-
-/* Utilizados en 1er test - Deprecated */
-template <typename PointT> void
-PlanarAndEuclidean<PointT>::setNube (const pcl::PointCloud<PointT> &input)
-{
-  this->nube = input;
-}
-
-template <typename PointT> int
-PlanarAndEuclidean<PointT>::getSizeNube ()
-{
-  return this->nube.points.size();
-}
-
-template <typename PointT> pcl::PointCloud<PointT>
-PlanarAndEuclidean<PointT>::getNube ()
-{
-  return this->nube;
-}
-
-
-
-/* Fin Utilizados en 1er test - Deprecated */
 
 template <typename PointT> void
 PlanarAndEuclidean<PointT>::planarSegmentation (const pcl::PointCloud<PointT> &input, pcl::PointCloud<PointT> &cloud_no_plane, pcl::PointCloud<PointT> &cloud_plane)
@@ -225,19 +248,6 @@ PlanarAndEuclidean<PointT>::euclideanClusterExtraction (const pcl::PointCloud<Po
   }
 }
 
-/* Utilizados en 1er test - Deprecated */
-template <typename PointT> std::vector<pcl::PointCloud<PointT>>
-PlanarAndEuclidean<PointT>::computar (pcl::PointCloud<PointT> &input)
-{
-  std::vector<pcl::PointCloud<PointT>> clusters_cloud;
-  typename pcl::PointCloud<PointT>::Ptr plane (new pcl::PointCloud<PointT>);
-  typename pcl::PointCloud<PointT>::Ptr no_plane (new pcl::PointCloud<PointT>);
-  this->planarSegmentation (input, *no_plane, *plane);
-  this->euclideanClusterExtraction(*no_plane, clusters_cloud);
-  return clusters_cloud;
-}
-/* Fin Utilizados en 1er test - Deprecated */
-
 template <typename PointT> std::vector<pcl::PointCloud<PointT>>
 PlanarAndEuclidean<PointT>::computar ()
 {
@@ -251,47 +261,9 @@ PlanarAndEuclidean<PointT>::computar ()
   return clusters_cloud;
 }
 
-template <typename PointT>
-Parametrizador PlanarAndEuclidean<PointT>::parametrizador_;
-
-template <typename PointT>
-bool PlanarAndEuclidean<PointT>::configurado_ = false;
-
-template <typename PointT> void
-PlanarAndEuclidean<PointT>::configurarParametrizador()
-{
-  if (PlanarAndEuclidean<PointT>::configurado_)
-    return;
-  PlanarAndEuclidean<PointT>::parametrizador_.setNombre("planar_euclidean");
-  Parametro p1;
-  p1.setNombre("dist_thresh");
-  p1.setValorEsperado("float");
-  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p1);
-  Parametro p2;
-  p2.setNombre("max_it");
-  p2.setValorEsperado("int");
-  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p2);
-  Parametro p3;
-  p3.setNombre("tolerance");
-  p3.setValorEsperado("float");
-  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
-  p3.setEsRequerido(false);
-  p3.setNombre("min_cluster_size");
-  p3.setValorEsperado("int");
-  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
-  p3.setNombre("max_cluster_size");
-  p3.setEsRequerido(false);
-  p3.setValorEsperado("int");
-  PlanarAndEuclidean<PointT>::parametrizador_.agregar(p3);
-  PlanarAndEuclidean<PointT>::configurado_ = true;
-}
-
 //The explicit instantiation part
-/*
-*/
 template class EstrategiaSegmentationAbstract<pcl::PointXYZRGB>; 
 template class EstrategiaSegmentationAbstract<pcl::PointXYZ>; 
 
 template class PlanarAndEuclidean<pcl::PointXYZ>;
 template class PlanarAndEuclidean<pcl::PointXYZRGB>; 
-

@@ -25,15 +25,22 @@ public:
   esRequerido() const;
   
   void
-  setValorEsperado(std::string valor);
+  setValorEsperado(std::vector<std::string> valor);
+
+  std::vector<std::string>
+  getValorEsperado() const;
+
+  void
+  setTipoValorEsperado(std::string valor);
 
   std::string
-  getValorEsperado() const;
+  getTipoValorEsperado() const;
 
 private:
   std::string nombre;
   bool es_requerido = true;
-  std::string valor_esperado;
+  std::vector<std::string> valor_esperado;
+  std::string tipo_valor_esperado;
 
 };
 #endif

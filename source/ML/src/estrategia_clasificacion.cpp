@@ -1,5 +1,3 @@
-#include "../../utils/include/utils.hpp"
-
 #include "../include/estrategia_clasificacion.hpp"
 
 
@@ -37,16 +35,13 @@ TipoMuestra EstrategiaClasificacionMLAbstract::clasificar(std::string pathModelo
 }
 */
 
-
 svm_model* EstrategiaClasificacionMLAbstract::cargarModelo(std::string pathModeloEntrenado){
 	std::cout << "cargarModelo() SUPERCLASE!!!" << std::endl;
 }
 
-
 TipoMuestra EstrategiaClasificacionMLAbstract::predecir(svm_model* modelo,svm_problem problema){
 	std::cout << "estrategiaClasificacion.predecir() de SUPERCLASE!!!" << std::endl;	
 }
-
 
 void EstrategiaClasificacionMLAbstract::setFormateador(FormateadorDatasetAbstract* f){
 	this->formateador = f;
@@ -56,8 +51,40 @@ FormateadorDatasetAbstract* EstrategiaClasificacionMLAbstract::getFormateador(){
 	return this->formateador;
 }
 
+Parametrizador EstrategiaClasificacionMLAbstract::parametrizador_;
 
+bool EstrategiaClasificacionMLAbstract::configurado_ = false;
 
+void EstrategiaClasificacionMLAbstract::configurarParametrizador()
+{
+  if (EstrategiaClasificacionMLAbstract::configurado_)
+    return;
+  EstrategiaClasificacionMLAbstract::parametrizador_.setNombre("clasificador");
+  Parametro p1;
+  p1.setNombre("tipo");
+  p1.setTipoValorEsperado("string");
+  std::vector<std::string> v;
+  for (int i = 0; i < sizeof FormateadorClasificadorTypes / sizeof FormateadorClasificadorTypes[0]; ++i)
+  {
+  	v.push_back(FormateadorClasificadorTypes[i]);
+  }
+  p1.setValorEsperado(v);
+  EstrategiaClasificacionMLAbstract::parametrizador_.agregar(p1);
+  Parametro p2;
+  p2.setNombre("path_modelo");
+  p2.setTipoValorEsperado("string");
+  EstrategiaClasificacionMLAbstract::parametrizador_.agregar(p2);
+  p2.setNombre("dir_salida_dataset");
+  p2.setTipoValorEsperado("string");
+  EstrategiaClasificacionMLAbstract::parametrizador_.agregar(p2);
+  EstrategiaClasificacionMLAbstract::configurado_ = true;
+}
+
+Parametrizador EstrategiaClasificacionMLAbstract::getParametrizador()
+{
+  EstrategiaClasificacionMLAbstract::configurarParametrizador();
+  return EstrategiaClasificacionMLAbstract::parametrizador_;
+}
 
 /************************** Estrategia clasificacion SVM **************************/
 
