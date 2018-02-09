@@ -33,11 +33,15 @@ public:
 
 	template <class SignatureT,class ProblemaT,class ModeloT>
 	TipoMuestra clasificar(PointFeature<SignatureT,PointT>* descriptor){
-
-		//template <class SignatureT,class PointT,class ProblemaT,class ModeloT,class MuestraT>
+		/*
 		return this->estratClasificacion->template clasificar<SignatureT,PointT,ProblemaT,
 															ModeloT,pcl::SVMData>(
 													this->estratDescriptor->getPathModeloEntrenado(),
+													descriptor);
+		*/
+		return this->estratClasificacion->template clasificar<SignatureT,PointT,ProblemaT,
+															ModeloT,pcl::SVMData>(
+													this->getPathModeloEntrenado(),
 													descriptor);
 	}
 
@@ -61,9 +65,14 @@ public:
 	void setEstrategiaClasificacion(EstrategiaClasificacionMLAbstract* clasificacion);
 	EstrategiaClasificacionMLAbstract* getEstrategiaClasificacion();
 
+	void
+	almacenarCluster(Nube<PointT>* n,Cluster<PointT> c, std::string dir_guardado_cluster);
+
+	std::string
+	getPathModeloEntrenado() const;
 
 	void
-	almacenarCluster(Nube<PointT>* n,Cluster<PointT> c);
+	setPathModeloEntrenado(std::string path);
 
 	static Parametrizador
 	getParametrizador();
@@ -73,6 +82,8 @@ private:
 	EstrategiaSegmentationAbstract<PointT>* estratSegmentacion;
 	EstrategiaDescriptorsAbstract<PointT>* estratDescriptor;
 	EstrategiaClasificacionMLAbstract* estratClasificacion;
+
+	std::string pathModeloEntrenado;
 
 	static Parametrizador parametrizador_;
 	static bool configurado_;

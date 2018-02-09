@@ -67,7 +67,7 @@ typedef struct {
 #define MODEL_TRAINED_PATHS_DEF
 
 //TODO: CAMBIAR EL ROOT DEL DIR RAIZ CON LOS MODELOS ENTRENADOS
-const std::string ROOT_MODELO = "/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/";
+const std::string ROOT_MODELO = "/home/manjaro-guille/mis_proyectos/clasificadorFallas/";
 
 const std::string TRAIN_MODEL_NAME_DEFAULT = "modelo.dat";
 
@@ -81,10 +81,14 @@ const std::string TRAIN_MODEL_GRSD_DIR_DEFAULT = "modelo_grsd/";
 #ifndef PATH_SAVE_CLUSTER
 #define PATH_SAVE_CLUSTER
 
-const std::string DIR_GUARDADO_CLUSTER = "/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/dirGuardadoClusters/";
+const std::string DIR_GUARDADO_CLUSTER = "build/dirGuardadoClusters/";
 const std::string EXTENSION_CLUSTERS_DEFAULT = ".pcd";
 
 #endif
 
+#ifndef DIR_ENTRADA_DEF
+#define DIR_ENTRADA_DEF
 
+const std::string DIR_ENTRADA = "/home/rodrigo/TESINA-2016-KINECT/MACHINE_LEARNING/clasificadorFallas/build/dirGuardadoClusters/";
 
+#endif

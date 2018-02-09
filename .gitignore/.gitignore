@@ -2,6 +2,7 @@
 *.pcd
 *.dat
 build/*
+config_pipeline.json
 
 # Ignorar CMakes
 CMakeCache.txt

@@ -1,0 +1,26 @@
+{
+	"configuracion_global" : {
+		"dir_entrada" : "un_dir_entrada",
+		"dir_salida" : "un_dir_salida",
+		"database_muestras" : "path_database"
+	},
+	"clasificador": {
+		"tipo": "svm",
+		"path_modelo": "un/path/modelo.dat",
+		"dir_salida_dataset": "un/path/dir_salida/"
+	},
+	"estrategia_segmentador":{
+		"tipo" : "planar_euclidean",
+		"dist_thresh": 0.009,
+		"max_it": 1000,
+		"tolerance": 0.023,
+		"min_cluster_size": 20,
+		"max_cluster_size": 25000
+	},
+	"point_feature": {
+		"point_type" : "PointXYZ"
+	},
+	"estrategia_descriptor": {
+		"tipo_descriptor" : "GRSD"
+	}
+}

@@ -162,7 +162,7 @@ int MainPipeLine<PointT>::leerCaptura(std::string pathCaptura,
 */
 
 template <class PointT>
-void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c){
+void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c, std::string dir_guardado_cluster){
 
 
 	
@@ -172,7 +172,8 @@ void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c){
 
 	//Se intenta crear el directorio para la muestra
 	std::string subDirMuestra;
-	subDirMuestra = DIR_GUARDADO_CLUSTER + nombreNube + "/";
+	//subDirMuestra = DIR_GUARDADO_CLUSTER + nombreNube + "/";
+	subDirMuestra = dir_guardado_cluster + nombreNube + "/";
 	if (boost::filesystem::create_directory(subDirMuestra) == false){
 		std::cout <<"El directorio de salida para grietas ya existe" << std::endl; 
 	}else{
@@ -194,6 +195,17 @@ void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c){
 	Json::StyledWriter styledWriter;
 	salida << styledWriter.write(info);
 	salida.close();
+}
+
+template <class PointT> std::string
+MainPipeLine<PointT>::getPathModeloEntrenado() const{
+	return this->pathModeloEntrenado;
+}
+
+template <class PointT> void
+MainPipeLine<PointT>::setPathModeloEntrenado(std::string path)
+{
+	this->pathModeloEntrenado = path;
 }
 
 template <class PointT>

@@ -30,6 +30,7 @@ INCLUDE_DIRECTORIES(${gtest_SOURCE_DIR}/include ${COMMON_INCLUDES})
 include_directories( 
 	${GTEST_INCLUDE_DIRS}
 	${PCL_INCLUDE_DIRS}
+	/usr/include
 	)
 
 message(STATUS GTEST_ROOT=${gtest_SOURCE_DIR}/include)
@@ -37,6 +38,7 @@ message(STATUS GTEST_ROOT=${gtest_SOURCE_DIR}/include)
 link_directories(
 	${GTEST_BOTH_LIBRARIES}
 	${PCL_LIBRARY_DIRS}
+	/usr/lib
 	)
 
 #Se agrega la libsvm.so.2 que contiene los elementos de svm-predict y svm-train
@@ -61,19 +63,20 @@ add_executable (mainPipeLine "mainPipeLine.cpp" "${SOURCES}")
 
 #add_executable (unittest_estrategia_clasificacion "tests/unittest/ML/unittest_estrategia_clasificacion.cpp" "source/descriptor/src/descriptor.cpp" "source/nube/src/nube.cpp" "source/descriptor/src/pointfeature.cpp" "source/ML/src/estrategia_clasificacion.cpp" "source/ML/src/formateador_dataset.cpp" )
 
-
+add_executable (unittest_db_manager "tests/unittest/db_manager/unittest_db_manager.cpp" "source/db_manager/src/db_manager.cpp")
 
 
 # Standard linking to gtest stuff.
 
 #target_link_libraries(unittest_segmentation ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 #target_link_libraries(unittest_nube ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
+target_link_libraries(unittest_db_manager ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest sqlite3)
 
 #target_link_libraries(unittest_descriptor ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 #target_link_libraries(unittest_estrategia_clasificacion ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 #target_link_libraries(unittest_pointfeature ${GTEST_BOTH_LIBRARIES} ${PCL_LIBRARIES} gtest)
 
-target_link_libraries (mainPipeLine ${PCL_LIBRARIES} ${JSONCPP_LIBRARIES})
+target_link_libraries (mainPipeLine ${PCL_LIBRARIES} ${JSONCPP_LIBRARIES} sqlite3)
 
 
 

@@ -111,33 +111,34 @@ ParseadorJSON::parser_rapid(Parametrizador *p, std::unordered_map<std::string, s
   for (int i = 0; i < p->getCantParametros(); ++i)
   {
     Parametro param = p->getParametros()[i];
-    char *nombre = (char *)malloc((sizeof param.getNombre().c_str() / sizeof param.getNombre().c_str()[0]) * sizeof(char));
-    std::strcpy(nombre, param.getNombre().c_str());
-    bool ok = root.HasMember(nombre);
+    //char *nombre = (char *)malloc((sizeof param.getNombre().c_str() / sizeof param.getNombre().c_str()[0]) * sizeof(char));
+    //std::strcpy(nombre, param.getNombre().c_str());
+    std::string nombre = param.getNombre();
+    bool ok = root.HasMember(nombre.c_str());
     if (not ok && param.esRequerido())
       return false;
     if (not ok && not param.esRequerido())
       continue;
-    switch (root[nombre].GetType())
+    switch (root[nombre.c_str()].GetType())
     {
       case 6: // Number is a JSON type, but C++ needs more specific type.
         if (param.getTipoValorEsperado().compare("float") == 0)
         {
-          if (root[nombre].IsDouble())
-            values.emplace(param.getNombre(), std::to_string(root[nombre].GetDouble()));
+          if (root[nombre.c_str()].IsDouble())
+            values.emplace(param.getNombre(), std::to_string(root[nombre.c_str()].GetDouble()));
           else
             return false;
         }
         if (param.getTipoValorEsperado().compare("int") == 0)
         {
-          if (root[nombre].IsInt()) // In this case, IsUint()/IsInt64()/IsUInt64() also return true.
-            values.emplace(param.getNombre(), std::to_string(root[nombre].GetInt()));
+          if (root[nombre.c_str()].IsInt()) // In this case, IsUint()/IsInt64()/IsUInt64() also return true.
+            values.emplace(param.getNombre(), std::to_string(root[nombre.c_str()].GetInt()));
           else
             return false;
         }
         break;
       case 5:
-        values.emplace(param.getNombre(), root[nombre].GetString());
+        values.emplace(param.getNombre(), root[nombre.c_str()].GetString());
         break;
       default:
         return false;

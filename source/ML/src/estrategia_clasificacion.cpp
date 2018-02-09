@@ -74,9 +74,6 @@ void EstrategiaClasificacionMLAbstract::configurarParametrizador()
   p2.setNombre("path_modelo");
   p2.setTipoValorEsperado("string");
   EstrategiaClasificacionMLAbstract::parametrizador_.agregar(p2);
-  p2.setNombre("dir_salida_dataset");
-  p2.setTipoValorEsperado("string");
-  EstrategiaClasificacionMLAbstract::parametrizador_.agregar(p2);
   EstrategiaClasificacionMLAbstract::configurado_ = true;
 }
 
