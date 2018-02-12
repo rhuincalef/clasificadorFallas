@@ -5,6 +5,7 @@
 
 #include "source/parser/include/parseador.hpp"
 #include "source/ML/include/estrategia_clasificacion.hpp"
+#include "source/db_manager/include/db_manager.hpp"
 #include "source/main_pipe_line/include/main_pipe_line.hpp"
 
 /*
@@ -46,7 +47,7 @@ int main(int argc,char** argv)
 	bool ok = parseador.openRapid(argv[index+1]);
 	if (not ok)
 	{
-		std::cout << "Error apertura archivo JSON!" << std::endl;
+		std::cout << "Error apertura archivo JSON! " << argv[index+1] << std::endl;
 		return -1;
 	}
 	std::unordered_map<std::string, std::string> values;
@@ -59,15 +60,26 @@ int main(int argc,char** argv)
 	//std::string dirAlmacenamientoCapturas = "dirAlmacCapturas/" ;
 	std::string dirAlmacenamientoCapturas = DIR_ENTRADA;
 	std::string dir_salida = DIR_GUARDADO_CLUSTER;
+	std::string database_muestras = FALLAS_DB;
 	for (auto i = values.begin(); i != values.end(); ++i)
 	{
 		if ("dir_entrada" == i->first)
 			dirAlmacenamientoCapturas = i->second;
 		if ("dir_salida" == i->first)
 			dir_salida = i->second;
+		if ("database_muestras" == i->first)
+			database_muestras = i->second;
 	}
   	std::cout << "dir_entrada: "<< dirAlmacenamientoCapturas << std::endl;
   	std::cout << "dir_salida: "<< dir_salida << std::endl;
+  	std::cout << "database_muestras: "<< database_muestras << std::endl;
+  	DBManager db;
+  	result = db.abrirConexion(database_muestras);
+  	if (not result)
+  	{
+  		std::cout << "Error abrir archivo " << database_muestras << std::endl;
+  		return -1;
+  	}
 
 	PlanarAndEuclidean<pcl::PointXYZRGB>* estratSegmentacion = new PlanarAndEuclidean<pcl::PointXYZRGB>;
 	parametrizador = PlanarAndEuclidean<pcl::PointXYZRGB>::getParametrizador();
@@ -104,13 +116,13 @@ int main(int argc,char** argv)
 	}
 	if (not(pipeLine->getPathModeloEntrenado() != "" && boost::filesystem::exists (pipeLine->getPathModeloEntrenado())))
 	{
-		std::cout << "Falla al abrir PathModeloEntrenado!" << std::endl;
+		std::cout << "Falla al abrir PathModeloEntrenado!" << pipeLine->getPathModeloEntrenado() << std::endl;
 		return -1;
 	}
 	
 	if (not(dirAlmacenamientoCapturas != "" && boost::filesystem::exists (dirAlmacenamientoCapturas)))
 	{
-		std::cout << "Falla al abrir dir_entrada!" << std::endl;
+		std::cout << "Falla al abrir dir_entrada! " << dirAlmacenamientoCapturas << std::endl;
 		return -1;
 	}
 
@@ -119,22 +131,44 @@ int main(int argc,char** argv)
 	pipeLine->setEstrategiaDescriptor(estratDescriptor);
 	pipeLine->setEstrategiaClasificacion(estratClasificacion);
 
-	std::vector<std::string> capturas = pipeLine->leerDirCaptura();
+	std::vector<std::string> capturas;
+	boost::filesystem::directory_iterator end_itr;
+	for (boost::filesystem::directory_iterator itr (dirAlmacenamientoCapturas); itr != end_itr; ++itr)
+	{
+		// Only add PCD files
+		if ( is_directory (itr->status ()) )
+		{
+			pipeLine->setDirAlmacenamientoCapturasClasificadas(itr->path ().string ());	
+		  	std::cout << "Added " << itr->path().string().c_str() << " for processing." << std::endl;
+			std::vector<std::string> capturas_sub_dir = pipeLine->leerDirCaptura();
+			capturas.insert(capturas.end(), capturas_sub_dir.begin(), capturas_sub_dir.end());
+		}
+	}
 
 	for (int i = 0; i < capturas.size(); ++i)
 	{
-		std::cout << "Clasificando capturas["<<i << "] = " << capturas[i] << std::endl;
+		std::cout << "Clasificando capturas["<< i << "] = " << capturas[i] << std::endl;
 		std::string cap = capturas[i];
 		typename pcl::PointCloud<pcl::PointXYZRGB>::Ptr p (new pcl::PointCloud<pcl::PointXYZRGB>);
 	
+	
+
 		if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(cap, *p) != 0)
 		{
-		  std::cerr << "Failed to read PCD test file." << std::endl;
-		  return -1;
+		  std::cerr << "Falla al abrir archivo PCD: " << cap << std::endl;
+		  continue;
 		}
 		Nube<pcl::PointXYZRGB>* n = new Nube<pcl::PointXYZRGB>(p);
 		n->setNombre(splitear(cap));
+		n->setNombreCompleto(cap);
 		std::cout << "" << std::endl;
+
+		int idTemp = std::stoi(n->trimearIdFalla());
+		if (db.estaProcesada(idTemp , n->getNombre()) )
+		{
+			std::cout << "Falla con id "<< idTemp << " ya procesada! " << std::endl;
+			continue;
+		}
 
 		std::vector <pcl::PointCloud<pcl::PointXYZRGB>> clusters = pipeLine->computarNube(n);
 		for (int i = 0; i < clusters.size(); ++i)
@@ -143,7 +177,7 @@ int main(int argc,char** argv)
 			*c1 = clusters[i];
 			std::string aux = "_cluster_" + std::to_string(i);
 			Cluster<pcl::PointXYZRGB> c (c1,aux);
-			n->agregarCluster(c); 
+			n->agregarCluster(c);
 		}
 
 		std::vector< Cluster<pcl::PointXYZRGB> > clustersReales = n->getClusters();
@@ -178,19 +212,13 @@ int main(int argc,char** argv)
 			std::cout << std::endl;
 			pipeLine->almacenarCluster(n,clustersReales[i], dir_salida);
 
+			std::string nomb = n->getNombre() + clustersReales[i].getNombre() + ".pcd"; 
+			db.insertar(idTemp, nomb);
+
 			std::cout << "---------------------------------------------------"<< std::endl<< std::endl;			
-		}
-	}
+		}	}
+
+	result = db.cerrarConexion();
 
 	std::cout << "Fin main xx pipeLine..." << std::endl;
 }
-
-
-/*
-TODO:
-Desde dir_entrado o dirAlmacenamientoCapturas:
-	- trim de ruta obteniendo id falla
-	- crear carpeta con id falla en dir_salida
-	- almacenar en esta ruta cluster + json clasificados
-	- guardar todas las fallas (clasificadas o no)
-*/

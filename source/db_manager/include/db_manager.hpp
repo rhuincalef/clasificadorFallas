@@ -36,6 +36,9 @@ public:
   bool
   estaProcesada(int id_falla, std::string nombre_falla);
 
+  bool
+  insertar(int id_falla, std::string nombre_falla);
+
 private:
   sqlite3 *db;
 

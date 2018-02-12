@@ -36,7 +36,8 @@ DBManager::estaProcesada(int id_falla, std::string nombre_falla)
 	rows = this->execQueryByIdFalla(id_falla);
 	for (std::vector<TRowFalla>::iterator i = rows.begin(); i != rows.end(); ++i)
 	{
-		if (i->nombre_falla == nombre_falla)
+		//if (i->nombre_falla == nombre_falla)
+		if ( (std::strncmp(i->nombre_falla.c_str(), nombre_falla.c_str(), nombre_falla.size()) == 0) )
 			return true;
 	}
 	return false;
@@ -48,7 +49,6 @@ DBManager::execQueryByIdFalla(int id_falla)
 	int rc;
 	int id_base;
 	char *data = NULL;
-	char *zErrMsg = 0;
 	sqlite3_stmt    *stmt = NULL;
 	std::vector<TRowFalla> rows;
 	rc = sqlite3_prepare_v2( this->db, "select * from FALLA_PROCESADA where id_falla = ?", -1, &stmt, NULL);
@@ -67,4 +67,24 @@ DBManager::execQueryByIdFalla(int id_falla)
     }
     sqlite3_finalize( stmt );
     return rows;
+}
+
+bool
+DBManager::insertar(int id_falla, std::string nombre_falla)
+{
+	int rc;
+	sqlite3_stmt    *stmt = NULL;
+	rc = sqlite3_prepare_v2( this->db, "insert into FALLA_PROCESADA ( id_falla, path ) values (?1, ?2)", -1, &stmt, NULL);
+    if ( rc != SQLITE_OK)
+    	return false;
+    sqlite3_bind_int(stmt, 1, id_falla);
+    sqlite3_bind_text(stmt, 2, nombre_falla.c_str(), -1, SQLITE_STATIC);
+    rc = sqlite3_step( stmt );
+    if( (rc != SQLITE_DONE) )
+    {
+    	std::cout << "ERORORORORO: " << sqlite3_errmsg(db) << std::endl;
+    	return false;
+    }
+    sqlite3_finalize( stmt );
+    return true;
 }

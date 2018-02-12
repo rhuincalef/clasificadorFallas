@@ -54,7 +54,6 @@ class DBManagerTest : public ::testing::Test {
   }
 };
 
-// Tests PlanarAndEuclidean()
 /*
 */
 TEST(DBManagerTest, AbrirConexion)
@@ -66,6 +65,29 @@ TEST(DBManagerTest, AbrirConexion)
   EXPECT_TRUE (result);
 }
 
+TEST(DBManagerTest, EjecutarConsulta)
+{
+  DBManager db;
+  bool result = db.abrirConexion(db_argv[1]);
+  EXPECT_TRUE (result);
+  result = db.estaProcesada(1, "letter/algo/mas.pcd");
+  EXPECT_TRUE (result);
+  result = db.estaProcesada(10, "letter/algo/mas.pcd");
+  EXPECT_FALSE(result);
+  result = db.cerrarConexion();
+  EXPECT_TRUE (result);
+}
+
+TEST(DBManagerTest, Insertar)
+{
+  DBManager db;
+  bool result = db.abrirConexion(db_argv[1]);
+  EXPECT_TRUE (result);
+  result = db.insertar(4, "letter/algo/mas.pcd");
+  EXPECT_TRUE (result);
+  result = db.cerrarConexion();
+  EXPECT_TRUE (result);
+}
 /*
 */
 // Step 3. Call RUN_ALL_TESTS() in main().

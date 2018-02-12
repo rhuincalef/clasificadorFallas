@@ -172,8 +172,9 @@ void MainPipeLine<PointT>::almacenarCluster(Nube<PointT>* n,Cluster<PointT> c, s
 
 	//Se intenta crear el directorio para la muestra
 	std::string subDirMuestra;
-	//subDirMuestra = DIR_GUARDADO_CLUSTER + nombreNube + "/";
-	subDirMuestra = dir_guardado_cluster + nombreNube + "/";
+	
+	//subDirMuestra = dir_guardado_cluster + nombreNube + "/";
+	subDirMuestra = dir_guardado_cluster + n->trimearIdFalla() + "/";
 	if (boost::filesystem::create_directory(subDirMuestra) == false){
 		std::cout <<"El directorio de salida para grietas ya existe" << std::endl; 
 	}else{

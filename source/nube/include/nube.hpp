@@ -50,9 +50,15 @@ public:
   void
   setNombre(std::string n);
 
+  void
+  setNombreCompleto(std::string cap);
+
   std::string
   getNombre();
-  
+
+  std::string
+  trimearIdFalla();
+
 
 private:
   typename pcl::PointCloud<PointT>::Ptr downsampling_cloud;
@@ -63,8 +69,18 @@ private:
   typename std::vector<Cluster<PointT>> clusters;
   std::string nombre;
 
+
+  /*
+  Este es el path completo de la nube que se usa para obtener el id_falla que sera guardado en el
+  dir_salida.
+  */
+  std::string nombreCompleto;
+
   void
   setAllClouds();
+
+
+
 
 };
 #endif

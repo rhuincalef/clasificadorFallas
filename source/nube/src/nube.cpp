@@ -191,6 +191,28 @@ Nube<PointT>::setAllClouds()
   normalEstimation.compute(*this->normals_cloud);
 }
 
+
+template<typename PointT> void
+Nube<PointT>::setNombreCompleto(std::string cap){
+	this->nombreCompleto = cap;
+}
+
+
+
+template<typename PointT> std::string
+Nube<PointT>::trimearIdFalla(){
+	std::vector<std::string> result;
+	std::string r = "DEF";
+	boost::split(result,this->nombreCompleto,boost::is_any_of("/"));
+	if (result.size() > 1)
+	{
+		r = result[result.size()-2];
+		std::cout << "Retornando el id falla: " << r << std::endl;
+	}
+	return r;
+}
+
+
 /*
 	Instanciacion explicita del metodo que tiene template. Se aplica para metodos y clases que tienen la 
 	definicion de sus templates en archivos .hpp y .cpp separados. 
