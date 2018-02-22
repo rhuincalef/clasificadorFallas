@@ -181,6 +181,12 @@ int main(int argc,char** argv)
 		}
 
 		std::vector< Cluster<pcl::PointXYZRGB> > clustersReales = n->getClusters();
+		if (clustersReales.size() == 0)
+		{
+			std::string nombre = n->getNombre() + ".pcd"; 
+			db.insertar(idTemp, nombre);
+		}
+
 		for (int i = 0; i < clustersReales.size(); ++i)
 		{
 			std::cout << "Clasificando clusters[" << i << "] = " << clusters[i] << std::endl;  			
@@ -216,7 +222,8 @@ int main(int argc,char** argv)
 			db.insertar(idTemp, nomb);
 
 			std::cout << "---------------------------------------------------"<< std::endl<< std::endl;			
-		}	}
+		}	
+	}
 
 	result = db.cerrarConexion();
 
